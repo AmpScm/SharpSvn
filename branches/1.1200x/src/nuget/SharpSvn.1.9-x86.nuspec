@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SharpSvn.1.9-x86</id>
+    <title>SharpSvn 1.9-x86</title>    
+    <version>$version$</version>
+    <authors>SharpSvn Project</authors>
+    <owners>SharpSvn Project</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://sharpsvn.net/</projectUrl>
+    <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SharpSvn 1.9 is a binding of the Subversion Client API for .NET based on Subversion 1.9.x. This is the x86/32-bit version, See SharpSvn.1.9-x64 for the 64 bit version.</description>
+    <copyright>(C) Copyright 2006-2015 The SharpSvn Project</copyright>
+    <tags>Subversion Svn SharpSvn</tags>
+  </metadata>
+  <files>
+    <!-- DotNet 2.0 compatible version -->
+    <file src="net20/x86/SharpSvn.dll" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.xml" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.pdb" target="lib/net20" />
+    <file src="net20/x86/SharpSvn-DB44-20-win32.svnDll" target="lib/net20" />
+    <file src="net20/x86/SharpPlink-Win32.svnExe" target="lib/net20" />
+    <file src="net20/x86/SharpPlink-Win32.pdb" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.UI.dll" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.UI.xml" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.UI.pdb" target="lib/net20" />
+    <!-- DotNet 4.0+ version -->
+    <file src="net40/x86/SharpSvn.dll" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.xml" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.pdb" target="lib/net40" />
+    <file src="net40/x86/SharpSvn-DB44-20-win32.svnDll" target="lib/net40" />
+    <file src="net40/x86/SharpPlink-Win32.svnExe" target="lib/net40" />
+    <file src="net40/x86/SharpPlink-Win32.pdb" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.UI.dll" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.UI.xml" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.UI.pdb" target="lib/net40" />
+  </files>
+</package>

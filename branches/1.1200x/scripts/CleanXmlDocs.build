@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<project name="Clean-XML" default="clean-xml" basedir=".">
+
+  <target name="clean-xml">
+    <xmlpoke
+      file="${docFile}"
+      xpath="/doc/members/member[starts-with(@name, 'M:svn_') or starts-with(@name, 'F:svn_') or starts-with(@name, 'D:svn_') or starts-with(@name, 'T:svn_')]"
+      value="" />
+   </target>
+</project>
+    
+    

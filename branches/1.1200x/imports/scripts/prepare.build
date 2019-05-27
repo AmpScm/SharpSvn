@@ -1,0 +1,297 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <target name="checkout" depends="initialize-layout">
+    <Svn
+      verbose="true"
+      if="${buildSubversion}"
+      unless="${directory::exists(svnBase)}">
+
+      <arg value="co" />
+      <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
+      <arg value="http://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
+      <arg value="http://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
+      <arg value="${svnBase}" />
+    </Svn>
+
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.revsMerged" if="${buildSubversion}">
+      <Svn>
+        <arg value="revert" />
+        <arg value="-R" />
+        <arg value="${svnBase}" />
+      </Svn>
+      <foreach item="String" property="range" in="${subversionMerges}" delim=";"
+        if="${string::get-length(subversionMerges) &gt; 0}">
+        <property name="accept" value="" />
+        <if test="${string::to-upper(range) != string::to-lower(range)}">
+          <property name="accept" value="theirs-conflict" if="${string::starts-with(range, 'T')}" />
+          <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />
+          <property name="range" value="${string::substring(range, 1, string::get-length(range)-1)}" />
+        </if>
+        <Svn verbose="true">
+          <arg value="merge" />
+          <arg line="--accept ${accept}" if="${string::get-length(accept) &gt; 0}" />
+          <arg value="-c" />
+          <arg value="${range}" />
+          <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
+          <arg value="${svnBase}" />
+        </Svn>
+      </foreach>
+      <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
+         if="${string::get-length(subversionMergeBranches) &gt; 0}">
+        <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+          <arg value="merge" />
+          <arg line="^/subversion/${branch}" />
+          <arg value="${svnBase}" />
+        </Svn>
+      </foreach>
+    </OnceBlock>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(zlibDir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/madler/zlib/tags/v${zlibVersion}/" />
+      <arg value="${zlibDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(opensslDir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/openssl/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
+      <arg value="${opensslDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      if="${buildNeon}"
+      unless="${directory::exists(neonDir)}">
+
+      <arg value="co" />
+      <arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
+      <arg value="${neonDir}" />
+    </Svn>
+    <!-- Write version for subversion configure script -->
+    <echo message="${neonVersion}" file="${neonDir}/.version" if="${buildNeon}" />
+
+    <Svn
+      verbose="true"
+      if="${buildHttpd}"
+      unless="${directory::exists(httpdDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" if="${httpdBuildType == 'tag'}" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/branches/${httpdVersion}/" if="${httpdBuildType == 'branch'}" />
+      <arg value="${httpdDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      if="${buildHttpd}"
+      unless="${directory::exists(pcreDir)}">
+
+      <arg value="co" />
+      <arg value="svn://vcs.exim.org/pcre/code/tags/pcre-${pcreVersion}/" />
+      <arg value="${pcreDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      if="${buildHttpd}"
+      unless="${directory::exists(nghttp2Dir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/tatsuhiro-t/nghttp2/tags/v${nghttp2Version}/" />
+      <arg value="${nghttp2Dir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      if="${buildHttpd}"
+      unless="${file::exists(nghttp2Dir + '/CMakeLists.txt')}">
+
+      <arg value="export" />
+      <arg value="--force" />
+      <arg value="https://github.com/trawick/nghttp2-minimal-cmake/trunk" />
+      <arg value="${nghttp2Dir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(aprDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
+      <arg value="${aprDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(aprUtilDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
+      <arg value="${aprUtilDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(libexpatDir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/libexpat/libexpat/tags/R_${string::replace(expatVersion,'.','_')}/expat/" />
+      <arg value="${libexpatDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(serfDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/trunk/" if="${serfBuildType == 'trunk'}" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
+      <arg value="${serfDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(sqliteDir)}">
+
+      <arg value="co" />
+      <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
+      <arg value="${sqliteDir}" />
+      <arg line='--no-auth-cache --username guest --password=""' />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(saslDir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
+      <arg value="${saslDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
+
+      <arg value="co" />
+      <arg value="https://github.com/libssh2/libssh2/trunk/"                         if="${libssh2BuildType == 'trunk'}" />
+      <arg value="https://github.com/libssh2/libssh2/tags/libssh2-${libssh2Version}" if="${libssh2BuildType == 'tag'}" />
+      <arg value="${libssh2Dir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(libeventDir)}" if="${buildLibevent}">
+
+      <arg value="co" />
+      <arg value="https://github.com/libevent/libevent/tags/release-${libeventVersion}"/>
+      <arg value="${libeventDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(pthreadwin32Dir)}" if="${buildPthreadwin32}">
+
+      <arg value="co" />
+      <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/pthreads-win32/tags/${pthreadwin32Version}"/>
+      <arg value="${pthreadwin32Dir}" />
+      <arg line='--no-auth-cache --username guest --password=""' />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(memcachedDir)}" if="${buildMemcached}">
+
+      <arg value="co" />
+      <arg value="https://github.com/memcached/memcached/branches/engine-pu" if="${memcachedBuildType == 'trunk'}" />/>
+      <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}" if="${memcachedBuildType == 'tag'}" />/>
+      <arg value="${memcachedDir}" />
+    </Svn>
+  </target>
+
+  <filterchain id="license-filter">
+    <LineRegexReplace re='(?&lt;!\r)\n' to='&#x0D;&#x0A;' />
+  </filterchain>
+  <target name="copy-licenses">
+    <copy
+      file="build/${platform}/subversion/LICENSE"
+      tofile="release/licenses/Subversion-License.txt"
+      if="${buildSubversion}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${aprDir}/LICENSE"
+      tofile="release/licenses/Apr-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${aprUtilDir}/LICENSE"
+      tofile="release/licenses/Apr-Util-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${dbDir}/LICENSE"
+      tofile="release/licenses/BerkeleyDB-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${saslDir}/COPYING"
+      tofile="release/licenses/Cyrus-Sasl-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      if="${buildNeon}"
+      file="${neonDir}/src/COPYING.LIB"
+      tofile="release/licenses/Neon-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${opensslDir}/LICENSE"
+      tofile="release/licenses/OpenSSL-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${serfDir}/LICENSE"
+      tofile="release/licenses/Serf-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${zlibDir}/README"
+      tofile="release/licenses/ZLib-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy if="${buildLibssh2}"
+      file="${libssh2Dir}/COPYING"
+      tofile="release/licenses/LibSSH2-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
+
+    <copy
+      file="${sharpSvnDir}/LICENSE.txt"
+      tofile="release/licenses/SharpSvn-License.txt"
+      if="${file::exists(sharpSvnDir + '/LICENSE.txt')}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${sharpSvnDir}/src/SharpPlink/PuttySrc/LICENCE"
+      tofile="release/licenses/Putty-License.txt"
+      if="${file::exists(sharpSvnDir + '/src/SharpPlink/PuttySrc/LICENCE')}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+        file="${gettextDir}/gettext-runtime/COPYING"
+        tofile="release/licenses/GetText-Runtime-License.txt"
+        if="${intl == 'gettext'}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="${downloads}/../scripts/SharpSvn-Licenses.wxs"
+      tofile="release/licenses/SharpSvn-Licenses.wxs" />
+  </target>
+</project>

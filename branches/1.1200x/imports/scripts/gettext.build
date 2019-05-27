@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." default="build">
+  <property name="gettextFilename" value="gettext-${gettextVersion}.tar.gz" />
+  <property name="gettextDir" value="build/gettext-${gettextVersion}" />
+
+  <property name="gettextToolsFilename" value="gettext-tools-0.13.1.bin.woe32.zip" />
+  <property name="gettextToolsRuntimeFilename" value="gettext-runtime-0.13.1.bin.woe32.zip" />
+  <property name="gettextToolsIconvFilename" value="libiconv-1.9.1.bin.woe32.zip" />
+
+  <property name="gettextToolsDir" value="build/gettext-tools" />
+
+  <target name="gettext-prepare" depends="extract" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+    <OnceBlock file="build/gettext-${gettextVersion}.patched">
+      <loadfile file="${gettextDir}/gettext-runtime/config.h.in" property="configh">
+        <filterchain>
+          <replacestring from="#undef USE_WIN32_THREADS" to="#define USE_WIN32_THREADS 1" />
+          <replacestring from="#undef USE_WINDOWS_THREADS" to="#define USE_WINDOWS_THREADS 1" />
+          <replacestring from="#undef HAVE_ALLOCAH" to="#define HAVE_ALLOCAH 1 //" />
+          <replacestring from="#undef HAVE_ALLOCA" to="#define HAVE_ALLOCA 1 //" />
+          <replacestring from="#undef HAVE_GETCWD" to="#define HAVE_GETCWD 1" />
+          <replacestring from="#undef inline" to="#define inline __inline" />
+          <replacestring from="#undef HAVE_UINTMAX_T" to="#define HAVE_UINTMAX_T 1" />
+          <replacestring from="#undef HAVE_INTMAX_T" to="#define HAVE_INTMAX_T 1" />
+          <replacestring from="#undef uintmax_t" to="#define uintmax_t unsigned __int64" />
+          <replacestring from="#undef intmax_t" to="#define intmax_t __int64" />
+          <replacestring from="#define glthread_" to="// #undef glthread_" />
+        </filterchain>
+      </loadfile>
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/config.h" />
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/config.h" />
+      <loadfile file="${gettextDir}/gettext-runtime/intl/libgnuintl.in.h" property="intlh">
+        <filterchain>
+          <replacestring from="@HAVE_POSIX_PRINTF@" to="1 /* SHARPSVN */" />
+          <replacestring from="@HAVE_SNPRINTF@"     to="1 /* SHARPSVN */" />
+          <replacestring from="@HAVE_ASPRINTF@"     to="0 /* SHARPSVN */" />
+          <replacestring from="@HAVE_WPRINTF@"      to="0 /* SHARPSVN */" />
+          <replacestring from="@HAVE_NEWLOCALE@"    to="0 /* SHARPSVN */" />
+          <replacestring from="#ifndef GNULIB_defined" to="#if 0 // SHARPSVN: GNULIB_defined" />
+        </filterchain>
+      </loadfile>
+      <echo file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" append="true">
+${intlh}
+#define nls_uint32 unsigned int
+#define LOCALEDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Locales"
+#define LOCALE_ALIAS_PATH "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\LocaleAliases"
+#undef SUBLANG_SINDHI_PAKISTAN
+#undef SUBLANG_SINDHI_AFGHANISTAN
+
+</echo>
+      <echo file="${gettextDir}/gettext-runtime/intl/config.h" append="true">
+#define uintmax_t unsigned __int64
+#define intmax_t __int64
+#ifndef SIZE_MAX
+# define SIZE_MAX ((size_t) -1)
+#endif
+#ifndef SSIZE_MAX
+# define SSIZE_MAX ((ssize_t) (SIZE_MAX / 2))
+#endif
+
+</echo>
+      <echo file="${gettextDir}/gettext-runtime/config.h" append="true">
+#define uintmax_t unsigned __int64
+#define intmax_t __int64
+#ifndef SIZE_MAX
+# define SIZE_MAX ((size_t) -1)
+#endif
+#ifndef SSIZE_MAX
+# define SSIZE_MAX ((ssize_t) (SIZE_MAX / 2))
+#endif
+
+</echo>
+      <loadfile file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" property="configh">
+        <filterchain>
+          <replacestring
+              from="__libc_lock_define_initialized_recursive (static, lock)"
+              to="static gl_recursive_lock_t lock = gl_recursive_lock_initializer;" />
+        </filterchain>
+      </loadfile>
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" />
+      <echo file="${gettextDir}/gettext-runtime/intl/gettext.def">
+        ;LIBRARY ${dllPrefix}libintl
+        EXPORTS
+        gettext                                @401
+        dgettext                               @402
+        dcgettext                              @403
+
+        libintl_gettext                        @501
+        libintl_dgettext                       @502
+        libintl_dcgettext                      @503
+        libintl_printf                         @504
+        libintl_fprintf                        @505
+        libintl_sprintf                        @506
+        libintl_bindtextdomain                 @507
+        libintl_dngettext                      @508
+        libintl_bind_textdomain_codeset        @509
+      </echo>
+    </OnceBlock>
+  </target>
+  <target name="gettext-build" depends="gettext-prepare" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+    <OnceBlock file="build/gettext-${gettextVersion}-${platform}.build">
+      <mkdir dir="${gettextDir}/obj/${platform}/release" />
+      <mkdir dir="${gettextDir}/bin/${platform}/release" />
+      <cl outputdir="${gettextDir}/obj/${platform}/release">
+        <arg value="/O1" /> <!-- Optimize for size -->
+        <arg value="/MD" /> <!-- Build dll -->
+        <defines>
+          <define name="SHARPSVN_GETTEXT" />
+          <define name="inline" value="__inline" />
+          <define name="BUILDING_LIBINTL" value="1" />
+          <define name="HAVE_CONFIG_H" value="1" />
+          <define name="IN_LIBINTL" value="1" />
+          <define name="LIBDIR" value="1" />
+          <define name="WIN32" value="1" />
+          <define name="_WIN32" value="1" />
+          <define name="WIN64" value="1" if="${platform == 'x64'}" />
+          <define name="alloca" value="_alloca" />
+        </defines>
+        <includedirs>
+          <include name="${gettextDir}/gettext-runtime/intl" />
+          <include name="${gettextDir}/gettext-tools/gnulib-lib" />
+        </includedirs>
+
+        <sources basedir="${gettextDir}/gettext-runtime/intl">
+          <include name="*.c" />
+          <exclude name="intl-exports.c" />
+          <exclude name="tsearch*.c" />
+          <exclude name="os2*.c" />
+        </sources>
+      </cl>
+      <property name="libintlDllName" value="intl.dll" />
+      <property name="libintlDllName" value="${dllPrefix}libintl.dll" if="${dllPrefix != ''}" />
+      <regex pattern="^(?'GETTEXT_MAJOR'\d+)\.(?'GETTEXT_MINOR'\d+)\.(?'GETTEXT_MICRO'\d+)" input="${gettextVersion}" />
+      <rc rcfile="${gettextDir}/gettext-runtime/intl/libintl.rc" output="${gettextDir}/obj/${platform}/release/libintl.res" verbose="true"
+        options="/n /dPACKAGE_VERSION_MAJOR=${GETTEXT_MAJOR} /dPACKAGE_VERSION_MINOR=${GETTEXT_MINOR} /dPACKAGE_VERSION_SUBMINOR=${GETTEXT_MICRO} /dPACKAGE_VERSION_STRING=${gettextVersion}">
+      </rc>
+      <link output="${gettextDir}/bin/${platform}/release/${libintlDllName}"
+        options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
+        /IMPLIB:"${gettextDir}/bin/${platform}/release/intl.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
+        /DEF:${gettextDir}/gettext-runtime/intl/gettext.def /NXCOMPAT /LARGEADDRESSAWARE'>
+        <sources basedir="${gettextDir}/obj/${platform}/release">
+          <include name="**/*.obj" />
+          <include name="libintl.res" />
+          <include name="${gettextDir}/gettext-runtime/intl/gettext.def" />
+        </sources>
+      </link>
+      <exec program="mt.exe">
+        <arg value="-nologo" />
+        <arg value="-manifest" />
+        <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" />
+        <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${libintlDllName};#2"' />
+      </exec>
+    </OnceBlock>
+    <copy tofile="${intDir}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${gettextDir}/bin/${platform}/release">
+        <include name="*.lib" />
+        <include name="*.exp" />
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin">
+      <fileset basedir="${gettextDir}/bin/${platform}/release">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy tofile="${intDir}/lib/intl3_svn.lib" file="${intDir}/lib/intl.lib" />
+  </target>
+
+  <target name="gettext-translate" depends="gettext-build, checkout" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+    <foreach item="File" property="po">
+      <in>
+        <items basedir="${svnBase}\subversion\po">
+          <include name="*.po" />
+        </items>
+      </in>
+      <do>
+        <property name="lang" value="${path::get-file-name-without-extension(po)}" />
+        <echo message="Generating resources for ${lang}" />
+        <mkdir dir="${release}/share/locale/${lang}/LC_MESSAGES" />
+        <exec program="${gettextToolsDir}/bin/msgfmt.exe">
+          <arg line="-o ${release}/share/locale/${lang}/LC_MESSAGES/subversion.mo" />
+          <arg value="${po}" />
+        </exec>
+      </do>
+    </foreach>
+  </target>
+</project>

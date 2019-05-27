@@ -1,0 +1,491 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <!-- This nant script is used by the SharpSvn buildbot -->
+  
+  <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
+  <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
+  <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
+  <property name="signtoolExe" value="" overwrite="false" />
+  <property name="buildImports" value="true" overwrite="false" />
+  <property name="svnDist" value="false" overwrite="false" />
+  
+  <if test="${property::exists('build.include')}">
+    <include buildfile="${build.include}" />
+  </if>
+  <include buildfile="imports/scripts/tasks.build" />
+  
+  <target name="prepare">
+    <Svn output=".svn-info"><arg line="info . --xml" /></Svn>
+    <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
+    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
+    <Svn unless="${svnDist}">
+      <arg line='--no-auth-cache --username guest --password ""' />
+      <arg line="checkout ${svn_url}" unless="${directory::exists('v40')}" />
+      <arg line="update"                  if="${directory::exists('v40')}" />
+      <arg line="-r ${svn_rev} v40/" />      
+    </Svn>
+    
+    <delete dir="release" if="${directory::exists('release')}" />
+    <mkdir dir="release" />
+    
+    <foreach item="Folder" property="dir">
+      <in>
+        <items basedir=".">
+          <include name="Jenkins_*_*" />
+        </items>
+      </in>
+      <do>
+        <delete dir="${dir}" />
+      </do>
+    </foreach>
+  </target>
+  
+  <target name="build" depends="prepare">
+    <Svn output=".svn-info"><arg line="info imports\default.build --xml" /></Svn>
+    <xmlpeek file=".svn-info" xpath="/info/entry/commit/@revision" property="imports-rev" />
+    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="checkout-rev" />    
+    
+    <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
+    <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
+      <exec program="cmd.exe" failonerror="false">
+        <arg line="/c rmdir imports\build imports\release imports\svn-dist\build imports\svn-dist\release v40\imports\build v40\imports\release /s /q" />
+      </exec>
+    </if>
+  
+    <NAntWithEnv unless="${svnDist}"
+        env-script="${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" env-args="x86"
+        workingdir="imports" buildfile="imports\Default.build"
+        target="build" />
+
+    <NAntWithEnv unless="${svnDist}"
+        env-script="${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" env-args="x86_amd64"
+        workingdir="imports" buildfile="imports\Default.build"
+        target="build" />
+    
+    <NAntWithEnv unless="${svnDist}"
+        env-script="${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" env-args="x86"
+        workingdir="v40\imports" buildfile="v40\imports\Default.build"
+        target="build" />
+
+    <NAntWithEnv unless="${svnDist}"
+        env-script="${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" env-args="x86_amd64"
+        workingdir="v40\imports" buildfile="v40\imports\Default.build"
+        target="build" />
+
+    <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='"${nantExe}" build-svn-dist"' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
+      <arg line='"${nantExe}" build-svn-dist"' />
+    </exec>
+
+
+    <echo file="imports/build/.imports-rev" message="${imports-rev}" />
+
+    <Svn output=".svn-info-svn">
+      <arg line="info --xml" />
+      <arg value="imports\build\win32\subversion" unless="${svnDist}" />
+      <arg value="imports\svn-dist\build\win32\subversion" if="${svnDist}" />
+    </Svn>
+    <xmlpeek file=".svn-info-svn" xpath="/info/entry/url" property="svn-tag" />
+    <property name="svn-tag" value="${path::get-file-name(string::replace(svn-tag,'://', '/'))}" />
+    <property name="svn-ver" value="${string::replace(string::replace(string::replace(string::replace(svn-tag, '-alpha', '.'), '-beta', '.'),'-rc', '.'), '.x', '.0')}" />
+    <choose>
+      <when test="${svn-tag == 'trunk'}">
+        <property name="versionBase" value="1.55555" />
+      </when>
+      <when test="${svn-tag != svn-ver}">
+        <property name="v" value="0" />
+        <property name="v" value="1" if="${string::contains(svn-tag, 'alpha')}" />
+        <property name="v" value="2" if="${string::contains(svn-tag, 'beta')}" />
+        <property name="v" value="3" if="${string::contains(svn-tag, 'rc')}" />
+        <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))-1) * 1000 + 990 + int::parse(v)}" />
+      </when>
+      <otherwise>
+        <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))) * 1000 + version::get-build(version::parse(svn-ver))}" />
+      </otherwise>
+    </choose>
+
+    <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
+/P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This product and its sourcecode are licensed under the Apache 2.0 license. Check http://sharpsvn.net/ for details."
+/P:ForceAssemblyCompany="SharpSvn - http://sharpsvn.net/"
+/P:ForceAssemblyProduct="SharpSvn - Subversion support for .Net"
+/P:ForceAssemblyConfiguration="Release"
+</echo>
+    <if test="${property::exists('CCNetNumericLabel')}">
+      <echo append="true" file="msbuildprops.txt">/P:ForceAssemblyVersion="${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
+</echo>
+
+      <echo file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
+      <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}" />
+      <echo file="release\tag.txt" message="${svn-tag}" />
+    </if>    
+  </target>
+  
+  <target name="package" if="${property::exists('CCNetNumericLabel')}">
+    <property name="artifactLabel" value="${CCNetNumericLabel}" />
+    
+    <if test="${file::exists('release/ver.txt')}">
+      <loadfile file="release/ver.txt" property="sharpsvnVersion" />
+
+      <property name="artifactLabel" value="${sharpsvnVersion}" />      
+    </if>
+
+    <style style="tools/SharpSvn-Xml-filter.xsl"
+        in="src/SharpSvn.UI/bin/x86/release/SharpSvn.xml"
+        out="release/SharpSvn.xml" />
+        
+    <copy file="release/SharpSvn.xml" todir="release/net20/x86" />
+    <copy file="release/SharpSvn.xml" todir="release/net20/x64" />
+    <copy file="release/SharpSvn.xml" todir="release/net40/x86" />
+    <copy file="release/SharpSvn.xml" todir="release/net40/x64" />
+    <delete file="release/SharpSvn.xml" />
+
+    <copy todir="release">
+      <fileset basedir="src">
+        <include name="SharpSvn.wxs" />
+      </fileset>
+    </copy>
+    
+    <copy todir="release/licenses">
+      <fileset basedir="imports/scripts">
+        <include name="SharpSvn-Licenses.wxs" />
+      </fileset>
+    </copy>
+    <copy todir="release/licenses">
+      <fileset basedir="imports/release/licenses">
+        <include name="*.txt" />
+      </fileset>
+    </copy>
+
+    <copy todir="release/resources">
+      <fileset basedir="src/SharpSvn.UI/bin/x86/release">
+        <include name="*/*.resources.dll" />
+      </fileset>
+    </copy>
+
+    <copy todir="release/net20/x86">
+      <fileset basedir="src/SharpSvn/bin/Win32/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpPlink-Win32.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net20/x86">
+      <fileset basedir="src/SharpSvn.UI/bin/x86/release">
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="SharpSvn.UI.xml" />
+      </fileset>
+    </copy>
+    <copy todir="release/net20/x86">
+      <fileset basedir="imports/release/bin">
+        <include name="SharpSvn-*-win32.*" />
+      </fileset>
+    </copy>
+
+    <copy todir="release/net20/x64">
+      <fileset basedir="src/SharpSvn/bin/x64/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpPlink-x64.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net20/x64">
+      <fileset basedir="src/SharpSvn.UI/bin/x64/release">
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="SharpSvn.UI.xml" />
+      </fileset>
+    </copy>
+    <copy todir="release/net20/x64">
+      <fileset basedir="imports/release/bin">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+    </copy>
+
+    <copy todir="release/net40/x86">
+      <fileset basedir="v40/src/SharpSvn/bin/Win32/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpPlink-Win32.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x86">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release">
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="SharpSvn.UI.xml" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x86">
+      <fileset basedir="v40/imports/release/bin">
+        <include name="SharpSvn-*-win32.*" />
+      </fileset>
+    </copy>
+
+    <copy todir="release/net40/x64">
+      <fileset basedir="v40/src/SharpSvn/bin/x64/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpPlink-x64.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x64">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release">
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="SharpSvn.UI.xml" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x64">
+      <fileset basedir="v40/imports/release/bin">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+    </copy>
+    
+    <foreach item="File" property="file">
+      <in>
+        <items basedir="release">
+          <include name="**/*.dll" />
+        </items>
+      </in>
+      <do>
+        <fail
+          if="${version::get-major(fileversioninfo::get-file-version(fileversioninfo::get-version-info(file))) == 0}"
+          message="File '${file}' doesn't have a fileversion recorded in its version resource" />
+      </do>
+    </foreach>
+
+    <exec program="${sevenZipExe}">
+      <arg line="a -y" />
+      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+      <arg value="release" />
+    </exec>
+    
+    <foreach item="File" property="file" if="${property::exists('nugetExe')}">
+      <in>
+        <items basedir="src/nuget">
+          <include name="*.nuspec" />
+        </items>
+      </in>
+      <do>
+        <exec program="${nugetExe}">
+          <arg line='pack "${file}"' />
+          <arg line='-BasePath release' />
+          <arg line='-OutputDirectory release' />
+          <arg line='-Version "${artifactLabel}"' />
+          <arg line='-NonInteractive' />
+        </exec>
+      </do>
+    </foreach>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}.zip" ziplevel="9">
+      <fileset basedir="release/net20/x86" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
+        <include name="*.txt" />
+        <include name="*.wxs" />
+      </fileset>
+    </zip>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}-x64.zip" ziplevel="9">
+      <fileset basedir="release/net20/x64" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
+        <include name="*.txt" />
+        <include name="*.wxs" />
+      </fileset>
+    </zip>
+    
+    <if test="${property::exists('collabUploadCredentials') and property::exists('collabUploadExe')}">
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 716" />
+          
+          <arg value="--description" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
+          <arg value="release/SSvn-${artifactLabel}.zip" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 719" />
+          
+          <arg value="--description" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
+          <arg value="release/SSvn-${artifactLabel}-x64.zip" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 727" />
+          
+          <arg value="--description" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
+          <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 717" />
+          
+          <arg value="--description" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
+          <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.nupkg" />
+          <!--arg value="release/SharpSvn.1.9-x86.${artifactLabel}.symbols.nupkg" /-->
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 718" />
+          
+          <arg value="--description" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
+          <arg value="release/SharpSvn.1.9-x64.${artifactLabel}.nupkg" />
+          <!--arg value="release/SharpSvn.1.9-x64.${artifactLabel}.symbols.nupkg" /-->
+        </exec>
+        
+      </if>
+
+  </target>
+  
+  <target name="clean-imports">
+  </target>
+  
+  <target name="package-svndist" if="${property::exists('CCNetNumericLabel')}">
+    <property name="artifactLabel" value="${CCNetNumericLabel}" />
+    
+    <if test="${file::exists('release/ver.txt')}">
+      <loadfile file="release/ver.txt" property="sliksvnVersion" />
+      <loadfile file="release/tag.txt" property="svnTag" />
+
+      <property name="artifactLabel" value="${sliksvnVersion}" />
+      <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}.${version::get-minor(version::parse(sliksvnVersion)) % 1000}" />
+      <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}" />
+      <choose>
+        <when test="${(version::get-minor(version::parse(sliksvnVersion)) % 1000) &gt; 900}">
+          <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${(version::get-minor(version::parse(sliksvnVersion)) / 1000) + 1}.${version::get-revision(version::parse(sliksvnVersion))}" />
+        </when>
+        <otherwise>
+          <property name="distVersion" value="${distVersion}.${(version::get-minor(version::parse(sliksvnVersion)) % 1000) * 1000 + version::get-revision(version::parse(sliksvnVersion))}" />
+        </otherwise>
+      </choose>
+    </if>
+    
+    <delete>
+      <fileset basedir="imports\svn-dist\wix">
+        <include name="bin/**" />
+        <include name="obj/**" />
+      </fileset>
+    </delete>
+
+    <exec program="cmd.exe" workingdir="imports\svn-dist">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="imports\svn-dist">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
+    </exec>
+    
+    <copy todir="release" flatten="true">
+      <fileset basedir="imports\svn-dist\wix\bin">
+        <include name="*-Subversion-${svnTag}*.msi" />
+      </fileset>
+    </copy>
+    
+    <!--foreach item="File" property="file" if="${signtoolExe != ''}">
+      <in>
+        <items basedir="release">
+          <include name="*.msi" />
+        </items>
+      </in>
+      <do>
+        <exec program="${signtoolExe}" >
+          <arg line='sign /v /n "Open Source"' />
+          <arg line='/du http://sliksvn.com/en/download/' />
+          <arg line='/d' />
+          <arg value="Slik Subversion Client ${svnVersion}" />
+          <arg line='/t http://timestamp.certum.pl/authenticode' />
+          <arg value="${file}" />
+      </exec>
+      </do>
+    </foreach-->
+    
+    <copy todir="release">
+      <fileset basedir="imports\svn-dist\dist-win32">
+        <include name="Symbols*${svnTag}*.zip" />
+      </fileset>
+    </copy>
+
+    <copy todir="release">
+      <fileset basedir="imports\svn-dist\dist-x64">
+        <include name="Symbols*${svnTag}*.zip" />
+      </fileset>
+    </copy>
+
+    <exec program="${sevenZipExe}">
+      <arg line="a -y" />
+      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+      <arg value="release" />
+    </exec>
+
+    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
+    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
+    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
+  </target>
+  
+  <mkdir dir="D:\artifacts\${CCNetProject}" />
+  <target name="buildbot-build" depends="build"></target>
+  <target name="buildbot-package" depends="build,package"></target>
+</project>

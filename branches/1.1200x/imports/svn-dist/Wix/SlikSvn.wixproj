@@ -1,0 +1,80 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.0</ProductVersion>
+    <ProjectGuid>{a30bd3bb-a4e1-41b9-ac12-1993c739cb34}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <SvnVersion Condition="'$(SvnVersion)' == '' ">1.7.4</SvnVersion>
+    <SvnSuffix Condition="'$(SvnSuffix)' == '' ">0</SvnSuffix>
+    <SvnFullVersion Condition="'$(SvnFullVersion)' != ''">$(SvnVersion)</SvnFullVersion>
+    <SvnFullVersion Condition="'$(SvnFullVersion)' != '' and '$(SvnSuffix)' != '0'">$(SvnVersion)-$(SvnSuffix)</SvnFullVersion>
+    <DistVersion Condition="'$(DistVersion) == ''">$(SvnVersion)</DistVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=$(SvnVersion);platform=Win32;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=$(SvnVersion);platform=x64;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <OutputName>Slik-Subversion-$(SvnFullVersion)-win32</OutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
+    <OutputName>Slik-Subversion-$(SvnFullVersion)-x64</OutputName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Localization.wxs" />
+    <Compile Include="MyMondo.wxs" />
+    <Compile Include="Product.wxs" />
+    <Compile Include="Relations.wxs" />
+    <Compile Include="Win32.wxs" />
+    <Compile Include="X64.wxs" />
+    <Compile Include="../Release/Licenses/SharpSvn-Licenses.wxs">
+      <Link>SharpSvn-Licenses.wxs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SlikSvnLicense.rtf" />
+    <Content Include="Win32.wxi" />
+    <Content Include="X64.wxi" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup Condition="'$(DistBuild)' == 'true'">
+    <SuppressValidation>True</SuppressValidation>
+  </PropertyGroup>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

@@ -1,0 +1,12 @@
+Index: src/global.c
+===================================================================
+--- src/global.c	(revision 38727)
++++ src/global.c	(working copy)
+@@ -225,6 +225,7 @@
+ 	TlsSetValue(_tls_index, NULL);
+ }
+ 
++#elif 0 /* No DllMain Please */
+ BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved)
+ {
+ 	GIT_UNUSED(hInstDll);
