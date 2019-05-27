@@ -61,9 +61,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.MSBuild.VSIX", "Sh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.MSBuild.Inc", "SharpSvn.MSBuild\SharpSvn.MSBuild.Inc.csproj", "{FEEDF00D-BC63-4FDF-84D4-6194228C9101}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AssemblyAnnotate", "AssemblyAnnotate", "{6FD3987C-F85A-499E-8C67-817A65439D31}"
-EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -193,13 +195,6 @@ Global
 		{3645E16F-6B5A-43D7-A81D-77E681E9A636} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
 		{41C94DFB-3004-4524-9869-69C30931BE4E} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
 		{FEEDF00D-BC63-4FDF-84D4-6194228C9101} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F59DEE84-404E-4132-A4EC-9A2DC5C6511E}
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

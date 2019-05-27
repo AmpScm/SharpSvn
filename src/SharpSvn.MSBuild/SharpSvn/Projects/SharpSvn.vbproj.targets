@@ -1,14 +1,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <SharpSvnAnnotateIncluded>true</SharpSvnAnnotateIncluded>
-  </PropertyGroup>
 
-  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(MSBuildThisFileDirectory)\SharpSvn.MSBuild.dll" Condition="$(SharpSvnIncluded) != 'true'" />
+  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+  <UsingTask TaskName="PdbSourceAnnotate" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
 
-  <Target Name="SharpSvnPatchAssemblyInfoFileViaNuGet"
+  <Target Name="SharpSvnPatchAssemblyInfoFile"
           AfterTargets="BuildGenerateSources"
           BeforeTargets="Compile;XamlPreCompile;CoreCompile"
-          Condition="'$(SharpSvnPatchAssemblyInfo)' == 'true' and $(SharpSvnIncluded) != 'true'">
+          Condition="'$(SharpSvnPatchAssemblyInfo)' == 'true'">
 
     <ItemGroup>
       <AssemblyInfoFile
@@ -53,4 +51,22 @@
       <Output TaskParameter="FilesWritten" ItemName="FileWrites"/>
     </TransformAssemblyInfo>
   </Target>
+
+  <Target Name="SharpSvnAnnotateSymbols"
+          AfterTargets="Compile;XamlPreCompile;CoreCompile"
+          BeforeTargets="CopyFilesToOutputDirectory"
+          Condition="$(AnnotatePdbFile) == 'true' and $(_DebugSymbolsProduced) == 'true'"
+          Inputs="@(_DebugSymbolsIntermediatePath)"
+          Outputs="@(_DebugSymbolsIntermediatePath->'$(IntermediateOutputPath)_SharpSvn\%(filename).pdb')">
+
+    <PdbSourceAnnotate
+          Sources="@(_DebugSymbolsIntermediatePath)"
+          ToolPath="$(SharpSvnTargetsDir)\bin" />
+
+    <Copy SourceFiles="@(_DebugSymbolsIntermediatePath)"
+          DestinationFolder="$(IntermediateOutputPath)_SharpSvn">
+      <Output TaskParameter="CopiedFiles" ItemName="FileWrites"/>
+    </Copy>
+  </Target>
+
 </Project>
