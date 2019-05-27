@@ -31,7 +31,7 @@
     <if test="${environment::variable-exists('VisualStudioVersion')}">
       <property name="VSversion" value="2017" overwrite="false" if="${'15.0' == environment::get-variable('VisualStudioVersion')}" />
     </if>
-    <!-- Auto detect VS 2005-2015 -->
+    <!-- Auto detect VS 2005-2019 -->
     <if test="${environment::variable-exists('VCINSTALLDIR') and not property::exists('VSversion')}">
       <property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
 
@@ -42,6 +42,7 @@
       <property name="VSversion" value="2013" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 12.0')}" />
       <property name="VSversion" value="2015" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 14.0')}" />
       <property name="VSversion" value="2017" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio\2017\')}" />
+      <property name="VSversion" value="2019" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio\2019\')}" />
     </if>
 
     <if test="${not property::exists('VSversion')}">

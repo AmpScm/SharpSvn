@@ -1,0 +1,31 @@
+<!-- SharpSvn.net AnnotateAssembly Common Targets -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Guard against multiple imports -->
+  <PropertyGroup>
+    <SharpSvnAnnotateGenericFileIncluded>true</SharpSvnAnnotateGenericFileIncluded>
+    <SharpSvnEnabled Condition="$(SharpSvnEnabled) == ''">true</SharpSvnEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(SharpSvnIncluded) != 'true' and $(SharpSvnEnabled) != 'false'">
+    <SharpSvnPatchAssemblyInfo
+            Condition="$(SharpSvnPatchAssemblyInfo) == ''
+                       and (  $(ForceAssemblyVersion)              != '' or
+                              $(ForceOnlyAssemblyVersion)          != '' or
+                              $(ForceAssemblyFileVersion)          != '' or
+                              $(ForceAssemblyInformationalVersion) != '' or
+                              $(ForceSatelliteContractVersion)     != '' or
+                              $(ForceComCompatibleVersion)         != '' or
+                              $(ForceAssemblyCopyright)            != '' or
+                              $(ForceAssemblyCompany)              != '' or
+                              $(ForceAssemblyTrademark)            != '' or
+                              $(ForceAssemblyConfiguration)        != '' or
+                              $(ForceAssemblyDescription)          != '' or
+                              $(ForceAssemblyProduct)              != '' or
+                              $(ForceAssemblyTitle)                != '' or
+                              $(ForceCLSCompliant)                 != '' or
+                              $(ForceComVisible)                   != '' or
+                              $(ForceNeutralResourceLanguage)      != '')">true</SharpSvnPatchAssemblyInfo>
+    <SharpSvnPatchAssemblyInfo Condition="$(SharpSvnPatchAssemblyInfo) == ''">false</SharpSvnPatchAssemblyInfo>
+  </PropertyGroup>
+  <Import Condition="$(SharpSvnIncluded) != 'true' and $(SharpSvnAnnotateIncluded) != 'true' and Exists('$(SharpSvnAnnotateProjectTypeFile)')" Project="$(SharpSvnAnnotateProjectTypeFile)" />
+</Project>
+
