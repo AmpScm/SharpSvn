@@ -1,0 +1,25 @@
+<!-- SharpSvn.net AnnotateAssembly Common Targets -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(WebPublishTasksDir)' != ''">
+    <PackageDependsOn>$(PackageDependsOn);SharpSvnAddMSDeployReplaceRuleForAppPath</PackageDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="SharpSvnAddMSDeployReplaceRuleForAppPath">
+    <PropertyGroup>
+      <_PkgPathFull>$([System.IO.Path]::GetFullPath($(WPPAllFilesInSingleFolder)))</_PkgPathFull>
+      <_PkgPathFull Condition=" '$(_PkgPathFull)' == '' ">$([System.IO.Path]::GetFullPath($(_PackageTempDir)))</_PkgPathFull>
+    </PropertyGroup>
+    <!-- escape the text into a regex -->
+    <EscapeTextForRegularExpressions Text="$(_PkgPathFull)">
+      <Output TaskParameter="Result" PropertyName="_PkgPathRegex" />
+    </EscapeTextForRegularExpressions>
+    <!-- add the replace rule to update the path -->
+    <ItemGroup>
+      <MsDeployReplaceRules Include="replaceFullPath">
+        <Match>$(_PkgPathRegex)</Match>
+        <Replace>web</Replace>
+      </MsDeployReplaceRules>
+    </ItemGroup>
+  </Target>
+</Project>
+

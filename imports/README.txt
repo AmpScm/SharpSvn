@@ -15,9 +15,9 @@ in a number of ways. Normally you only build one variant.
 
 The scripts require the following tools: (currently used version)
   * NAnt        (0.92)
-  * Perl 5      (Activestate perl   5.16.3 x86)
-  * Python      (Activestate python 2.7.2  x86)
-  * Visual Studio 2008, 2010 or 2012
+  * Perl 5      (Activestate perl   5.26.3 x86)
+  * Python      (Activestate python 2.7.14  x86)
+  * Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 or 2019
     (Untested, so might require tweaks: 2005 and 2013)
 
 It is assumed all these tools are in the PATH and the settings for

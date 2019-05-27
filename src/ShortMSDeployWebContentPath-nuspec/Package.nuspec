@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata minClientVersion="2.5">
+    <id>SharpSvn.ShortMSDeployWebContentPath</id>
+    <version>$version$</version>
+    <title>SharpSvn.ShortMSDeployWebContentPath</title>
+    <authors>SharpSvn Project</authors>
+    <owners>SharpSvn Project</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://sharpsvn.net/</projectUrl>
+    <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      This package learns ASP.Net WebApplication project's MSDeploy support to
+      package with an standardized directory format like
+      'Content\web\Default.aspx' instead of paths like 
+      'Content\C_C\Users\Name\VS Projects\.....\....\Default.aspx'.
+      This allows building projects in different locations while delivering
+      similar results.
+    </description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright (c) 2006-2018</copyright>
+    <tags>msbuild aspnet webproject</tags>
+  </metadata>
+  <files>
+    <file target="build" src="SharpSvn.ShortMSDeployWebContentPath.props" />
+    <file target="build" src="SharpSvn.ShortMSDeployWebContentPath.targets" />
+  </files>
+</package>
