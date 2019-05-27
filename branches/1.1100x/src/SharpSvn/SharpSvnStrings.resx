@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllTargetsMustBeUriOrPath" xml:space="preserve">
+    <value>All targets must either be Uri or Path</value>
+  </data>
+  <data name="ArgumentMustBeAPathNotAUri" xml:space="preserve">
+    <value>This argument is not a valid path. A Uri was specified</value>
+  </data>
+  <data name="ArgumentMustBeAValidRepositoryUri" xml:space="preserve">
+    <value>The argument must be a valid absolute repository Uri</value>
+  </data>
+  <data name="HandlerIsNotRegisteredAtThisTime" xml:space="preserve">
+    <value>The handler is not registered at this time</value>
+  </data>
+  <data name="InvalidCharacterInClientName" xml:space="preserve">
+    <value>Invalid character in client name</value>
+  </data>
+  <data name="InvalidSvnRevisionTypeValue" xml:space="preserve">
+    <value>Invalid SvnRevisionType value specified</value>
+  </data>
+  <data name="InvalidUri" xml:space="preserve">
+    <value>Invalid Uri string</value>
+  </data>
+  <data name="IOThreadBlocked" xml:space="preserve">
+    <value>The IO Thread Blocked -- Do you have a deadlock?</value>
+  </data>
+  <data name="ItemInListIsNull" xml:space="preserve">
+    <value>One or more items in the list are null</value>
+  </data>
+  <data name="NonUtf8ConvertableLine" xml:space="preserve">
+    <value>{This line does contain non-Utf8 characters}</value>
+  </data>
+  <data name="NotifyAtRevisionX" xml:space="preserve">
+    <value>At revision {0}.</value>
+  </data>
+  <data name="NotifyCheckedOutExternalAtRevisionX" xml:space="preserve">
+    <value>Checked out external at revision {0}.</value>
+  </data>
+  <data name="NotifyCheckedOutRevisionX" xml:space="preserve">
+    <value>Checked out revision {0}.</value>
+  </data>
+  <data name="NotifyExportedExternalAtRevisionX" xml:space="preserve">
+    <value>Exported external at revision {0}.</value>
+  </data>
+  <data name="NotifyExportedRevisionX" xml:space="preserve">
+    <value>Exported revision {0}.</value>
+  </data>
+  <data name="NotifyExternalAtRevisionX" xml:space="preserve">
+    <value>External at revision {0}.</value>
+  </data>
+  <data name="NotifyFailedToRevertX" xml:space="preserve">
+    <value>Failed to revert '{0}' -- try updating instead</value>
+  </data>
+  <data name="NotifyFetchExternalItemIntoX" xml:space="preserve">
+    <value>Fetching external item into '{0}'</value>
+  </data>
+  <data name="NotifyMergingDifferencesBetweenRepositoryUrlsIntoX" xml:space="preserve">
+    <value>--- Merging differences between repository URLs into '{0}':</value>
+  </data>
+  <data name="NotifyMergingRXIntoY" xml:space="preserve">
+    <value>--- Merging r{0} into '{1}':</value>
+  </data>
+  <data name="NotifyMergingRXToRYIntoZ" xml:space="preserve">
+    <value>--- Merging r{0} through r{1} into '{2}':</value>
+  </data>
+  <data name="NotifyPathXIsNoLongerAMemberOfAChangeList" xml:space="preserve">
+    <value>Path '{0}' is no longer a member of a change list.</value>
+  </data>
+  <data name="NotifyPathXIsNowAMemberOfChangeListY" xml:space="preserve">
+    <value>Path '{0}' is now a member of change list '{1}'.</value>
+  </data>
+  <data name="NotifyPerformingStatusOnExternalItemAtX" xml:space="preserve">
+    <value>Performing status on external item at '{0}'</value>
+  </data>
+  <data name="NotifyResolvedConflictedStateOfX" xml:space="preserve">
+    <value>Resolved conflicted state of '{0}'</value>
+  </data>
+  <data name="NotifyRestoredX" xml:space="preserve">
+    <value>Restored '{0}'</value>
+  </data>
+  <data name="NotifyReverseMergingRXIntoY" xml:space="preserve">
+    <value>--- Reverse-merging r{0} into '{1}':</value>
+  </data>
+  <data name="NotifyReverseMergingRXToRYIntoZ" xml:space="preserve">
+    <value>--- Reverse-merging r{0} through r{1} into '{2}':</value>
+  </data>
+  <data name="NotifyRevertedX" xml:space="preserve">
+    <value>Reverted '{0}'</value>
+  </data>
+  <data name="NotifySkippedMissingTargetX" xml:space="preserve">
+    <value>Skipped missing target '{0}'</value>
+  </data>
+  <data name="NotifySkippedX" xml:space="preserve">
+    <value>Skipped '{0}'</value>
+  </data>
+  <data name="NotifyStatusAgainstRevisionX" xml:space="preserve">
+    <value>Status against revision: {0}</value>
+  </data>
+  <data name="NotifyTransmittingFileData" xml:space="preserve">
+    <value>Transmitting file data</value>
+  </data>
+  <data name="NotifyUpdatedExternalToRevisionX" xml:space="preserve">
+    <value>Updated external to revision {0}.</value>
+  </data>
+  <data name="NotifyUpdatedToRevisionX" xml:space="preserve">
+    <value>Updated to revision {0}.</value>
+  </data>
+  <data name="NotifyXLockedByUserY" xml:space="preserve">
+    <value>'{0}' locked by user '{1}'.</value>
+  </data>
+  <data name="NotifyXUnlocked" xml:space="preserve">
+    <value>'{0}' unlocked.</value>
+  </data>
+  <data name="PathCountDoesNotMatchRevisions" xml:space="preserve">
+    <value>The number of elements in the paths collection does not match the number in revisions</value>
+  </data>
+  <data name="RevisionNumberMustBeAtLeast0" xml:space="preserve">
+    <value>Revision number must be at least 0</value>
+  </data>
+  <data name="RevisionTypeMustBeHeadDateOrSpecific" xml:space="preserve">
+    <value>Revision type must be head, date or a specific revision number</value>
+  </data>
+  <data name="SvnAuthManagedPlaceholder" xml:space="preserve">
+    <value>This function is not available from managed code. </value>
+  </data>
+  <data name="SvnClientOperationInProgress" xml:space="preserve">
+    <value>Svn operation in progress; an SvnClient instance can handle only one command at a time</value>
+  </data>
+  <data name="TheTargetIsNotAValidPathTarget" xml:space="preserve">
+    <value>The specified target is not a valid Path target</value>
+  </data>
+  <data name="TheTargetIsNotAValidUriOrPathTarget" xml:space="preserve">
+    <value>The specified target is not a value Uri or Path target</value>
+  </data>
+  <data name="TheTargetIsNotAValidUriTarget" xml:space="preserve">
+    <value>The specified target is not a valid Uri target</value>
+  </data>
+  <data name="UriIsNotAbsolute" xml:space="preserve">
+    <value>The passed Uri is not absolute</value>
+  </data>
+  <data name="VerifyEnumFailed" xml:space="preserve">
+    <value>The value {0} is not a valid {1}</value>
+  </data>
+  <data name="AllUrisMustBeOnTheSameServer" xml:space="preserve">
+    <value>All provided Uri's must be on the same server</value>
+  </data>
+  <data name="CollectionMustContainAtLeastOneItem" xml:space="preserve">
+    <value>The collection must at least contain one item</value>
+  </data>
+  <data name="LoadingMimeTypesMapFileFailed" xml:space="preserve">
+    <value>The loading of the subversion mime mapping file failed</value>
+  </data>
+  <data name="FatalExceptionInSubversionApi" xml:space="preserve">
+    <value>A fatal error occurred within the subversion API - (Use Ctrl+C to copy message)</value>
+  </data>
+  <data name="PleaseRestartThisApplicationBeforeContinuing" xml:space="preserve">
+    <value>Please restart this application before continuing.\n\nStack trace:\n{0}</value>
+  </data>
+  <data name="FileXNotFound" xml:space="preserve">
+    <value>File '{0}' not found</value>
+  </data>
+  <data name="RevisionTypeCantBeWorking" xml:space="preserve">
+    <value>The Working revision type is not supported here</value>
+  </data>
+  <data name="RevisionMustBeGreaterThanOrEqualToZero" xml:space="preserve">
+    <value>Revision must be &gt;= 0</value>
+  </data>
+  <data name="TargetMustContainExplicitRevision" xml:space="preserve">
+    <value>The passed target must contain an explicit revision</value>
+  </data>
+  <data name="PropertyNameIsNotValid" xml:space="preserve">
+    <value>Property name is not valid</value>
+  </data>
+  <data name="SvnMalfunctionPrefix" xml:space="preserve">
+    <value>Subversion reported a malfunction '{0}' on line {2} of '{1}'.</value>
+  </data>
+  <data name="CropToValidDepth" xml:space="preserve">
+    <value>You can only crop a node to a depth between empty and files.</value>
+  </data>
+  <data name="PathXContainsInvalidCharacters" xml:space="preserve">
+    <value>Path '{0}' contains invalid characters</value>
+  </data>
+  <data name="PathXTooLongAndNotRooted" xml:space="preserve">
+    <value>Paths with a length above MAX_PATH (like '{0}') must be rooted.</value>
+  </data>
+  <data name="RemoteSessionMustBeOpenToPerformCommand" xml:space="preserve">
+    <value>The remote session must be open before it can perform commands</value>
+  </data>
+  <data name="CanOnlyResolveHeadDateandExplicitRevisions" xml:space="preserve">
+    <value>Can only resolve head, number and date revisions</value>
+  </data>
+  <data name="SessionAlreadyOpen" xml:space="preserve">
+    <value>The session is already open</value>
+  </data>
+  <data name="CantParseCommandX" xml:space="preserve">
+    <value>Can't parse command '{0}'</value>
+  </data>
+  <data name="NotifyExternalXRemoved" xml:space="preserve">
+    <value>Removed external '{0}'</value>
+  </data>
+  <data name="NotifySkippedAccessDeniedX" xml:space="preserve">
+    <value>Skipped '{0}' - Access denied</value>
+  </data>
+  <data name="NotifySkippedObstructionX" xml:space="preserve">
+    <value>Skipped '{0}' - An obstructing working copy found</value>
+  </data>
+  <data name="NotifySkippedXRemainsInConflict" xml:space="preserve">
+    <value>Skipped '{0}' - Node remains in conflict</value>
+  </data>
+  <data name="NotifyUpdateStartedX" xml:space="preserve">
+    <value>Updating '{0}':</value>
+  </data>
+  <data name="ArgumentMustBeAValidRelativePath" xml:space="preserve">
+    <value>This argument is not a valid relative path</value>
+  </data>
+</root>

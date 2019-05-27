@@ -1,0 +1,343 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="intl" value="sharpsvn" overwrite="false" />
+  <property name="svnBuildName" value="SharpSvn" overwrite="false" />
+  <property name="svnBase" value="${platformRoot}/subversion" />
+  <property name="subversionMergeBranches" value="" overwrite="false" />
+
+  <target name="svn-prepare" depends="checkout, bdb-build, zlib-build, openssl-build, gettext-build, sqlite-build, sasl-build, libssh2-build, sharpintl-build">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${buildSubversion}">
+      <foreach item="File" property="patch" if="${applyPatches}">
+        <in>
+          <items basedir="${downloads}/../patches/subversion">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${svnBase}" />
+          </Svn>
+        </do>
+      </foreach>
+
+      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn and applyMerges}">
+        /* Appended by sharpsvn/imports/scripts/build-subversion.build */
+        apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+        {
+        if (!auth_baton)
+        return NULL;
+
+        return auth_baton->creds_cache;
+        }
+      </echo>
+
+      <FilterFile file="${svnBase}/subversion/libsvn_fs_base/fs.c" if="${svnAddSharpSvn and applyMerges}">
+        <filterchain>
+          <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+                   to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+        </filterchain>
+      </FilterFile>
+
+      <FilterFile file="${svnBase}/subversion/libsvn_subr/io.c" if="${svnAddSharpSvn and applyMerges}">
+        <filterchain>
+          <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
+                           to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
+        </filterchain>
+      </FilterFile>
+
+      <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcproj.ezt" if="${(not static) and (dllPrefix != '')}">
+        <filterchain>
+          <replacestring from='$(OutDir)\[target.output_name]'
+                         to='$(OutDir)\[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name]' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcxproj.ezt" if="${(not static) and (dllPrefix != '')}">
+        <filterchain>
+          <replacestring from='[target.output_name_without_ext]'
+                         to='[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name_without_ext]' />
+        </filterchain>
+      </FilterFile>
+    </OnceBlock>
+  </target>
+
+  <target name="svn-compat">
+
+    <copy todir="${intDir}\inc">
+      <fileset basedir="${intDir}\include">
+        <include name="sqlite*.h" />
+      </fileset>
+    </copy>
+
+    <copy todir="${intDir}\include">
+      <fileset basedir="${intDir}\include\apr-1">
+        <include name="**.h" />
+      </fileset>
+    </copy>
+
+    <!-- 1.8 and earlier expect this nonstandard sqlite layout -->
+    <copy todir="${intDir}\inc">
+      <fileset basedir="${intDir}\include">
+        <include name="sqlite*.h" />
+      </fileset>
+    </copy>
+    <!-- Place APR below HTTPD where 1.8 and 1.7 expect it -->
+    <copy todir="${httpdDir}/srclib/apr/LibR">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/srclib/apr/LibD">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/srclib/apr/Release">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/srclib/apr/Debug">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/srclib/apr/include" verbose="true">
+      <fileset basedir="${intDir}/include/apr-1">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+
+    <copy todir="${httpdDir}/srclib/apr-util/LibR">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/srclib/apr-util/LibD">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/srclib/apr-util/Release">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/srclib/apr-util/Debug">
+      <fileset basedir="${intDir}/lib">
+        <include name="*apr*.lib" />
+      </fileset>
+    </copy>
+
+    <copy todir="${httpdDir}/srclib/apr-util/include">
+      <fileset basedir="${intDir}/include/apr-1">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+
+    <!-- Allow neon to find expat and zlib where Subversion 1.7 says it is -->
+    <copy todir="${httpdDir}/srclib/apr-util/xml/expat/lib">
+      <fileset basedir="${intDir}/include">
+        <include name="expat*.h" />
+      </fileset>
+    </copy>
+    <copy tofile="${zlibDir}/zlibstat.lib" file="${zlibDir}/zlib.lib" />
+    <copy tofile="${zlibDir}/zlibstatD.lib" file="${zlibDir}/zlib.lib" />
+    <!-- /Neon -->
+
+
+    <!-- Pre 1.9 the test suite expects this dll here -->
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${intDir}/bin">
+        <include name="libsasl.dll" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/bin">
+      <fileset basedir="${intDir}/bin">
+        <include name="*apr-1.dll" />
+        <include name="*aprutil-1.dll" />
+        <include name="*libeay*.dll" />
+        <include name="*ssl*.dll" />
+        <include name="engines/*" unless="${static}" />
+        <include name="*sasl*.dll" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="svn-generate" depends="checkout, apr-build, aprutil-build, serf-build, svn-prepare, svn-compat" if="${buildSubversion}">
+
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
+      <exec program="python.exe" workingdir="${svnBase}" verbose="true">
+        <arg value="gen-make.py" />
+        <arg line="-t vcproj" />
+        <arg line="--vsnet-version=${VSversion}" />
+        <arg value="--release" />
+        <arg value="--with-httpd=../../httpd" if="${(buildHttpd == 'true') and (platform == 'win32')}" />
+        <arg value="--with-apr=${intDir}" />
+        <arg value="--with-apr-util=${intDir}" />
+        <arg value="--with-berkeley-db=${intDir}" />
+        <arg value="--with-zlib=${intDir}" />
+        <arg value="--with-sasl=${intDir}" />
+        <arg value="--with-openssl=${intDir}" />
+        <arg value="--with-serf=${intDir}" if="false" />
+        <arg value="--with-serf=../serf" />
+        <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
+        <arg value="--with-sqlite=${path::get-full-path(intDir)}" />
+        <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
+        <arg value="--with-libintl=${intDir}" if="${intl != 'none'}" />
+        <arg value="--disable-shared" if="${static or svnStatic}"/>
+        <arg value="--with-static-apr" if="${static}" />
+        <arg line="-D SVN_HI_RES_SLEEP_MS=1" if="${static}" />
+      </exec>
+      <!-- The ZLib build has already completed -->
+
+      <echo message="@echo off" file="${svnBase}/build/win32/build_zlib.bat" />
+
+      <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
+      <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">
+        <arg value="-n" />
+        <arg value="${svnBase}/subversion/" />
+      </exec>
+      <loadfile file="build/subversion-${subversionVersion}_${platform}-version.txt" property="svnWcVersion">
+        <filterchain>
+          <replacestring from='M' to='' />
+          <replacestring from='S' to='' />
+        </filterchain>
+      </loadfile>
+      <if test="${string::get-length(svnWcVersion) &gt; 20}">
+        <property name="svnWcVersion" value="?" />
+      </if>
+
+      <!-- Trim whitespace (and the newline added by NAnt) -->
+      <property name="svnWcVersion" value="${string::trim(svnWcVersion)}" />
+
+      <!-- Add more version information to the subversion binaries and functions -->
+      <property name="vDesc" value=":${svnBuildType}/${subversionVersion}@${svnWcVersion}" if="${svnBuildType!='tag'}" />
+      <property name="vDesc" value="/${subversionVersion}" if="${svnBuildType=='tag'}" />
+      <property name="buildType" value="" />
+      <property name="buildType" value="${svnBuildType}-" if="${svnBuildType!='tag'}" />
+      <property name="buildType" value="${string::substring(subversionVersion,
+                                                            string::index-of(subversionVersion,'-')+1,
+                                                            string::get-length(subversionVersion)-string::index-of(subversionVersion,'-')-1)}-" 
+                                 if="${string::contains(subversionVersion, '-')}" />
+      <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
+        #pragma once
+        #undef SVN_VER_TAG
+        #undef SVN_VER_NUMTAG
+        #define SVN_VER_TAG  " (${svnBuildName}${vDesc})"
+        #define SVN_VER_NUMTAG "-${buildType + svnBuildName}"
+      </echo>
+    </OnceBlock>
+  </target>
+
+  <target name="svn-build" depends="bdb-build, zlib-build, apr-build, serf-build, swig-build, httpd-build, svn-generate" if="${buildSubversion}">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
+      <fileset basedir="${svnBase}">
+        <include name="subversion/**/*.c" />
+        <include name="subversion/**/*.h" />
+        <include name="${intDir}/**" />
+      </fileset>
+
+      <!-- Now build subversion -->
+      <MSBuild src="${svnBase}/subversion_vcnet.sln">
+        <!--arg value="/verbosity:quiet" /-->
+        <target value="Programs\svn" />
+        <target value="Programs\svnadmin" />
+        <target value="Programs\svnbench" />
+        <target value="Programs\svnversion" />
+        <target value="Programs\svnserve" />
+        <target value="Programs\svnsync" />
+        <target value="Programs\svnlook" />
+        <target value="Programs\svnmucc"/>
+        <target value="Programs\svnauthz" />
+        <target value="Programs\svnauthz-validate" />
+        <target value="Programs\svndumpfilter" />
+        <target value="Programs\svnfsfs" />
+        <target value="Programs\svnrdump" />
+        <target value="Programs\svn-populate-node-origins-index" />
+        <target value="__SWIG_PERL__" if="${property::exists('withSwig')}" />
+        <target value="__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
+        <target value="__JAVAHL__" if="${buildJavaHL and javaHome != ''}" />
+      </MSBuild>
+    </OnceBlock>
+  </target>
+  <target name="copy-result" depends="svn-build,misc-copy,copy-licenses,gettext-translate" if="${buildSubversion}">
+    <copy todir="${release}/lib" flatten="true">
+      <fileset basedir="build/win32">
+        <include name="subversion/${Configuration}/**/*.lib" />
+        <include name="subversion/${Configuration}/**/*.pdb" />
+        <!-- Don't copy pdb's for executables -->
+        <exclude name="subversion/${Configuration}/**/svn*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-x64" flatten="true">
+      <fileset basedir="build/x64">
+        <include name="subversion/${Configuration}/**/*.lib" />
+        <include name="subversion/${Configuration}/**/*.pdb" />
+        <!-- Don't copy pdb's for executables -->
+        <exclude name="subversion/${Configuration}/**/svn*.pdb" />
+      </fileset>
+    </copy>
+    <if test="${platform!='win32'}">
+      <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
+      <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve-${platform}.exe" if="${not static}"/>
+      <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
+      <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion-${platform}.exe" />
+    </if>
+    <if test="${platform=='win32'}">
+      <copy todir="${release}/bin" flatten="true">
+        <fileset basedir="${svnBase}/release">
+          <include name="**/*.dll" />
+          <include name="**/*.exe" />
+          <include name="**/*.pdb" />
+          <exclude name="**/*-test*" />
+        </fileset>
+      </copy>
+    </if>
+    <copy todir="${releaseLib}">
+      <fileset basedir="${intDir}/lib">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${svnBase}\subversion\include">
+        <include name="**/*.h" />
+        <include name="${svnBase}\release\svn_private_config.h" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include/svn-internal">
+      <fileset basedir="${svnBase}/subversion">
+        <include name="libsvn_client/client.h" />
+        <include name="libsvn_subr/config_impl.h" />
+        <include name="libsvn_subr/utf8proc/utf8proc.h" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${intDir}/include">
+        <include name="**" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib" if="${platform == 'win32'}">
+      <fileset basedir="${intDir}/lib">
+        <include name="**" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-x64" if="${platform == 'x64'}">
+      <fileset basedir="${intDir}/lib">
+        <include name="**" />
+      </fileset>
+    </copy>
+    <echo file="${release}/copylibs.cmd">
+      @echo off
+      xcopy /y /q "..\..\imports\release\bin\*-%1.dll" %2
+
+    </echo>
+    <copy todir="${release}/po" flatten="true">
+      <fileset basedir="${platformRoot}\subversion\subversion">
+        <include name="**/*.po" />
+      </fileset>
+    </copy>
+    <copy tofile="${release}/include/sharpsvn-imports.h" file="${downloads}/../scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
+  </target>
+</project>

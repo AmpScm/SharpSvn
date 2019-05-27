@@ -1,0 +1,12 @@
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 1811061)
++++ CMakeLists.txt	(working copy)
+@@ -221,6 +221,7 @@
+   xml/expat/lib/xmlrole.c
+   xml/expat/lib/xmltok.c
+   xml/expat/lib/xmlparse.c
++  xml/expat/lib/loadlibrary.c
+ )
+ 
+ SET(install_targets)
