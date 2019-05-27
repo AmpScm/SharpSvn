@@ -43,7 +43,7 @@ extern "C" {
 #define true Q_true
 #endif
 #undef ssize_t
-#include <svn-internal/libsvn_subr/utf8proc/utf8proc.h>
+#include <svn-internal/libsvn_subr/utf8proc/utf8proc_internal.h>
 #if _MSC_VER < 1900
 #undef true
 #undef false
