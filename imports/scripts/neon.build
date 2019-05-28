@@ -7,7 +7,7 @@
         <arg value="merge" />
         <arg value="-c" />
         <arg value="${neonMerges}" />
-        <arg value="http://svn.webdav.org/repos/projects/neon/trunk/" />
+        <arg value="^/projects/neon/trunk/" />
         <arg value="${neonDir}" />
       </Svn>
     </OnceBlock>
@@ -19,7 +19,11 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${neonDir}" />
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${neonDir}" />
+          </Svn>
         </do>
       </foreach>
       <property name="mak" value="" overwrite="false" />

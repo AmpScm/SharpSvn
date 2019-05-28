@@ -20,7 +20,7 @@
           </items>
         </in>
         <do>
-          <Svn verbose="true">
+          <Svn>
             <arg value="patch" />
             <arg value="${patch}" />
             <arg value="${opensslDir}" />
