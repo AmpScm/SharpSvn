@@ -9,7 +9,7 @@
         <arg value="merge" />
         <arg value="-c" />
         <arg value="${aprMerges}" />
-        <arg value="http://svn.apache.org/repos/asf/apr/apr/trunk/" />
+        <arg value="^/apr/apr/trunk/" />
         <arg value="${aprDir}" />
       </Svn>
     </OnceBlock>
