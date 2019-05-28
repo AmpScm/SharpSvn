@@ -24,7 +24,11 @@ nant -f:tools/buildbot.build "-D:CCNetNumericLabel=%BUILD_NUMBER%" "-D:CCNetProj
         """
       }
     }
-  
-  
+  }
+
+  post {
+    always {
+      archiveArtifacts 'release/**'
+    }
   }
 }
