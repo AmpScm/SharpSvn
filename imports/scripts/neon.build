@@ -19,7 +19,11 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${neonDir}" />
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${neonDir}" />
+          </Svn>
         </do>
       </foreach>
       <property name="mak" value="" overwrite="false" />

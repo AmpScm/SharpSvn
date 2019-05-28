@@ -16,7 +16,11 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${saslDir}" />
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${saslDir}" />
+          </Svn>
         </do>
       </foreach>
       <FilterFile file="${saslDir}/win32/include/config.h">
