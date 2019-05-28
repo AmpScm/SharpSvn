@@ -4,7 +4,7 @@
   <property name="serfDebug" value="false" overwrite="false" />
   <target name="serf-prepare" depends="checkout">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.merged" unless="${serfBuildType == 'trunk'}">
-      <Svn verbose="true" if="${string::get-length(serfMerges) &gt; 0}">
+      <Svn if="${string::get-length(serfMerges) &gt; 0}">
         <arg value="merge" />
         <arg value="-c" />
         <arg value="${serfMerges}" />

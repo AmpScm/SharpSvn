@@ -28,7 +28,7 @@
     <mkdir dir="${downloads}" />
 
     <get
-      src="http://download.oracle.com/berkeley-db/${dbFilename}"
+      src="https://download.oracle.com/berkeley-db/${dbFilename}"
       dest="${downloads + dbFilename}"
       unless="${file::exists(downloads + dbFilename)}" />
 
@@ -68,7 +68,7 @@
 
     <if test="${intl == 'gettext'}">
       <get
-        src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}"
+        src="https://ftpmirror.gnu.org/gettext/${gettextFilename}"
         dest="${downloads + gettextFilename}"
         unless="${file::exists(downloads + gettextFilename)}" />
 
