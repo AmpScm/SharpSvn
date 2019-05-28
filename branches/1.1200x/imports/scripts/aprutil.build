@@ -9,7 +9,7 @@
         <arg value="merge" />
         <arg value="-c" />
         <arg value="${aprutilMerges}" />
-        <arg value="http://svn.apache.org/repos/asf/apr/apr-util/trunk/" />
+        <arg value="^/apr/apr-util/trunk/" />
         <arg value="${aprUtilDir}" />
       </Svn>
       <foreach item="File" property="patch">
