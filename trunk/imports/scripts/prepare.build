@@ -6,9 +6,9 @@
       unless="${directory::exists(svnBase)}">
 
       <arg value="co" />
-      <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
-      <arg value="http://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
-      <arg value="http://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
+      <arg value="https://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
+      <arg value="https://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
+      <arg value="https://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
       <arg value="${svnBase}" />
     </Svn>
 
@@ -31,7 +31,7 @@
           <arg line="--accept ${accept}" if="${string::get-length(accept) &gt; 0}" />
           <arg value="-c" />
           <arg value="${range}" />
-          <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
+          <arg value="https://svn.apache.org/repos/asf/subversion/trunk/" />
           <arg value="${svnBase}" />
         </Svn>
       </foreach>

@@ -7,7 +7,7 @@
         <arg value="merge" />
         <arg value="-c" />
         <arg value="${neonMerges}" />
-        <arg value="http://svn.webdav.org/repos/projects/neon/trunk/" />
+        <arg value="^/projects/neon/trunk/" />
         <arg value="${neonDir}" />
       </Svn>
     </OnceBlock>
