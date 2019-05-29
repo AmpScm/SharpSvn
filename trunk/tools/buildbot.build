@@ -15,16 +15,7 @@
   <include buildfile="imports/scripts/tasks.build" />
   
   <target name="prepare">
-    <Svn output=".svn-info"><arg line="info . --xml" /></Svn>
-    <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
-    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
-    <Svn unless="${svnDist}">
-      <arg line='--no-auth-cache --username guest --password ""' />
-      <arg line="checkout ${svn_url}" unless="${directory::exists('v40')}" />
-      <arg line="update"                  if="${directory::exists('v40')}" />
-      <arg line="-r ${svn_rev} v40/" />      
-    </Svn>
-    
+
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
     
@@ -48,28 +39,18 @@
     <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
     <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
       <exec program="cmd.exe" failonerror="false">
-        <arg line="/c rmdir imports\build imports\release imports\svn-dist\build imports\svn-dist\release v40\imports\build v40\imports\release /s /q" />
+        <arg line="/c rmdir imports\build imports\release imports\svn-dist\build imports\svn-dist\release v40 /s /q" />
       </exec>
     </if>
-  
-    <NAntWithEnv unless="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" env-args="x86"
-        workingdir="imports" buildfile="imports\Default.build"
-        target="build" />
 
     <NAntWithEnv unless="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" env-args="x86_amd64"
-        workingdir="imports" buildfile="imports\Default.build"
-        target="build" />
-    
-    <NAntWithEnv unless="${svnDist}"
         env-script="${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" env-args="x86"
-        workingdir="v40\imports" buildfile="v40\imports\Default.build"
+        workingdir="imports" buildfile="imports\Default.build"
         target="build" />
 
     <NAntWithEnv unless="${svnDist}"
         env-script="${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" env-args="x86_amd64"
-        workingdir="v40\imports" buildfile="v40\imports\Default.build"
+        workingdir="imports" buildfile="imports\Default.build"
         target="build" />
 
     <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
@@ -138,8 +119,6 @@
         in="src/SharpSvn.UI/bin/x86/release/SharpSvn.xml"
         out="release/SharpSvn.xml" />
         
-    <copy file="release/SharpSvn.xml" todir="release/net20/x86" />
-    <copy file="release/SharpSvn.xml" todir="release/net20/x64" />
     <copy file="release/SharpSvn.xml" todir="release/net40/x86" />
     <copy file="release/SharpSvn.xml" todir="release/net40/x64" />
     <delete file="release/SharpSvn.xml" />
@@ -164,48 +143,6 @@
     <copy todir="release/resources">
       <fileset basedir="src/SharpSvn.UI/bin/x86/release">
         <include name="*/*.resources.dll" />
-      </fileset>
-    </copy>
-
-    <copy todir="release/net20/x86">
-      <fileset basedir="src/SharpSvn/bin/Win32/release">
-        <include name="SharpSvn.dll" />
-        <include name="SharpSvn.pdb" />
-        <include name="SharpPlink-Win32.svnExe" />
-        <include name="SharpPlink-Win32.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="release/net20/x86">
-      <fileset basedir="src/SharpSvn.UI/bin/x86/release">
-        <include name="SharpSvn.UI.dll" />
-        <include name="SharpSvn.UI.pdb" />
-        <include name="SharpSvn.UI.xml" />
-      </fileset>
-    </copy>
-    <copy todir="release/net20/x86">
-      <fileset basedir="imports/release/bin">
-        <include name="SharpSvn-*-win32.*" />
-      </fileset>
-    </copy>
-
-    <copy todir="release/net20/x64">
-      <fileset basedir="src/SharpSvn/bin/x64/release">
-        <include name="SharpSvn.dll" />
-        <include name="SharpSvn.pdb" />
-        <include name="SharpPlink-x64.svnExe" />
-        <include name="SharpPlink-x64.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="release/net20/x64">
-      <fileset basedir="src/SharpSvn.UI/bin/x64/release">
-        <include name="SharpSvn.UI.dll" />
-        <include name="SharpSvn.UI.pdb" />
-        <include name="SharpSvn.UI.xml" />
-      </fileset>
-    </copy>
-    <copy todir="release/net20/x64">
-      <fileset basedir="imports/release/bin">
-        <include name="SharpSvn-*-x64.*" />
       </fileset>
     </copy>
 
@@ -288,7 +225,7 @@
     </foreach>
     
     <zip zipfile="release\SSvn-${artifactLabel}.zip" ziplevel="9">
-      <fileset basedir="release/net20/x86" prefix="SharpSvn">
+      <fileset basedir="release/net40/x86" prefix="SharpSvn">
         <include name="*.dll" />
         <include name="*.pdb" />
         <include name="*.xml" />
@@ -305,7 +242,7 @@
     </zip>
     
     <zip zipfile="release\SSvn-${artifactLabel}-x64.zip" ziplevel="9">
-      <fileset basedir="release/net20/x64" prefix="SharpSvn">
+      <fileset basedir="release/net40/x64" prefix="SharpSvn">
         <include name="*.dll" />
         <include name="*.pdb" />
         <include name="*.xml" />
