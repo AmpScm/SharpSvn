@@ -195,6 +195,8 @@ namespace Po2Resx
                         case "msgstr[0]":
                         case "msgstr[1]":
                         case "msgstr[2]":
+                        case "msgstr[3]":
+                        case "msgstr[4]":
                             break;
                         default:
                             Console.Error.WriteLine(string.Format("{0}({1}): Warning: Ignoring unexpected token: {2}", file.FullName, token.Line, token.Key));
