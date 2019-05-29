@@ -38,6 +38,7 @@
 
 extern "C" {
 #include <svn-internal/libsvn_subr/utf8proc/utf8proc_internal.h>
+#include <svn-internal/libsvn_subr/lz4/lz4internal.h>
 };
 
 using namespace System;
@@ -71,6 +72,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     ", Cyrus Sasl " SASL_VERSION
     ", eXpat " EXPAT_VERSION
     ", LibSSH2 " LIBSSH2_VERSION
+    ", LZ4 " LZ4_VERSION_STRING
     ", " OPENSSL_VERSION_TEXT
     ", serf " SERF_VERSION
     ", sqlite " SQLITE_VERSION
@@ -92,6 +94,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
 [assembly:SvnLibrary("eXpat", EXPAT_VERSION)];
 [assembly:SvnLibrary("LibSSH2", LIBSSH2_VERSION)]
+[assembly:SvnLibrary("LZ4", LZ4_VERSION_STRING)]
 [assembly:SvnLibrary("Serf", SERF_VERSION)];
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
 [assembly:SvnLibrary("Utf8proc", UTF8PROC_VERSION)];
@@ -125,4 +128,4 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 
 #include "../../imports/release/include/sharpsvn-imports.h"
 #pragma comment(lib, "libssh2.lib")
-[assembly:AssemblyVersionAttribute("1.8999.*")];
+[assembly:AssemblyVersionAttribute("1.12999.*")];
