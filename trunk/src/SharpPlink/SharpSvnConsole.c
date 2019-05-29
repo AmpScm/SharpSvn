@@ -277,7 +277,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
     int result;
 
     if(console_batch_mode)
-        return console_verify_ssh_host_key(frontend, host, port, keytype, keystr, fingerprint, callback, ctx);
+        return putty_verify_ssh_host_key(frontend, host, port, keytype, keystr, fingerprint, callback, ctx);
 
     /*
     * Verify the key against the registry.
@@ -332,10 +332,10 @@ struct filereq_tag {
  * save==1 -> GetSaveFileName; save==0 -> GetOpenFileName
  * `state' is optional.
  */
-bool request_file(filereq *state, OPENFILENAME *of, int preserve, int save)
+BOOL request_file(filereq *state, OPENFILENAME *of, int preserve, int save)
 {
     TCHAR cwd[MAX_PATH]; /* process CWD */
-    bool ret;
+    BOOL ret;
 
     /* Get process CWD */
     if (preserve) {
