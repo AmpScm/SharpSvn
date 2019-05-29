@@ -359,7 +359,7 @@ public class NMake : ExternalAppTask
           if (!NoLogo)
             sb.Append(" /NOLOGO");
           if (!Verbose)
-            sb.Append(" /S");
+            sb.Append(" /S \"MAKE=nmake /S /NOLOGO\"");
 
           return sb.ToString().Trim();
         }
