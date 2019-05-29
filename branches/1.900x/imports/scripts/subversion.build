@@ -57,6 +57,8 @@
         <filterchain>
           <replacestring from='[target.output_name_without_ext]'
                          to='[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name_without_ext]' />
+          <replacestring from='[if-any depends.delayload][depends.delayload];[end]'
+                         to='[if-any depends.delayload]${dllPrefix}[depends.delayload];[end]' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
