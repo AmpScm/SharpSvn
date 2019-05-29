@@ -204,62 +204,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PuttySrc\agentf.c" />
     <ClCompile Include="PuttySrc\be_misc.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\ecc.c" />
-    <ClCompile Include="PuttySrc\mainchan.c" />
-    <ClCompile Include="PuttySrc\marshal.c" />
-    <ClCompile Include="PuttySrc\memory.c" />
     <ClCompile Include="PuttySrc\miscucs.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\mpint.c" />
-    <ClCompile Include="PuttySrc\nullplug.c" />
-    <ClCompile Include="PuttySrc\sessprep.c" />
-    <ClCompile Include="PuttySrc\ssh1bpp.c" />
-    <ClCompile Include="PuttySrc\ssh1censor.c" />
-    <ClCompile Include="PuttySrc\ssh1connection-client.c" />
-    <ClCompile Include="PuttySrc\ssh1connection.c" />
-    <ClCompile Include="PuttySrc\ssh1login.c" />
-    <ClCompile Include="PuttySrc\ssh2bpp-bare.c" />
-    <ClCompile Include="PuttySrc\ssh2bpp.c" />
-    <ClCompile Include="PuttySrc\ssh2censor.c" />
-    <ClCompile Include="PuttySrc\ssh2connection-client.c" />
-    <ClCompile Include="PuttySrc\ssh2connection.c" />
-    <ClCompile Include="PuttySrc\ssh2kex-client.c" />
-    <ClCompile Include="PuttySrc\ssh2transhk.c" />
-    <ClCompile Include="PuttySrc\ssh2transport.c" />
-    <ClCompile Include="PuttySrc\ssh2userauth.c" />
-    <ClCompile Include="PuttySrc\sshauxcrypt.c" />
     <ClCompile Include="PuttySrc\sshccp.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\sshcommon.c" />
     <ClCompile Include="PuttySrc\sshecc.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\sshhmac.c" />
-    <ClCompile Include="PuttySrc\sshmac.c" />
-    <ClCompile Include="PuttySrc\sshprng.c" />
-    <ClCompile Include="PuttySrc\sshverstring.c" />
-    <ClCompile Include="PuttySrc\stripctrl.c" />
-    <ClCompile Include="PuttySrc\utils.c" />
-    <ClCompile Include="PuttySrc\wcwidth.c" />
-    <ClCompile Include="PuttySrc\windows\winmiscs.c" />
     <ClCompile Include="SharpPlink.cpp" />
     <ClCompile Include="SharpSvnCmdLine.c" />
     <ClCompile Include="SharpSvnConsole.c" />
@@ -415,6 +383,12 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshblowf.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshbn.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
@@ -706,9 +680,6 @@
     <ClInclude Include="PuttySrc\resource.h" />
     <ClInclude Include="PuttySrc\sftp.h" />
     <ClInclude Include="PuttySrc\ssh.h" />
-    <ClInclude Include="PuttySrc\ssh1connection.h" />
-    <ClInclude Include="PuttySrc\ssh2connection.h" />
-    <ClInclude Include="PuttySrc\ssh2transport.h" />
     <ClInclude Include="PuttySrc\sshgss.h" />
     <ClInclude Include="PuttySrc\sshgssc.h" />
     <ClInclude Include="PuttySrc\storage.h" />

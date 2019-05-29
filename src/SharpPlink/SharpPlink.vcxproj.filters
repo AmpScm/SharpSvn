@@ -132,6 +132,9 @@
     <ClCompile Include="PuttySrc\sshblowf.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PuttySrc\sshbn.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="PuttySrc\sshcrc.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
@@ -258,102 +261,6 @@
     <ClCompile Include="PuttySrc\windows\wincapi.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PuttySrc\memory.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\utils.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh1bpp.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh1censor.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh1connection.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh1connection-client.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh1login.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2bpp.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2bpp-bare.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2censor.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2connection.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2connection-client.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2kex-client.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2transhk.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2transport.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh2userauth.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshprng.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\mpint.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshcommon.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\marshal.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ecc.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshauxcrypt.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshverstring.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshhmac.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winmiscs.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\mainchan.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshmac.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\stripctrl.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\nullplug.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\wcwidth.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sessprep.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\agentf.c">
-      <Filter>Putty</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharpPlink.h">
@@ -427,15 +334,6 @@
     </ClInclude>
     <ClInclude Include="sharpplink-ex.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PuttySrc\ssh1connection.h">
-      <Filter>Putty\Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PuttySrc\ssh2connection.h">
-      <Filter>Putty\Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PuttySrc\ssh2transport.h">
-      <Filter>Putty\Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
