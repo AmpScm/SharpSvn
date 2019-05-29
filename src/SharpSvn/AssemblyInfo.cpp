@@ -38,6 +38,7 @@
 
 extern "C" {
 #include <svn-internal/libsvn_subr/utf8proc/utf8proc_internal.h>
+#include <svn-internal/libsvn_subr/lz4/lz4internal.h>
 };
 
 using namespace System;
@@ -53,12 +54,11 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     "." APR_STRINGIFY(SERF_PATCH_VERSION)
 
 #define BDB_VERSION APR_STRINGIFY(DB_VERSION_MAJOR) "." APR_STRINGIFY(DB_VERSION_MINOR) "." APR_STRINGIFY(DB_VERSION_PATCH)
-
-#define SASL_VERSION APR_STRINGIFY(SASL_VERSION_MAJOR) "." APR_STRINGIFY(SASL_VERSION_MINOR) "." APR_STRINGIFY(SASL_VERSION_STEP)
-
 #define EXPAT_VERSION APR_STRINGIFY(XML_MAJOR_VERSION) "." APR_STRINGIFY(XML_MINOR_VERSION) "." APR_STRINGIFY(XML_MICRO_VERSION)
-
+#define LZ4_VERSION APR_STRINGIFY(LZ4_VERSION_MAJOR) "." APR_STRINGIFY(LZ4_VERSION_MINOR) "." APR_STRINGIFY(LZ4_VERSION_RELEASE)
+#define SASL_VERSION APR_STRINGIFY(SASL_VERSION_MAJOR) "." APR_STRINGIFY(SASL_VERSION_MINOR) "." APR_STRINGIFY(SASL_VERSION_STEP)
 #define UTF8PROC_VERSION APR_STRINGIFY(UTF8PROC_VERSION_MAJOR) "." APR_STRINGIFY(UTF8PROC_VERSION_MINOR) "." APR_STRINGIFY(UTF8PROC_VERSION_PATCH)
+
 //
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -71,6 +71,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     ", Cyrus Sasl " SASL_VERSION
     ", eXpat " EXPAT_VERSION
     ", LibSSH2 " LIBSSH2_VERSION
+    ", LZ4 " LZ4_VERSION
     ", " OPENSSL_VERSION_TEXT
     ", serf " SERF_VERSION
     ", sqlite " SQLITE_VERSION
@@ -92,6 +93,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
 [assembly:SvnLibrary("eXpat", EXPAT_VERSION)];
 [assembly:SvnLibrary("LibSSH2", LIBSSH2_VERSION)]
+[assembly:SvnLibrary("LZ4", LZ4_VERSION)]
 [assembly:SvnLibrary("Serf", SERF_VERSION)];
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
 [assembly:SvnLibrary("Utf8proc", UTF8PROC_VERSION)];
@@ -125,4 +127,4 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 
 #include "../../imports/release/include/sharpsvn-imports.h"
 #pragma comment(lib, "libssh2.lib")
-[assembly:AssemblyVersionAttribute("1.8999.*")];
+[assembly:AssemblyVersionAttribute("1.12999.*")];
