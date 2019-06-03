@@ -190,7 +190,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
       <NMake workingdir="${opensslDir}" makeFile="${opensslMakefile}" />
       <NMake workingdir="${opensslDir}" makeFile="${opensslMakefile}">
-        <arg value="install" />
+        <arg value="install_sw" />
       </NMake>
     </OnceBlock>
     <property name="binDir" value="${opensslDir}/out32dll" if="${opensslVersion &lt; '1.1.'}" />

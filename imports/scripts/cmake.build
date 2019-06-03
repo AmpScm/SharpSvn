@@ -33,9 +33,9 @@
   <property name="cmakeGenerator" value="Visual Studio 15 2017 Win64"
             overwrite="false" if="${VSversion == '2017' and platform=='x64'}" />
   <property name="cmakeGenerator" value="Visual Studio 16 2019"
-            overwrite="false" if="${VSversion == '2019' and platform=='win32'}" />
-  <property name="cmakeGenerator" value="Visual Studio 16 2019 Win64"
-            overwrite="false" if="${VSversion == '2019' and platform=='x64'}" />
+            overwrite="false" if="${VSversion == '2019'}" />
+            
+  <property name="cmakePlatform" value="${platform}" />
 
   <filterchain id="cmake-lib">
     <!-- DebugInformationFormat is only empty for release mode -->
