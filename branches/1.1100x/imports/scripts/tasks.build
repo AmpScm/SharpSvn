@@ -359,7 +359,7 @@ public class NMake : ExternalAppTask
           if (!NoLogo)
             sb.Append(" /NOLOGO");
           if (!Verbose)
-            sb.Append(" /S");
+            sb.Append(" /S \"MAKE=nmake /S /NOLOGO\"");
 
           return sb.ToString().Trim();
         }
@@ -713,7 +713,10 @@ public class CMake : ExternalAppTask
             StringBuilder sb = new StringBuilder();
 
             if (Targets.Count == 0)
+            {
                 sb.AppendFormat(" -G \"{0}\"", Properties["cmakeGenerator"]);
+                sb.AppendFormat(" -A \"{0}\"", Properties["cmakePlatform"]);
+            }
 
             foreach(Option o in AppProperties)
             {
