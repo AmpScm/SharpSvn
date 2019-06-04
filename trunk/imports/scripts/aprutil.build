@@ -3,7 +3,7 @@
   <property name="aprUtilDir" value="${platformRoot}\apr-util" />
   <property name="libAprUtilSharedLib" value="${aprUtilDir}\Release\libaprutil-1.lib" />
 
-  <property name="enableAprCrypto" value="false" overwrite="true" if="${enableAprCrypto and not static}" />
+  <property name="enableAprCrypto" value="false" overwrite="true" if="${enableAprCrypto and static}" />
 
   <target name="aprutil-merge" depends="checkout">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.merged">
