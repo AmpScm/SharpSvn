@@ -25,7 +25,7 @@
   <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088" overwrite="false" />
 
   <!-- -->
-  <property name="opensslVersion" value="1.1.0j" overwrite="false" />
+  <property name="opensslVersion" value="1.1.1c" overwrite="false" />
 
   <property name="aprVersion" value="1.6.5" overwrite="false" />
   <property name="aprUtilVersion" value="1.6.1" overwrite="false" />
