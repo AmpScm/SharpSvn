@@ -201,12 +201,6 @@
       </do>
     </foreach>
 
-    <exec program="${sevenZipExe}">
-      <arg line="a -y" />
-      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
-      <arg value="release" />
-    </exec>
-    
     <foreach item="File" property="file" if="${property::exists('nugetExe')}">
       <in>
         <items basedir="src/nuget">
@@ -223,115 +217,6 @@
         </exec>
       </do>
     </foreach>
-    
-    <zip zipfile="release\SSvn-${artifactLabel}.zip" ziplevel="9">
-      <fileset basedir="release/net40/x86" prefix="SharpSvn">
-        <include name="*.dll" />
-        <include name="*.pdb" />
-        <include name="*.xml" />
-        <include name="*.svnDll" />
-        <include name="*.svnExe" />
-      </fileset>
-      <fileset basedir="release" prefix="SharpSvn">
-        <include name="*.wxs" />
-      </fileset>
-      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
-        <include name="*.txt" />
-        <include name="*.wxs" />
-      </fileset>
-    </zip>
-    
-    <zip zipfile="release\SSvn-${artifactLabel}-x64.zip" ziplevel="9">
-      <fileset basedir="release/net40/x64" prefix="SharpSvn">
-        <include name="*.dll" />
-        <include name="*.pdb" />
-        <include name="*.xml" />
-        <include name="*.svnDll" />
-        <include name="*.svnExe" />
-      </fileset>
-      <fileset basedir="release" prefix="SharpSvn">
-        <include name="*.wxs" />
-      </fileset>
-      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
-        <include name="*.txt" />
-        <include name="*.wxs" />
-      </fileset>
-    </zip>
-    
-    <if test="${property::exists('collabUploadCredentials') and property::exists('collabUploadExe')}">
-        <exec program="${collabUploadExe}">
-          <arg line="${collabUploadCredentials}" />
-          <arg line="--site https://sharpsvn.open.collab.net" />
-          <arg line="--max-uploads 15" />
-          <arg line="--keep 28.0:00" />
-          <!--arg line="- -result resulting.uri" /-->
-          
-          <arg line="--folder 716" />
-          
-          <arg value="--description" />
-            <arg value="SharpSvn Build ${artifactLabel}" />
-          <arg value="release/SSvn-${artifactLabel}.zip" />
-        </exec>
-        
-        <exec program="${collabUploadExe}">
-          <arg line="${collabUploadCredentials}" />
-          <arg line="--site https://sharpsvn.open.collab.net" />
-          <arg line="--max-uploads 15" />
-          <arg line="--keep 28.0:00" />
-          <!--arg line="- -result resulting.uri" /-->
-          
-          <arg line="--folder 719" />
-          
-          <arg value="--description" />
-            <arg value="SharpSvn Build ${artifactLabel}" />
-          <arg value="release/SSvn-${artifactLabel}-x64.zip" />
-        </exec>
-        
-        <exec program="${collabUploadExe}">
-          <arg line="${collabUploadCredentials}" />
-          <arg line="--site https://sharpsvn.open.collab.net" />
-          <arg line="--max-uploads 15" />
-          <arg line="--keep 28.0:00" />
-          <!--arg line="- -result resulting.uri" /-->
-          
-          <arg line="--folder 727" />
-          
-          <arg value="--description" />
-            <arg value="SharpSvn Build ${artifactLabel}" />
-          <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
-        </exec>
-        
-        <exec program="${collabUploadExe}">
-          <arg line="${collabUploadCredentials}" />
-          <arg line="--site https://sharpsvn.open.collab.net" />
-          <arg line="--max-uploads 30" />
-          <arg line="--keep 28.0:00" />
-          <!--arg line="- -result resulting.uri" /-->
-          
-          <arg line="--folder 717" />
-          
-          <arg value="--description" />
-            <arg value="SharpSvn Build ${artifactLabel}" />
-          <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.nupkg" />
-          <!--arg value="release/SharpSvn.1.9-x86.${artifactLabel}.symbols.nupkg" /-->
-        </exec>
-        
-        <exec program="${collabUploadExe}">
-          <arg line="${collabUploadCredentials}" />
-          <arg line="--site https://sharpsvn.open.collab.net" />
-          <arg line="--max-uploads 30" />
-          <arg line="--keep 28.0:00" />
-          <!--arg line="- -result resulting.uri" /-->
-          
-          <arg line="--folder 718" />
-          
-          <arg value="--description" />
-            <arg value="SharpSvn Build ${artifactLabel}" />
-          <arg value="release/SharpSvn.1.9-x64.${artifactLabel}.nupkg" />
-          <!--arg value="release/SharpSvn.1.9-x64.${artifactLabel}.symbols.nupkg" /-->
-        </exec>
-        
-      </if>
 
   </target>
   
