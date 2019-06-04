@@ -3,6 +3,8 @@
   <property name="aprUtilDir" value="${platformRoot}\apr-util" />
   <property name="libAprUtilSharedLib" value="${aprUtilDir}\Release\libaprutil-1.lib" />
 
+  <property name="enableAprCrypto" value="false" overwrite="true" if="${enableAprCrypto and not static}" />
+
   <target name="aprutil-merge" depends="checkout">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.merged">
       <Svn verbose="true" if="${string::get-length(aprutilMerges) &gt; 0}">
@@ -48,7 +50,7 @@
       <CMake workingdir="${aprUtilDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
-        <prop name="APR_BUILD_TESTAPR" value="ON" />
+        <prop name="APR_BUILD_TESTAPR" value="OFF" />
 
         <prop name="APR_INCLUDE_DIR" value="${intDir}/include/apr-1" />
         <prop name="APR_LIBRARIES" value="${intDir}/lib/libapr-1.lib" />
@@ -57,8 +59,8 @@
         <prop name="EXPAT_INCLUDE_DIR" value="${intDir}/include" />
         <prop name="XMLLIB_LIBRARIES" value="libexpat.lib" />
 
-        <prop name="APU_HAVE_CRYPTO" value="ON" if="${enableAprCrypto and not static}" />
-        <prop name="APU_HAVE_CRYPTO" value="OFF" unless="${enableAprCrypto and not static}" />
+        <prop name="APU_HAVE_CRYPTO" value="ON" if="${enableAprCrypto}" />
+        <prop name="APU_HAVE_CRYPTO" value="OFF" unless="${enableAprCrypto}" />
         <prop name="APR_HAS_LDAP" value="OFF" />
         <prop name="APU_HAVE_ODBC" value="OFF" />
       </CMake>
@@ -92,7 +94,7 @@
       <MSBuild src="${aprUtilDir}/APR-Util.sln">
         <target value="aprutil-1" />
         <target value="libaprutil-1" />
-        <target value="apr_crypto_openssl-1" if="${enableAprCrypto and not static}" />
+        <target value="apr_crypto_openssl-1" if="${enableAprCrypto}" />
       </MSBuild>
     </OnceBlock>
 
