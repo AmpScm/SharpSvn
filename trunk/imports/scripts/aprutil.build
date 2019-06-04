@@ -92,7 +92,7 @@
       <MSBuild src="${aprUtilDir}/APR-Util.sln">
         <target value="aprutil-1" />
         <target value="libaprutil-1" />
-        <target value="apr_crypto_openssl-1" if="${enableAprCrypto}" />
+        <target value="apr_crypto_openssl-1" if="${enableAprCrypto and not static}" />
       </MSBuild>
     </OnceBlock>
 
