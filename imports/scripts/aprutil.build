@@ -57,8 +57,8 @@
         <prop name="EXPAT_INCLUDE_DIR" value="${intDir}/include" />
         <prop name="XMLLIB_LIBRARIES" value="libexpat.lib" />
 
-        <prop name="APU_HAVE_CRYPTO" value="ON" if="${enableAprCrypto}" />
-        <prop name="APU_HAVE_CRYPTO" value="OFF" unless="${enableAprCrypto}" />
+        <prop name="APU_HAVE_CRYPTO" value="ON" if="${enableAprCrypto and not static}" />
+        <prop name="APU_HAVE_CRYPTO" value="OFF" unless="${enableAprCrypto and not static}" />
         <prop name="APR_HAS_LDAP" value="OFF" />
         <prop name="APU_HAVE_ODBC" value="OFF" />
       </CMake>
@@ -92,7 +92,7 @@
       <MSBuild src="${aprUtilDir}/APR-Util.sln">
         <target value="aprutil-1" />
         <target value="libaprutil-1" />
-        <target value="apr_crypto_openssl-1" if="${enableAprCrypto}" />
+        <target value="apr_crypto_openssl-1" if="${enableAprCrypto and not static}" />
       </MSBuild>
     </OnceBlock>
 
