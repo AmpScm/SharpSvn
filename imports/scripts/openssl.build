@@ -115,6 +115,11 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
             if (hwnd == (HWND)-1) { idx = 0; goto err; }" />
         </filterchain>
       </FilterFile>
+      <FilterFile file="${opensslDir}/util/mkdef.pl">
+        <filterchain>
+          <LineRegexReplace re='^\s*LIBRARY\s+[\$a-zA-Z]' to='; $0' />
+        </filterchain>
+      </FilterFile>
     </OnceBlock>
   </target>
   <target name="openssl-build" depends="openssl-prepare">
