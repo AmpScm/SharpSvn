@@ -1,12 +1,5 @@
 <?xml version="1.0" ?>
 <project basedir="..">
-
-  <property name="aprRelSubdir" value="Release" if="${not static}" />
-  <property name="aprRelSubdir" value="LibR" if="${static}" />
-  <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
-  <property name="aprStaticSubdir" value="LibR" />
-  <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
-
   <target name="gen-dev" depends="extract,checkout,svn-compat,memcached-build">
     <if test="${not directory::exists(wc)}">
       <Svn>
