@@ -1,0 +1,60 @@
+Index: crypto/engine/eng_list.c
+===================================================================
+--- crypto/engine/eng_list.c	(revision 38600)
++++ crypto/engine/eng_list.c	(working copy)
+@@ -7,8 +7,9 @@
+  * in the file LICENSE in the source distribution or at
+  * https://www.openssl.org/source/license.html
+  */
+ 
++#include <windows.h>
+ #include "eng_int.h"
+ 
+ /*
+  * The linked-list of pointers to engine types. engine_list_head incorporates
+@@ -316,10 +317,43 @@ ENGINE *ENGINE_by_id(const char *id)
+     /*
+      * Prevent infinite recursion if we're looking for the dynamic engine.
+      */
+     if (strcmp(id, "dynamic")) {
+-        if ((load_dir = ossl_safe_getenv("OPENSSL_ENGINES")) == NULL)
+-            load_dir = ENGINESDIR;
++        if ((load_dir = ossl_safe_getenv("OPENSSL_ENGINES")) == NULL) {
++            static int engines_initialized = 0; 
++            static char engines_path[4*MAX_PATH] = "";
++            
++            if (!engines_initialized) {
++                HMODULE hm = NULL;
++
++                engines_initialized = 1;
++
++                if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
++                                       (LPCSTR) &ENGINE_by_id, &hm)) {
++                    char *last_bs;
++                    DWORD r = GetModuleFileNameA(hm, engines_path, sizeof(engines_path));
++
++                    if ((r > 0) && (r < (sizeof(engines_path)-10)))
++                    {
++                        last_bs = (char*)strrchr(engines_path, "\\"[0]);
++
++                        if (last_bs)
++                        {
++                            *last_bs = 0;
++                            strcat(engines_path, "\\engines");
++                        }
++                        else
++                            engines_path[0] = 0;
++                    }
++                    else
++                        engines_path[0] = 0;
++                }
++    }
++    if (*engines_path)
++      load_dir = engines_path;
++    else
++      load_dir =  ENGINESDIR;
++}
+         iterator = ENGINE_by_id("dynamic");
+         if (!iterator || !ENGINE_ctrl_cmd_string(iterator, "ID", id, 0) ||
+             !ENGINE_ctrl_cmd_string(iterator, "DIR_LOAD", "2", 0) ||
+             !ENGINE_ctrl_cmd_string(iterator, "DIR_ADD",
