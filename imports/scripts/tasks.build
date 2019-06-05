@@ -584,7 +584,7 @@ public class ApplyPatch : ExternalAppTask
     }
 }
 
-[TaskName("python")]
+[TaskName("Python")]
 public class Python : ExternalAppTask
 {
     string _appName;
@@ -607,6 +607,99 @@ public class Python : ExternalAppTask
         get { return ""; }
     }
 }
+
+[TaskName("Perl")]
+public class Perl : ExternalAppTask
+{
+    string _appName;
+    
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["PerlExe"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
+    }
+    
+    public override string ProgramArguments
+    {
+        get { return ""; }
+    }
+}
+
+[TaskName("SCons")]
+public class SCons : ExternalAppTask
+{
+    string _appName;
+    EnvironmentSet _environmentSet = new EnvironmentSet();
+    
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["sconsApp"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
+    }
+
+    [BuildElement("environment")]
+    public EnvironmentSet EnvironmentSet
+    {
+        get
+        {
+            return this._environmentSet;
+        }
+    }
+    
+    public override string ProgramArguments
+    {
+        get { return ""; }
+    }
+    
+    protected override void PrepareProcess(Process process)
+    {
+        base.PrepareProcess(process);
+        process.StartInfo.WorkingDirectory = this.WorkingDirectory.FullName;
+        foreach (Option option in this.EnvironmentSet.Options)
+        {
+            if (option.IfDefined && !option.UnlessDefined)
+            {
+                if (option.Value == null)
+                {
+                    process.StartInfo.EnvironmentVariables[option.OptionName] = "";
+                }
+                else
+                {
+                    process.StartInfo.EnvironmentVariables[option.OptionName] = option.Value;
+                }
+            }
+        }
+        foreach (EnvironmentVariable environmentVariable in this.EnvironmentSet.EnvironmentVariables)
+        {
+            if (environmentVariable.IfDefined && !environmentVariable.UnlessDefined)
+            {
+                if (environmentVariable.Value == null)
+                {
+                    process.StartInfo.EnvironmentVariables[environmentVariable.VariableName] = "";
+                }
+                else
+                {
+                    process.StartInfo.EnvironmentVariables[environmentVariable.VariableName] = environmentVariable.Value;
+                }
+            }
+        }
+    }
+}
+
 
 [TaskName("FilterFile")]
 public class FilterFile : Task

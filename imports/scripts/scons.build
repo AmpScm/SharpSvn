@@ -27,12 +27,12 @@
       </foreach>
     </OnceBlock>
     <OnceBlock file="build/scons-${sconsVersion}.installed">
-      <python workingdir="${sconsDir}">
+      <Python workingdir="${sconsDir}">
         <arg value="setup.py" />
         <arg value="install" />
         <arg value="--standalone-lib" />
         <arg value="--prefix=${path::get-full-path('build/scons')}" />
-      </python>
+      </Python>
     </OnceBlock>
   </target>
 

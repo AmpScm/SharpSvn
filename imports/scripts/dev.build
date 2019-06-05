@@ -17,7 +17,7 @@
     <property name="wc.branch.start" value="${string::last-index-of(wc.url,'/')}" />
     <property name="wc.branch" value="${string::substring(wc.url, int::parse(wc.branch.start)+1, string::get-length(wc.url)-int::parse(wc.branch.start)-1)}" />
 
-    <python workingdir="${wc}">
+    <Python workingdir="${wc}">
       <arg value="gen-make.py" />
       <arg line="-t vcproj" />
       <arg value="--vsnet-version=${VSversion}" />
@@ -40,6 +40,6 @@
       <arg value="--with-static-openssl"        if="${((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
       <arg value="-DSVN_SQLITE_REVERSE_UNORDERED_SELECTS" />
       <arg line="-D SVN_HI_RES_SLEEP_MS=1" if="${static}" />
-    </python>
+    </Python>
   </target>
 </project>
