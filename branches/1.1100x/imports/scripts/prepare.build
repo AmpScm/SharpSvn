@@ -62,17 +62,6 @@
     </Svn>
 
     <Svn
-      if="${buildNeon}"
-      unless="${directory::exists(neonDir)}">
-
-      <arg value="co" />
-      <arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
-      <arg value="${neonDir}" />
-    </Svn>
-    <!-- Write version for subversion configure script -->
-    <echo message="${neonVersion}" file="${neonDir}/.version" if="${buildNeon}" />
-
-    <Svn
       if="${buildHttpd}"
       unless="${directory::exists(httpdDir)}">
 
@@ -208,6 +197,18 @@
       <filterchain refid="license-filter" />
     </copy>
     <copy
+      file="build/${platform}/subversion/subversion/libsvn_subr/lz4/LICENSE"
+      tofile="release/licenses/LZ4-License.txt"
+      if="${buildSubversion}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="build/${platform}/subversion/subversion/libsvn_subr/utf8proc/LICENSE.md"
+      tofile="release/licenses/Utf8Proc-License.md"
+      if="${buildSubversion}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
       file="${aprDir}/LICENSE"
       tofile="release/licenses/Apr-License.txt">
       <filterchain refid="license-filter" />
@@ -225,12 +226,6 @@
     <copy
       file="${saslDir}/COPYING"
       tofile="release/licenses/Cyrus-Sasl-License.txt">
-      <filterchain refid="license-filter" />
-    </copy>
-    <copy
-      if="${buildNeon}"
-      file="${neonDir}/src/COPYING.LIB"
-      tofile="release/licenses/Neon-License.txt">
       <filterchain refid="license-filter" />
     </copy>
     <copy

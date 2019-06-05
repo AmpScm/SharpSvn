@@ -38,6 +38,11 @@
           <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 // WAS: ' />
         </filterchain>
       </FilterFile>
+      <FilterFile file="${aprUtilDir}\include\apr_xlate.h">
+        <filterchain>
+          <LineRegexReplace re='(\([ a-z_]*\*[ ]*\))[ ]*([0-9]+)\b' to='$1(apr_intptr_t)$2' />
+        </filterchain>
+      </FilterFile>
     </OnceBlock>
   </target>
   <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build, libexpat-build, cmake-prepare">
