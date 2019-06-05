@@ -28,7 +28,7 @@
   <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088" overwrite="false" />
 
   <!-- -->
-  <property name="opensslVersion" value="1.1.0j" overwrite="false" />
+  <property name="opensslVersion" value="1.1.1c" overwrite="false" />
   <property name="neonVersion" value="0.30.2" overwrite="false" />
 
   <property name="aprVersion" value="1.6.5" overwrite="false" />
@@ -49,7 +49,7 @@
   <property name="nghttp2Version" value="1.38.0" overwrite="false" />
 
   <!-- Building only -->
-  <property name="cmakeVersion" value="3.14.0" overwrite="false" />
+  <property name="cmakeVersion" value="3.14.5" overwrite="false" />
   <property name="sconsVersion" value="3.0.5" overwrite="false" />
 
   <!-- For testcase -->
