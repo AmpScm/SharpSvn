@@ -40,7 +40,7 @@
       </FilterFile>
       <FilterFile file="${aprUtilDir}\include\apr_xlate.h">
         <filterchain>
-          <LineRegexReplace re='(\(const[ a-z_]*\))([0-9]+);' to='$1(apr_intptr_t)$2;' />
+          <LineRegexReplace re='(\(const[ a-z_]*\*\s*\))([0-9]+);' to='$1(apr_intptr_t)$2;' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
