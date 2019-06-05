@@ -7,10 +7,12 @@
       <ComponentRef Id="C_SSVNLICENSE_Apr" />
       <ComponentRef Id="C_SSVNLICENSE_BerkeleyDB" />
       <ComponentRef Id="C_SSVNLICENSE_Cyrus_Sasl"/>
+      <ComponentRef Id="C_SSVNLICENSE_LZ4" />
       <ComponentRef Id="C_SSVNLICENSE_OpenSsl" />
       <ComponentRef Id="C_SSVNLICENSE_Serf" />
       <ComponentRef Id="C_SSVNLICENSE_SharpSvn" />
       <ComponentRef Id="C_SSVNLICENSE_Subversion" />
+      <ComponentRef Id="C_SSVNLICENSE_Utf8Proc" />
       <ComponentRef Id="C_SSVNLICENSE_ZLib" />
     </ComponentGroup>
   </Fragment>
@@ -40,6 +42,9 @@
       <Component Id="C_SSVNLICENSE_Cyrus_Sasl" Guid="A14954AB-3D8E-499A-80A9-D74407844058">
         <File Id="CF_SSVNLICENSE_Cyrus_Sasl" Name="Cyrus-Sasl-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
+      <Component Id="C_SSVNLICENSE_LZ4" Guid="CA48494F-342A-48FB-8173-937566ECAB03">
+        <File Id="CF_SSVNLICENSE_LZ4" Name="LZ4-License.txt" Vital="yes" KeyPath="yes"/>
+      </Component>
       <Component Id="C_SSVNLICENSE_OpenSsl" Guid="A0CCDA71-2C18-4617-90BA-FC5B761E8252">
         <File Id="CF_SSVNLICENSE_OpenSsl" Name="OpenSSL-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
@@ -51,6 +56,9 @@
       </Component>
       <Component Id="C_SSVNLICENSE_Subversion" Guid="F54C1220-3835-4262-9193-FDC31055BD95">
         <File Id="CF_SSVNLICENSE_Subversion" Name="Subversion-License.txt" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="C_SSVNLICENSE_Utf8Proc" Guid="96528F4C-7B7B-4917-A9F3-CD62360B9EFA">
+        <File Id="CF_SSVNLICENSE_Utf8Proc" Name="Utf8Proc-License.md" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_ZLib" Guid="B26E4697-80B7-4FF8-9549-0C5F0449FF15">
         <File Id="CF_SSVNLICENSE_ZLib" Name="ZLib-License.txt" Vital="yes" KeyPath="yes"/>

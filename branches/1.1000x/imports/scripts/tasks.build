@@ -62,7 +62,7 @@ public abstract class ExternalAppTask : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("VCBuild")]
-public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
+public class VCBuild : ExternalAppTask
 {
     bool _showLogo;
     string _platform;
@@ -142,7 +142,7 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("VCUpgrade")]
-public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
+public class VCUpgrade : ExternalAppTask
 {
     bool _showLogo;
     bool _noOverwrite;
@@ -196,7 +196,7 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("Svn")]
-public class Svn : NAnt.Core.Tasks.ExternalProgramBase
+public class Svn : ExternalAppTask
 {
     bool _interactive;
     FileInfo _output;
@@ -223,7 +223,7 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("MSBuild")]
-public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
+public class MSBuild : ExternalAppTask
 {
     bool _showLogo;
     string _configuration;
@@ -539,7 +539,7 @@ public class VCProjAddPlatform : NAnt.Core.Task
 }
 
 [TaskName("ApplyPatch")]
-public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
+public class ApplyPatch : ExternalAppTask
 {
     FileInfo _patchFile;
     DirectoryInfo _toDir;
@@ -583,6 +583,123 @@ public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
         get { return string.Format("-f --unified \"--input={0}\" --strip={1} -d \"{2}\"", _patchFile.FullName, _strip, _toDir.FullName); }
     }
 }
+
+[TaskName("Python")]
+public class Python : ExternalAppTask
+{
+    string _appName;
+    
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["PythonExe"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
+    }
+    
+    public override string ProgramArguments
+    {
+        get { return ""; }
+    }
+}
+
+[TaskName("Perl")]
+public class Perl : ExternalAppTask
+{
+    string _appName;
+    
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["PerlExe"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
+    }
+    
+    public override string ProgramArguments
+    {
+        get { return ""; }
+    }
+}
+
+[TaskName("SCons")]
+public class SCons : ExternalAppTask
+{
+    string _appName;
+    EnvironmentSet _environmentSet = new EnvironmentSet();
+    
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["sconsApp"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
+    }
+
+    [BuildElement("environment")]
+    public EnvironmentSet EnvironmentSet
+    {
+        get
+        {
+            return this._environmentSet;
+        }
+    }
+    
+    public override string ProgramArguments
+    {
+        get { return ""; }
+    }
+    
+    protected override void PrepareProcess(Process process)
+    {
+        base.PrepareProcess(process);
+        process.StartInfo.WorkingDirectory = this.WorkingDirectory.FullName;
+        foreach (Option option in this.EnvironmentSet.Options)
+        {
+            if (option.IfDefined && !option.UnlessDefined)
+            {
+                if (option.Value == null)
+                {
+                    process.StartInfo.EnvironmentVariables[option.OptionName] = "";
+                }
+                else
+                {
+                    process.StartInfo.EnvironmentVariables[option.OptionName] = option.Value;
+                }
+            }
+        }
+        foreach (EnvironmentVariable environmentVariable in this.EnvironmentSet.EnvironmentVariables)
+        {
+            if (environmentVariable.IfDefined && !environmentVariable.UnlessDefined)
+            {
+                if (environmentVariable.Value == null)
+                {
+                    process.StartInfo.EnvironmentVariables[environmentVariable.VariableName] = "";
+                }
+                else
+                {
+                    process.StartInfo.EnvironmentVariables[environmentVariable.VariableName] = environmentVariable.Value;
+                }
+            }
+        }
+    }
+}
+
 
 [TaskName("FilterFile")]
 public class FilterFile : Task
@@ -658,10 +775,11 @@ public class FilterFile : Task
         text = text.Replace("\r\n", "\n");
     }
 
-    using (StreamWriter sw = new StreamWriter(File.FullName, false, Encoding))
-    {
-      sw.Write(text ?? "");
-    }
+    if (System.IO.File.ReadAllText(File.FullName) != text)
+        using (StreamWriter sw = new StreamWriter(File.FullName, false, Encoding))
+        {
+          sw.Write(text);
+        }
   }
 
 }
