@@ -775,10 +775,11 @@ public class FilterFile : Task
         text = text.Replace("\r\n", "\n");
     }
 
-    using (StreamWriter sw = new StreamWriter(File.FullName, false, Encoding))
-    {
-      sw.Write(text ?? "");
-    }
+    if (System.IO.File.ReadAllText(File.FullName) != text)
+        using (StreamWriter sw = new StreamWriter(File.FullName, false, Encoding))
+        {
+          sw.Write(text);
+        }
   }
 
 }
