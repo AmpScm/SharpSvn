@@ -94,7 +94,7 @@
   <target name="svn-generate" depends="checkout, apr-build, aprutil-build, serf-build, svn-prepare, svn-compat" if="${buildSubversion}">
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
-      <python workingdir="${svnBase}">
+      <Python workingdir="${svnBase}">
         <arg value="gen-make.py" />
         <arg line="-t vcproj" />
         <arg line="--vsnet-version=${VSversion}" />
@@ -114,7 +114,7 @@
         <arg value="--with-static-apr" if="${static}" />
         <arg value="--with-static-openssl" if="${static=='true' or svnStatic=='true'}" />
         <arg line="-D SVN_HI_RES_SLEEP_MS=1" if="${static}" />
-      </python>
+      </Python>
 
       <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
       <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">

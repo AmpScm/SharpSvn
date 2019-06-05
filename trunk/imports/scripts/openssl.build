@@ -29,7 +29,7 @@
       </foreach>
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
-      <exec program="perl.exe" workingdir="${opensslDir}">
+      <Perl workingdir="${opensslDir}">
         <arg value="Configure" />
         <arg value="VC-WIN32" if="${platform=='win32'}" />
         <arg value="VC-WIN64A" if="${platform=='x64'}" />
@@ -58,7 +58,7 @@
         <arg value="-D_WIN32_WINNT=0x0501" />
         <arg value="-D_WINSOCK_DEPRECATED_NO_WARNINGS" />
         <arg value="--prefix=${path::get-full-path(intDir)}" />
-      </exec>
+      </Perl>
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
       <FilterFile file="${opensslMakefile}" unless="${static}">
