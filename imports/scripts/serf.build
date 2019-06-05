@@ -47,8 +47,7 @@
           <include name="libserf-?.pdb" />
         </fileset>
       </delete>
-      <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
-          if="${file::exists(serfDir + '/SConstruct')}">
+      <SCons workingdir="${serfDir}" if="${file::exists(serfDir + '/SConstruct')}">
         <environment>
           <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
           <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
@@ -68,7 +67,7 @@
         <arg value="install-lib" />
         <arg value="install-inc" />
         <!-- But not install-pc! -->
-      </exec>
+      </SCons>
     </OnceBlock>
     <property name="bad-name" value="serf-1" if="${file::exists(serfDir+'/serf-2.lib')}" />
     <property name="bad-name" value="serf-2" if="${file::exists(serfDir+'/serf-1.lib')}" />
