@@ -54,6 +54,12 @@
   <property name="MSBuildExe" value="MSBuild.exe" />
   <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
 
+  <property name="PythonExe" value="python.exe" />
+  <property name="PythonExe" value="C:\pythonamd64\python.exe" if="${file::exists('C:/pythonamd64/python.exe')}" />
+  <property name="PythonExe" value="C:\python\python.exe" if="${file::exists('C:/python/python.exe')}" />
+  <property name="PythonExe" value="C:\python27amd64\python.exe" if="${file::exists('C:/python27amd64/python.exe')}" />
+  <property name="PythonExe" value="C:\python27\python.exe" if="${file::exists('C:/python27/python.exe')}" />
+
   <property name="buildHttpd" value="false" overwrite="false" />
   <property name="buildNeon" value="false" overwrite="false" />
 
