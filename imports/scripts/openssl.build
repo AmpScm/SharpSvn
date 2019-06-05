@@ -61,26 +61,6 @@
       </exec>
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
-      <exec program="cmd.exe" workingdir="${opensslDir}" if="${opensslVersion &lt; '1.1.' and platform=='win32'}">
-        <arg line="/c ms\do_nasm.bat" />
-      </exec>
-      <exec program="cmd.exe" workingdir="${opensslDir}" if="${opensslVersion &lt; '1.1.' and platform=='x64'}">
-        <arg line="/c ms\do_win64a.bat" />
-      </exec>
-      <foreach item="File" property="deffile" if="${opensslVersion &lt; '1.1.'}" >
-        <in>
-          <items basedir="${opensslDir}">
-            <include name="ms/*.def" />
-          </items>
-        </in>
-        <do>
-          <FilterFile file="${deffile}" unless="${static}">
-            <filterchain>
-              <LineRegexReplace re="LIBRARY[\t ]+" to="LIBRARY ${dllPrefix}" />
-            </filterchain>
-          </FilterFile>
-        </do>
-      </foreach>
       <FilterFile file="${opensslMakefile}" unless="${static}">
         <filterchain>
           <replacestring from="LIB_LDFLAGS=/dll" to="LIB_LDFLAGS=/dll /MACHINE:${platform}" unless="${platform=='win32'}" />

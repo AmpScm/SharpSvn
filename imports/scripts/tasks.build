@@ -62,7 +62,7 @@ public abstract class ExternalAppTask : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("VCBuild")]
-public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
+public class VCBuild : ExternalAppTask
 {
     bool _showLogo;
     string _platform;
@@ -142,7 +142,7 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("VCUpgrade")]
-public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
+public class VCUpgrade : ExternalAppTask
 {
     bool _showLogo;
     bool _noOverwrite;
@@ -196,7 +196,7 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("Svn")]
-public class Svn : NAnt.Core.Tasks.ExternalProgramBase
+public class Svn : ExternalAppTask
 {
     bool _interactive;
     FileInfo _output;
@@ -223,7 +223,7 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 }
 
 [TaskName("MSBuild")]
-public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
+public class MSBuild : ExternalAppTask
 {
     bool _showLogo;
     string _configuration;
@@ -539,7 +539,7 @@ public class VCProjAddPlatform : NAnt.Core.Task
 }
 
 [TaskName("ApplyPatch")]
-public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
+public class ApplyPatch : ExternalAppTask
 {
     FileInfo _patchFile;
     DirectoryInfo _toDir;
@@ -581,6 +581,25 @@ public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
     public override string ProgramArguments
     {
         get { return string.Format("-f --unified \"--input={0}\" --strip={1} -d \"{2}\"", _patchFile.FullName, _strip, _toDir.FullName); }
+    }
+}
+
+[TaskName("python")]
+public class Python : ExternalAppTask
+{
+    string _appName;
+    
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["PythonExe"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
     }
 }
 
