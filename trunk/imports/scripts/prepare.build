@@ -197,6 +197,18 @@
       <filterchain refid="license-filter" />
     </copy>
     <copy
+      file="build/${platform}/subversion/subversion/libsvn_subr/lz4/LICENSE"
+      tofile="release/licenses/LZ4-License.txt"
+      if="${buildSubversion}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
+      file="build/${platform}/subversion/subversion/libsvn_subr/utf8proc/LICENSE.md"
+      tofile="release/licenses/Utf8Proc-License.md"
+      if="${buildSubversion}">
+      <filterchain refid="license-filter" />
+    </copy>
+    <copy
       file="${aprDir}/LICENSE"
       tofile="release/licenses/Apr-License.txt">
       <filterchain refid="license-filter" />
