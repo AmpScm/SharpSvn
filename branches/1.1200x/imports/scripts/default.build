@@ -61,7 +61,6 @@
   <property name="PythonExe" value="C:\python27\python.exe" if="${file::exists('C:/python27/python.exe')}" />
 
   <property name="buildHttpd" value="false" overwrite="false" />
-  <property name="buildNeon" value="false" overwrite="false" />
 
   <foreach item="Folder" property="jhbp">
     <in>
@@ -107,7 +106,6 @@
   <include buildfile="zlib.build" />
   <include buildfile="openssl.build" />
   <include buildfile="serf.build" />
-  <include buildfile="neon.build" />
   <include buildfile="httpd.build" />
   <include buildfile="pcre.build" />
   <include buildfile="nghttp2.build" />
