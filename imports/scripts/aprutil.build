@@ -7,11 +7,11 @@
 
   <target name="aprutil-merge" depends="checkout">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.merged">
-      <Svn verbose="true" if="${string::get-length(aprutilMerges) &gt; 0}">
+      <Svn if="${string::get-length(aprutilMerges) &gt; 0}">
         <arg value="merge" />
         <arg value="-c" />
         <arg value="${aprutilMerges}" />
-        <arg value="http://svn.apache.org/repos/asf/apr/apr-util/trunk/" />
+        <arg value="^/apr/apr-util/trunk/" />
         <arg value="${aprUtilDir}" />
       </Svn>
       <foreach item="File" property="patch">
@@ -21,7 +21,7 @@
           </items>
         </in>
         <do>
-          <Svn verbose="true">
+          <Svn>
             <arg value="patch" />
             <arg value="${patch}" />
             <arg value="${aprUtilDir}" />

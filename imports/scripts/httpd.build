@@ -11,7 +11,11 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${httpdDir}" />
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${httpdDir}" />
+          </Svn>
         </do>
       </foreach>
     </OnceBlock>
