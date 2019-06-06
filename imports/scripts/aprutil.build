@@ -43,7 +43,7 @@
           <replacestring from='#include "apu.h"'
                          to='#include "apr.h"
 #include "apu.h"' />
-          <LineRegexReplace re='(\([ a-z_]*\*[ ]*\))[ ]*([0-9]+)\b' to='$1(apr_intptr_t)$2' />
+          <LineRegexReplace re='(\([ a-z_]*\*[ ]*\))[ ]*([0-9]+)\b' to='$1(apr_uintptr_t)$2' />
         </filterchain>
       </FilterFile>
     </OnceBlock>

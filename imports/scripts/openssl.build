@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
+  <regex pattern="^(?'opensslMM'\d+\.\d+)" input="${opensslVersion}" />
   <property name="opensslDir" value="${platformRoot}/openssl" />
-  <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
-  <property name="libcryptoName" value="libeay32.lib" if="${opensslVersion &lt; '1.1.'}" />
-  <property name="libcryptoName" value="libcrypto.lib" if="${opensslVersion &gt;= '1.1.'}" />
-  <property name="libsslName" value="ssleay32.lib" if="${opensslVersion &lt; '1.1.'}" />
-  <property name="libsslName" value="libssl.lib" if="${opensslVersion &gt;= '1.1.'}" />
+  <property name="libcryptoFullName" value="${dllPrefix}libcrypto-${string::replace(opensslMM, '.','_')}.dll" if="${platform=='win32'}"/>
+  <property name="libcryptoFullName" value="${dllPrefix}libcrypto-${string::replace(opensslMM, '.','_')}-${platform}.dll" if="${platform!='win32'}"/>
+  <property name="libcryptoName" value="libcrypto.lib"  />
+  <property name="libsslName" value="libssl.lib" />
 
   <property name="opensslMakefile" value="${opensslDir}\ms\nt.mak" if="${static and opensslVersion &lt; '1.1.'}" />
   <property name="opensslMakefile" value="${opensslDir}\ms\ntdll.mak" if="${not static and opensslVersion &lt; '1.1.'}" />
