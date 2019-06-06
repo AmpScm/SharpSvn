@@ -3,8 +3,6 @@
   <!-- This nant script is used by the SharpSvn buildbot -->
   
   <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
-  <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
-  <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
   <property name="signtoolExe" value="" overwrite="false" />
   <property name="buildImports" value="true" overwrite="false" />
   <property name="svnDist" value="false" overwrite="false" />
@@ -72,16 +70,16 @@
         workingdir="v40\imports" buildfile="v40\imports\Default.build"
         target="build" />
 
-    <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
-      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='"${nantExe}" build-svn-dist"' />
-    </exec>
-    
-    <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
-      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
-      <arg line='"${nantExe}" build-svn-dist"' />
-    </exec>
 
+    <NAntWithEnv if="${svnDist}"
+        env-script="${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" env-args="x86"
+        workingdir="imports/svn-dist" buildfile="imports\svn-dist\Default.build"
+        target="build-svn-dist" />
+
+    <NAntWithEnv if="${svnDist}"
+        env-script="${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" env-args="x86_amd64"
+        workingdir="imports/svn-dist" buildfile="imports\svn-dist\Default.build"
+        target="build-svn-dist" />
 
     <echo file="imports/build/.imports-rev" message="${imports-rev}" />
 
@@ -358,16 +356,6 @@
         <include name="Symbols*${svnTag}*.zip" />
       </fileset>
     </copy>
-
-    <exec program="${sevenZipExe}">
-      <arg line="a -y" />
-      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
-      <arg value="release" />
-    </exec>
-
-    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
-    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
-    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
   </target>
   
   <mkdir dir="D:\artifacts\${CCNetProject}" />
