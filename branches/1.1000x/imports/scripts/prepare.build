@@ -2,14 +2,13 @@
 <project basedir=".." default="build">
   <target name="checkout" depends="initialize-layout">
     <Svn
-      verbose="true"
       if="${buildSubversion}"
       unless="${directory::exists(svnBase)}">
 
       <arg value="co" />
-      <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
-      <arg value="http://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
-      <arg value="http://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
+      <arg value="https://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
+      <arg value="https://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
+      <arg value="https://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
       <arg value="${svnBase}" />
     </Svn>
 
@@ -27,18 +26,18 @@
           <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />
           <property name="range" value="${string::substring(range, 1, string::get-length(range)-1)}" />
         </if>
-        <Svn verbose="true">
+        <Svn>
           <arg value="merge" />
           <arg line="--accept ${accept}" if="${string::get-length(accept) &gt; 0}" />
           <arg value="-c" />
           <arg value="${range}" />
-          <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
+          <arg value="https://svn.apache.org/repos/asf/subversion/trunk/" />
           <arg value="${svnBase}" />
         </Svn>
       </foreach>
       <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
          if="${string::get-length(subversionMergeBranches) &gt; 0}">
-        <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+        <Svn if="${string::get-length(string::trim(branch)) &gt; 0}">
           <arg value="merge" />
           <arg line="^/subversion/${branch}" />
           <arg value="${svnBase}" />
@@ -47,7 +46,6 @@
     </OnceBlock>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(zlibDir)}">
 
       <arg value="co" />
@@ -56,7 +54,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(opensslDir)}">
 
       <arg value="co" />
@@ -65,7 +62,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       if="${buildHttpd}"
       unless="${directory::exists(httpdDir)}">
 
@@ -76,7 +72,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       if="${buildHttpd}"
       unless="${directory::exists(pcreDir)}">
 
@@ -86,7 +81,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       if="${buildHttpd}"
       unless="${directory::exists(nghttp2Dir)}">
 
@@ -96,7 +90,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       if="${buildHttpd}"
       unless="${file::exists(nghttp2Dir + '/CMakeLists.txt')}">
 
@@ -107,7 +100,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(aprDir)}">
 
       <arg value="co" />
@@ -116,7 +108,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(aprUtilDir)}">
 
       <arg value="co" />
@@ -125,7 +116,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(libexpatDir)}">
 
       <arg value="co" />
@@ -134,7 +124,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(serfDir)}">
 
       <arg value="co" />
@@ -145,7 +134,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(sqliteDir)}">
 
       <arg value="co" />
@@ -155,7 +143,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(saslDir)}">
 
       <arg value="co" />
@@ -164,7 +151,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
 
       <arg value="co" />
@@ -174,7 +160,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(libeventDir)}" if="${buildLibevent}">
 
       <arg value="co" />
@@ -183,7 +168,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(pthreadwin32Dir)}" if="${buildPthreadwin32}">
 
       <arg value="co" />
@@ -193,7 +177,6 @@
     </Svn>
 
     <Svn
-      verbose="true"
       unless="${directory::exists(memcachedDir)}" if="${buildMemcached}">
 
       <arg value="co" />
