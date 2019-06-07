@@ -42,23 +42,23 @@
     </if>
 
     <NAntWithEnv unless="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
         workingdir="imports" buildfile="imports\Default.build"
         target="build" />
 
     <NAntWithEnv unless="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
         workingdir="imports" buildfile="imports\Default.build"
         target="build" />
 
 
     <NAntWithEnv if="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
         workingdir="imports/svn-dist" buildfile="imports\svn-dist\Default.build"
         target="build-svn-dist" />
 
     <NAntWithEnv if="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
         workingdir="imports/svn-dist" buildfile="imports\svn-dist\Default.build"
         target="build-svn-dist" />
 
