@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-
-  <property name="sconsApp" value="${path::get-full-path('build/scons/scripts/scons.bat')}" />
+  <property name="sconsDir" value="build/scons" />
+  <property name="sconsApp" value="${path::get-full-path('build/scons/scripts/scons.py')}" />
   <property name="sconsPythonPath" value="${path::get-full-path('build/scons/Lib/site-packages/scons')}" />
 
   <property name="sconsVSVersion" value="8.0"  if="${VSversion == '2005'}" />
@@ -11,9 +11,9 @@
   <property name="sconsVSVersion" value="12.0" if="${VSversion == '2013'}" />
   <property name="sconsVSVersion" value="14.0" if="${VSversion == '2015'}" />
   <property name="sconsVSVersion" value="14.1" if="${VSversion == '2017'}" />
-  <property name="sconsVSVersion" value="14.1" if="${VSversion == '2019'}" />
+  <property name="sconsVSVersion" value="14.2" if="${VSversion == '2019'}" />
 
-  <target name="scons-install" depends="download,extract">
+  <target name="scons-install" depends="checkout">
     <OnceBlock file="build/scons-${sconsVersion}.patched">
       <foreach item="File" property="patch">
         <in>
@@ -22,15 +22,31 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${sconsDir}" />
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${sconsDir}" />
+          </Svn>
         </do>
       </foreach>
     </OnceBlock>
     <OnceBlock file="build/scons-${sconsVersion}.installed">
-      <Python workingdir="${sconsDir}">
+
+      <mkdir dir="${sconsDir}/src/script" />
+      <copy file="${sconsDir}/src/script/scons.py"
+          tofile="${sconsDir}/src/script/scons" />
+      <copy file="${sconsDir}/src/script/scons-configure-cache.py"
+          tofile="${sconsDir}/src/script/scons-configure-cache" />
+      <copy file="${sconsDir}/src/script/scons-time.py"
+          tofile="${sconsDir}/src/script/scons-time" />
+      <copy file="${sconsDir}/src/script/sconsign.py"
+          tofile="${sconsDir}/src/script/sconsign" />
+
+      <Python workingdir="${sconsDir}/src">
         <arg value="setup.py" />
         <arg value="install" />
         <arg value="--standalone-lib" />
+        <arg value="--record=CON:" />
         <arg value="--prefix=${path::get-full-path('build/scons')}" />
       </Python>
     </OnceBlock>

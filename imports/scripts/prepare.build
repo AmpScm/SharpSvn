@@ -151,6 +151,14 @@
     </Svn>
 
     <Svn
+      unless="${directory::exists(sconsDir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/SCons/scons/tags/${sconsVersion}/" />
+      <arg value="${sconsDir}" />
+    </Svn>
+
+    <Svn
       unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
 
       <arg value="co" />

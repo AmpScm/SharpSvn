@@ -11,9 +11,6 @@
   <regex pattern="^(?'nunitVersionMMR'\d+\.\d+(\.\d+))" input="${nunitVersion}" />
   <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
 
-  <property name="sconsFilename" value="scons-${sconsVersion}.zip" />
-  <property name="sconsDir" value="${'build/scons-' + sconsVersion}" />
-
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
   <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
   <property name="cmakeDir" value="build/cmake-${cmakeVersion}-win32-x86" />
@@ -49,10 +46,6 @@
     <get src="https://cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
       dest="${downloads + cmakeFilename}"
       unless="${file::exists(downloads + cmakeFilename)}" />
-
-    <get src="https://prdownloads.sourceforge.net/scons/scons-${sconsVersion}.zip"
-      dest="${downloads + sconsFilename}"
-      unless="${file::exists(downloads + sconsFilename)}" />
 
     <get
        src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf"
@@ -108,11 +101,6 @@
       todir="build"
       unless="${directory::exists(nunitDir)}"
       if="${downloadNUnit}" />
-
-    <unzip
-      zipfile="${downloads + sconsFilename}"
-      todir="build"
-      unless="${directory::exists(sconsDir)}" />
 
     <unzip
       zipfile="${downloads + sharpZipFilename}"
