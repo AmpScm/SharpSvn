@@ -24,7 +24,7 @@
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
-  <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088" overwrite="false" />
+  <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088,1861036" overwrite="false" />
 
   <!-- -->
   <property name="opensslVersion" value="1.1.1c" overwrite="false" />
