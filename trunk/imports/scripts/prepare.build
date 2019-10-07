@@ -66,8 +66,8 @@
       unless="${directory::exists(httpdDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" if="${httpdBuildType == 'tag'}" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/branches/${httpdVersion}/" if="${httpdBuildType == 'branch'}" />
+      <arg value="https://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" if="${httpdBuildType == 'tag'}" />
+      <arg value="https://svn.apache.org/repos/asf/httpd/httpd/branches/${httpdVersion}/" if="${httpdBuildType == 'branch'}" />
       <arg value="${httpdDir}" />
     </Svn>
 
@@ -103,7 +103,7 @@
       unless="${directory::exists(aprDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
+      <arg value="https://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
       <arg value="${aprDir}" />
     </Svn>
 
@@ -111,7 +111,7 @@
       unless="${directory::exists(aprUtilDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
+      <arg value="https://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
       <arg value="${aprUtilDir}" />
     </Svn>
 
@@ -127,9 +127,9 @@
       unless="${directory::exists(serfDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/trunk/" if="${serfBuildType == 'trunk'}" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
+      <arg value="https://svn.apache.org/repos/asf/serf/trunk/" if="${serfBuildType == 'trunk'}" />
+      <arg value="https://svn.apache.org/repos/asf/serf/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
+      <arg value="https://svn.apache.org/repos/asf/serf/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
       <arg value="${serfDir}" />
     </Svn>
 

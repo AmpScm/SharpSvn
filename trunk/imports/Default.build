@@ -33,33 +33,30 @@
   <property name="aprUtilVersion" value="1.6.1" overwrite="false" />
   <property name="aprIconvVersion" value="1.2.2" overwrite="false" />
   <property name="dbVersion" value="4.4.20" overwrite="false" />
-  <property name="expatVersion" value="2.2.6" overwrite="false" />
+  <property name="expatVersion" value="2.2.9" overwrite="false" />
   <property name="zlibVersion" value="1.2.11" overwrite="false" />
   <property name="serfVersion" value="1.3.9" overwrite="false" />
-  <property name="saslVersion" value="2.1.26" overwrite="false" />
+  <property name="saslVersion" value="2.1.27" overwrite="false" />
   <property name="swigVersion" value="3.0.12" overwrite="false" />
   <property name="nasmVersion" value="2.14.02" overwrite="false" />
   <property name="pcreVersion" value="8.43" overwrite="false" />
-  <property name="httpdVersion" value="2.4.38" overwrite="false" />
+  <property name="httpdVersion" value="2.4.41" overwrite="false" />
   <property name="gettextVersion" value="0.18.3.2" overwrite="false" />
-  <property name="sqliteVersion" value="3.28.0" overwrite="false" />
-  <property name="libssh2Version" value="1.8.2" overwrite="false" />
-  <property name="nghttp2Version" value="1.38.0" overwrite="false" />
+  <property name="sqliteVersion" value="3.30.0" overwrite="false" />
+  <property name="libssh2Version" value="1.9.0" overwrite="false" />
+  <property name="nghttp2Version" value="1.39.2" overwrite="false" />
 
   <!-- Building only -->
-  <property name="cmakeVersion" value="3.14.5" overwrite="false" />
-  <property name="sconsVersion" value="3.0.5" overwrite="false" />
+  <property name="cmakeVersion" value="3.15.4" overwrite="false" />
+  <property name="sconsVersion" value="3.1.1" overwrite="false" />
 
   <!-- For testcase -->
-  <property name="nunitVersion" value="2.6.4" overwrite="false" />
+  <property name="nunitVersion" value="2.7.0" overwrite="false" />
   <property name="sharpZipVersion" value="0860" overwrite="false" />
   <property name="junitVersion" value="4.10" overwrite="false" />
   <property name="libeventVersion" value="2.1.5-beta" overwrite="false" />
   <property name="pthreadwin32Version" value="2.9.1" overwrite="false" />
   <property name="memcachedVersion" value="1.6.0-beta1" overwrite="false" />
-
-  <!-- Prefer http or https -->
-  <property name="httpOrHttps" value="http" />
 
   <!-- Prefix to use for dependency DLL's -->
   <property name="dllPrefix" value="SharpSvn-" overwrite="false" />
