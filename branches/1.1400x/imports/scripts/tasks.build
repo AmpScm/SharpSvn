@@ -1,0 +1,1052 @@
+<project>
+  <script language="C#">
+    <references>
+      <lib>
+        <include name="${nant::get-base-directory() + '/lib'}" asis="true" />
+        <include name="${nant::get-base-directory() + '/lib/common/neutral'}" asis="true" />
+      </lib>
+      <include name="System.dll" />
+      <include name="System.Xml.dll" />
+    </references>
+    <imports>
+      <import namespace="System.Net"/>
+      <import namespace="System.Xml"/>
+      <import namespace="System.Xml.XPath"/>
+      <import namespace="System.Text.RegularExpressions" />
+      <import namespace="System.Diagnostics"/>
+      <import namespace="NAnt.Core.Types"/>
+      <import namespace="NAnt.Core.Filters"/>
+      <import namespace="NAnt.Core.Util"/>
+    </imports>
+    <code>
+      <![CDATA[
+
+[TaskName("TweakSslOptions")]
+public class TweakSslOptions : Task
+{
+    protected override void ExecuteTask()
+    {
+      System.Net.ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 |
+          (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+    }
+}
+
+
+public abstract class ExternalAppTask : NAnt.Core.Tasks.ExternalProgramBase
+{
+    DirectoryInfo _workingDirectory;
+
+    protected override void PrepareProcess(Process process)
+    {
+        base.PrepareProcess(process);
+
+        process.StartInfo.WorkingDirectory = this.WorkingDirectory.FullName;
+    }
+
+    [TaskAttribute("workingdir")]
+    public DirectoryInfo WorkingDirectory
+    {
+        get
+        {
+            if (this._workingDirectory == null)
+            {
+                return base.BaseDirectory;
+            }
+            return this._workingDirectory;
+        }
+        set
+        {
+            this._workingDirectory = value;
+        }
+    }
+}
+
+[TaskName("VCBuild")]
+public class VCBuild : ExternalAppTask
+{
+    bool _showLogo;
+    string _platform;
+    string _configuration;
+    FileInfo _src;
+
+    [TaskAttribute("nologo"), BooleanValidator]
+    public bool NoLogo
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
+
+    [TaskAttribute("src", Required=true)]
+    public FileInfo Src
+    {
+        get { return _src; }
+        set { _src = value; }
+    }
+
+
+    public override string ProgramFileName
+    {
+        get { return "vcbuild.exe"; }
+    }
+
+    [TaskAttribute("platform")]
+    public string Platform
+    {
+        get { return _platform ?? Properties["platform"]; }
+        set { _platform = value; }
+    }
+
+    [TaskAttribute("configuration")]
+    public string Configuration
+    {
+        get { return _configuration; }
+        set { _configuration = value; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (NoLogo)
+                sb.Append(" /nologo");
+
+            string platform = Platform;
+            if (!String.IsNullOrEmpty(platform))
+            {
+                if (platform == "win32")
+                    platform = "Win32"; // Fix casing
+
+                sb.AppendFormat(" /platform:{0}", platform);
+            }
+
+            sb.AppendFormat(" \"{0}\"", Src.FullName);
+
+            return sb.ToString().Trim();
+        }
+    }
+
+    public override void Log(Level messageLevel, string message)
+    {
+        if (message != null && message.StartsWith("Visual C++ now provides improved safety", StringComparison.Ordinal))
+        {
+           int n = message.LastIndexOf("Successfully upgraded");
+           if (n <= 0)
+             return;
+           message = message.Substring(n);
+        }
+
+        base.Log(messageLevel, message);
+    }
+}
+
+[TaskName("VCUpgrade")]
+public class VCUpgrade : ExternalAppTask
+{
+    bool _showLogo;
+    bool _noOverwrite;
+    FileInfo _src;
+
+    [TaskAttribute("nologo"), BooleanValidator]
+    public bool NoLogo
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
+
+    [TaskAttribute("overwrite"), BooleanValidator]
+    public bool Overwrite
+    {
+        get { return !_noOverwrite; }
+        set { _noOverwrite = !value; }
+    }
+
+    [TaskAttribute("src", Required=true)]
+    public FileInfo Src
+    {
+        get { return _src; }
+        set { _src = value; }
+    }
+
+    public override string ProgramFileName
+    {
+        get { return "vcupgrade.exe"; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (NoLogo)
+                sb.Append(" -nologo");
+
+            sb.Append(" -nocolor");
+
+            if (Overwrite)
+                sb.Append(" -overwrite");
+
+            sb.AppendFormat(" \"{0}\"", Src.FullName);
+
+            return sb.ToString().Trim();
+        }
+    }
+}
+
+[TaskName("Svn")]
+public class Svn : ExternalAppTask
+{
+    bool _interactive;
+    FileInfo _output;
+
+    public override string ProgramArguments
+    {
+        get { return _interactive ? "" : "--non-interactive"; }
+    }
+
+
+    [TaskAttribute("nonInteractive"), BooleanValidator]
+    public bool NonInteractive
+    {
+        get { return !_interactive; }
+        set { _interactive = !value; }
+    }
+
+    [TaskAttribute("output")]
+    public override FileInfo Output
+    {
+      get { return _output; }
+      set { _output = value; }
+    }
+}
+
+[TaskName("MSBuild")]
+public class MSBuild : ExternalAppTask
+{
+    bool _showLogo;
+    string _configuration;
+    string _platform;
+    string _verbosity;
+    readonly OptionCollection _properties = new OptionCollection();
+    readonly ArgumentCollection _targets = new ArgumentCollection();
+    FileInfo _src;
+
+    [TaskAttribute("platform")]
+    public string Platform
+    {
+        get { return _platform ?? Properties["platform"]; }
+        set { _platform = value; }
+    }
+
+    [TaskAttribute("configuration")]
+    public string Configuration
+    {
+        get { return _configuration ?? "Release"; }
+        set { _configuration = value; }
+    }
+
+    [BuildElementArray("prop")]
+    public OptionCollection AppProperties
+    {
+        get { return _properties; }
+    }
+
+    [BuildElementArray("target")]
+    public ArgumentCollection Targets
+    {
+        get { return _targets; }
+    }
+
+    [TaskAttribute("src", Required=true)]
+    public FileInfo Src
+    {
+        get { return _src; }
+        set { _src = value; }
+    }
+
+    [TaskAttribute("verbosity")]
+    public string Verbosity
+    {
+        get { return _verbosity; }
+        set { _verbosity = value; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (NoLogo)
+              sb.Append(" /nologo");
+
+            sb.AppendFormat(" /P:AnnotatePdbFile=true");
+
+            if (!string.IsNullOrEmpty(Configuration))
+              sb.AppendFormat(" \"/P:Configuration={0}\"", Configuration);
+
+            string platform = Platform;
+            if (!string.IsNullOrEmpty(platform))
+            {
+              if (platform == "win32")
+                platform = "Win32"; // Fix casing
+
+              sb.AppendFormat(" \"/P:Platform={0}\"", platform);
+            }
+
+            foreach(Option o in AppProperties)
+            {
+                if (o.IfDefined && !o.UnlessDefined)
+                  sb.AppendFormat(" \"/P:{0}={1}\"", o.OptionName, o.Value);
+            }
+
+            foreach(Argument a in Targets)
+            {
+                if (a.IfDefined && !a.UnlessDefined)
+                  sb.AppendFormat(" \"/t:{0}\"", a);
+            }
+
+            if (Src != null)
+              sb.AppendFormat(" \"{0}\"", Src.FullName);
+
+
+            if (!String.IsNullOrEmpty(Verbosity))
+              sb.AppendFormat(" \"/verbosity:{0}\"", Verbosity);
+            else if (!Verbose)
+              sb.AppendFormat(" /v:m");
+
+            return sb.ToString().Trim();
+        }
+    }
+
+    [TaskAttribute("noLogo"), BooleanValidator]
+    public bool NoLogo
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
+}
+
+[TaskName("NMake")]
+public class NMake : ExternalAppTask
+{
+    FileInfo _makeFile;
+    bool _showLogo;
+    [TaskAttribute("makeFile", Required = true)]
+    public FileInfo MakeFile
+    {
+        get { return _makeFile; }
+        set { _makeFile = value; }
+    }
+
+    [TaskAttribute("nologo"), BooleanValidator]
+    public bool NoLogo
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+          StringBuilder sb = new StringBuilder();
+
+          sb.AppendFormat("/f \"{0}\"", MakeFile.FullName);
+
+          if (!NoLogo)
+            sb.Append(" /NOLOGO");
+          if (!Verbose)
+            sb.Append(" /S \"MAKE=nmake /S /NOLOGO\"");
+
+          return sb.ToString().Trim();
+        }
+    }
+}
+
+
+[TaskName("OnceBlock")]
+public class OnceBlock : NAnt.Core.TaskContainer
+{
+    FileInfo _touchFile;
+    FileSet _fileset;
+
+    [TaskAttribute("file", Required = true)]
+    public FileInfo TouchFile
+    {
+        get { return _touchFile; }
+        set { _touchFile = value; }
+    }
+
+    [BuildElement("fileset")]
+    public virtual FileSet CopyFileSet
+    {
+        get
+        {
+            return this._fileset;
+        }
+        set
+        {
+            this._fileset = value;
+        }
+    }
+
+    protected override void ExecuteTask()
+    {
+        if (_touchFile.Exists)
+        {
+            if (_fileset == null)
+                return;
+
+            DateTime stamp = File.GetLastWriteTimeUtc(_touchFile.FullName);
+            bool skip = true;
+
+            foreach(string f in _fileset.FileNames)
+            {
+               if (File.Exists(f)
+                   && File.GetLastWriteTimeUtc(f) > stamp)
+               {
+                  skip = false;
+                  break;
+               }
+            }
+
+            if (skip)
+                return;
+        }
+
+        base.ExecuteTask();
+
+        using (_touchFile.Create())
+        {
+            // Create NOP file if execute succeeded
+        }
+    }
+}
+
+[TaskName("VCProjAddPlatform")]
+public class VCProjAddPlatform : NAnt.Core.Task
+{
+    FileInfo _project;
+    string _platform;
+    string _fromPlatform;
+
+    [TaskAttribute("project", Required = true)]
+    public FileInfo ProjectFile
+    {
+        get { return _project; }
+        set { _project = value; }
+    }
+
+    [TaskAttribute("platform", Required = true)]
+    public string Platform
+    {
+        get { return _platform; }
+        set { _platform = value; }
+    }
+
+    [TaskAttribute("fromPlatform", Required = true)]
+    public string FromPlatform
+    {
+        get { return _fromPlatform; }
+        set { _fromPlatform = value; }
+    }
+
+    protected override void ExecuteTask()
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(ProjectFile.FullName);
+
+        bool oldFound = false;
+
+        foreach (XmlNode n in doc.SelectNodes("/VisualStudioProject/Platforms/Platform/@Name"))
+        {
+            if (0 == string.Compare(n.Value, Platform, true))
+                return; // Already completed
+            else if (0 == string.Compare(n.Value, FromPlatform, true))
+            {
+                FromPlatform = n.Value;
+                oldFound = true;
+            }
+        }
+
+        if (!oldFound)
+            throw new Exception("FromPlatform not found");
+
+        XmlElement el = doc.CreateElement("Platform");
+        el.SetAttribute("Name", Platform);
+        doc.SelectSingleNode("/VisualStudioProject/Platforms").AppendChild(el);
+
+        foreach (XmlElement n in doc.SelectNodes("/VisualStudioProject/Configurations/Configuration"))
+        {
+            string name = n.GetAttribute("Name");
+            if (!name.EndsWith("|" + FromPlatform))
+                continue;
+
+
+            XmlElement nn = (XmlElement)n.CloneNode(true);
+            nn.SetAttribute("Name", name.Substring(0, name.Length - FromPlatform.Length) + Platform);
+
+            string platformValue = null;
+            switch (Platform.ToUpper())
+            {
+                case "X64":
+                    platformValue = "17";
+                    break;
+                case "IA64":
+                    platformValue = "error";
+                    break;
+            }
+
+            foreach (XmlNode i in nn.SelectNodes("Tool/@TargetMachine"))
+            {
+                i.Value = platformValue;
+            }
+
+            foreach(XmlElement i in nn.SelectNodes("Tool[@Name='VCLinkerTool'] | Tool[@Name='VCLibrarianTool']"))
+            {
+                i.SetAttribute("TargetMachine", platformValue);
+            }
+
+            foreach (XmlNode i in nn.SelectNodes("@OutputDirectory | @IntermediateDirectory | .//@OutputFile | .//@TypeLibraryName | .//@PrecompiledHeaderFile | .//@ObjectFile | .//@ProgramDataBaseFileName | .//@ImportLibrary"))
+            {
+                if (i.Value.StartsWith(".\\"))
+                    i.Value = Platform + '\\' + i.Value.Substring(2);
+                else if (char.IsLetterOrDigit(i.Value, 0))
+                    i.Value = Platform + '\\' + i.Value;
+            }
+
+            n.ParentNode.AppendChild(nn);
+        }
+
+        foreach (XmlElement n in doc.SelectNodes("/VisualStudioProject/Files//FileConfiguration"))
+        {
+            string name = n.GetAttribute("Name");
+            if (!name.EndsWith("|" + FromPlatform))
+                continue;
+
+            XmlElement nn = (XmlElement)n.CloneNode(true);
+            nn.SetAttribute("Name", name.Substring(0, name.Length - FromPlatform.Length) + Platform);
+
+            n.ParentNode.AppendChild(nn);
+        }
+
+
+        doc.Save(ProjectFile.FullName);
+    }
+}
+
+[TaskName("Python")]
+public class Python : ExternalAppTask
+{
+    string _appName;
+
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["PythonExe"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
+    }
+
+    public override string ProgramArguments
+    {
+        get { return ""; }
+    }
+}
+
+[TaskName("Perl")]
+public class Perl : ExternalAppTask
+{
+    string _appName;
+
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = (Properties["PerlExe"] ?? base.ProgramFileName);
+            }
+            else
+                return _appName;
+        }
+    }
+
+    public override string ProgramArguments
+    {
+        get { return ""; }
+    }
+}
+
+[TaskName("SCons")]
+public class SCons : ExternalAppTask
+{
+    string _appName;
+    EnvironmentSet _environmentSet = new EnvironmentSet();
+
+    public override string ProgramFileName
+    {
+        get
+        {
+            if (_appName == null)
+            {
+                return _appName = Properties["PythonExe"] ?? base.ProgramFileName;
+            }
+            else
+                return _appName;
+        }
+    }
+
+    [BuildElement("environment")]
+    public EnvironmentSet EnvironmentSet
+    {
+        get
+        {
+            return this._environmentSet;
+        }
+    }
+
+    public override string ProgramArguments
+    {
+        get { return Properties["sconsApp"] ?? ""; }
+    }
+
+    protected override void PrepareProcess(Process process)
+    {
+        base.PrepareProcess(process);
+        process.StartInfo.WorkingDirectory = this.WorkingDirectory.FullName;
+        foreach (Option option in this.EnvironmentSet.Options)
+        {
+            if (option.IfDefined && !option.UnlessDefined)
+            {
+                if (option.Value == null)
+                {
+                    process.StartInfo.EnvironmentVariables[option.OptionName] = "";
+                }
+                else
+                {
+                    process.StartInfo.EnvironmentVariables[option.OptionName] = option.Value;
+                }
+            }
+        }
+        foreach (EnvironmentVariable environmentVariable in this.EnvironmentSet.EnvironmentVariables)
+        {
+            if (environmentVariable.IfDefined && !environmentVariable.UnlessDefined)
+            {
+                if (environmentVariable.Value == null)
+                {
+                    process.StartInfo.EnvironmentVariables[environmentVariable.VariableName] = "";
+                }
+                else
+                {
+                    process.StartInfo.EnvironmentVariables[environmentVariable.VariableName] = environmentVariable.Value;
+                }
+            }
+        }
+    }
+}
+
+
+[TaskName("FilterFile")]
+public class FilterFile : Task
+{
+  FilterChain _filterChain;
+  FileInfo _file;
+  Encoding _encoding;
+  bool _generated;
+  bool _noNormalize;
+
+  [BuildElement("filterchain")]
+  public FilterChain FilterChain
+  {
+    get { return _filterChain; }
+    set { _filterChain = value; }
+  }
+
+  [TaskAttribute("file", Required = true)]
+  public FileInfo File
+  {
+    get { return _file; }
+    set { _file = value; }
+  }
+
+  [TaskAttribute("encoding")]
+  public Encoding Encoding
+  {
+    get { return _encoding ?? (_encoding = new UTF8Encoding()); }
+    set { _encoding = value; }
+  }
+
+  [TaskAttribute("generated"), BooleanValidator]
+  public bool Generated
+  {
+      get { return _generated; }
+      set { _generated = value; }
+  }
+
+  [TaskAttribute("normalize"), BooleanValidator]
+  public bool NormalizeEols
+  {
+      get { return !_noNormalize; }
+      set { _noNormalize = !value; }
+  }
+
+  protected override void ExecuteTask()
+  {
+    string text;
+    string from = File.FullName + ".preTweak";
+
+    if (_generated)
+      from = File.FullName;
+    else if (!System.IO.File.Exists(from))
+      System.IO.File.Copy(File.FullName, from);
+
+    text = FileUtils.ReadFile(from, FilterChain, Encoding);
+
+    if (NormalizeEols && text.Contains("\r\n"))
+    {
+      int n = text.IndexOf('\n');
+      bool normalize = true;
+
+      while (n > 0)
+      {
+        if (text[n-1] != '\r')
+        {
+            normalize = true;
+            break;
+        }
+        n = text.IndexOf('\n', n+1);
+      }
+      if (normalize)
+        text = text.Replace("\r\n", "\n");
+    }
+
+    if (System.IO.File.ReadAllText(File.FullName) != text)
+        using (StreamWriter sw = new StreamWriter(File.FullName, false, Encoding))
+        {
+          sw.Write(text);
+        }
+  }
+
+}
+
+[TaskName("CMake")]
+public class CMake : ExternalAppTask
+{
+    string _process;
+    readonly OptionCollection _properties = new OptionCollection();
+    readonly ArgumentCollection _targets = new ArgumentCollection();
+    string _configuration;
+
+    public override string ProgramFileName
+    {
+        get
+        {
+            string app = Path.GetFullPath(Path.Combine(Properties["cmakeDir"], "bin/cmake.exe"));
+
+            if (!File.Exists(app))
+                app = base.ProgramFileName;
+
+            return app;
+        }
+    }
+
+    [BuildElementArray("prop")]
+    public OptionCollection AppProperties
+    {
+        get { return _properties; }
+    }
+
+    [BuildElementArray("target")]
+    public ArgumentCollection Targets
+    {
+        get { return _targets; }
+    }
+
+    [TaskAttribute("configuration")]
+    public string Configuration
+    {
+        get { return _configuration ?? "Release"; }
+        set { _configuration = value; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (Targets.Count == 0)
+            {
+                sb.AppendFormat(" -G \"{0}\"", Properties["cmakeGenerator"]);
+                sb.AppendFormat(" -A \"{0}\"", Properties["cmakePlatform"]);
+            }
+
+            foreach(Option o in AppProperties)
+            {
+                if (o.IfDefined && !o.UnlessDefined)
+                  sb.AppendFormat(" \"-D{0}={1}\"", o.OptionName, o.Value);
+            }
+
+            sb.Append(" --build .");
+
+            bool haveTargets = false;
+            foreach(Argument a in Targets)
+            {
+                if (a.IfDefined && !a.UnlessDefined)
+                {
+                    sb.AppendFormat(" --target \"{0}\"", a);
+                    haveTargets = true;
+                }
+            }
+
+            if (haveTargets)
+            {
+                sb.AppendFormat(" --config \"{0}\"", Configuration);
+                sb.AppendFormat(" --use-stderr"); // Use direct output of MSBuild, etc.
+            }
+
+            if (!Verbose)
+            {
+                sb.Append(" -Wno-dev");
+            }
+
+            return sb.ToString().Trim();
+        }
+    }
+}
+
+[ElementName("LineRegexReplace")]
+public class LineRegexReplace : Filter
+{
+  string _regex;
+  string _to;
+  ChainableReader _from;
+
+  [TaskAttribute("re", Required=true)]
+  public string Re
+  {
+      get { return _regex; }
+      set { _regex = value; }
+  }
+
+  [TaskAttribute("to", Required=true)]
+  public string To
+  {
+      get { return _to; }
+      set { _to = value; }
+  }
+
+  public override void Chain(ChainableReader chainedReader)
+  {
+      base.Chain(chainedReader);
+      _from = chainedReader;
+  }
+
+  public override int Peek()
+  {
+      throw new NotImplementedException();
+  }
+
+  string _next;
+  int _iNext;
+  Regex _re;
+  public override int Read()
+  {
+      if (_next != null && ++_iNext < _next.Length)
+      {
+          return _next[_iNext];
+      }
+
+      _next = null;
+      _iNext = 0;
+
+      StringBuilder sb = new StringBuilder();
+      int c;
+
+      while (-1 != (c = _from.Read()))
+      {
+          sb.Append((char)c);
+          if (c == '\n')
+              break;
+      }
+
+      if (c == -1 && sb.Length == 0)
+          return -1;
+
+      if (_re == null)
+          _re = new Regex(_regex);
+
+      _next = _re.Replace(sb.ToString(), _to);
+      if (_next.Length > 0)
+         return _next[0];
+      else
+         return Read(); // Recurse
+  }
+}
+
+[ElementName("AppendAtEnd")]
+public class AppendAtEnd : Filter
+{
+  string _value;
+  ChainableReader _from;
+
+  [TaskAttribute("value", Required=true)]
+  public string Value
+  {
+      get { return _value; }
+      set { _value = value; }
+  }
+
+  public override void Chain(ChainableReader chainedReader)
+  {
+      base.Chain(chainedReader);
+      _from = chainedReader;
+  }
+
+  public override int Peek()
+  {
+      throw new NotImplementedException();
+  }
+
+  int _iNext;
+  public override int Read()
+  {
+      if (_iNext == 0)
+      {
+          int n = _from.Read();
+
+          if (n >= 0)
+              return n;
+      }
+      if (_iNext >= _value.Length)
+          return -1;
+      return _value[_iNext++];
+  }
+}
+
+[TaskName("NAntWithEnv")]
+public class NAntWithEnv : NAnt.Core.Tasks.NAntTask
+{
+   FileInfo _envScript;
+   string _envArgs;
+   DirectoryInfo _workDir;
+
+   [TaskAttribute("env-script", Required=true)]
+   public FileInfo EnvScript
+   {
+      set { _envScript = value; }
+      get { return _envScript; }
+   }
+
+   [TaskAttribute("workingdir")]
+   public DirectoryInfo WorkDir
+   {
+     set { _workDir = value; }
+     get { return _workDir; }
+   }
+
+   [TaskAttribute("env-args")]
+   public string EnvArgs
+   {
+      set { _envArgs = value; }
+      get { return _envArgs; }
+   }
+
+   SortedList LoadEnv()
+   {
+     if (!System.IO.File.Exists(EnvScript.FullName))
+       throw new System.IO.FileNotFoundException("Environment script file not found", EnvScript.FullName);
+
+     ProcessStartInfo psi = new ProcessStartInfo(Environment.GetEnvironmentVariable("COMSPEC"),
+                                        "/C \"" + EnvScript.FullName + "\" " + EnvArgs +" && echo.!.!.! && set");
+     psi.UseShellExecute = false;
+     psi.RedirectStandardOutput = true;
+
+     using(Process p = Process.Start(psi))
+     {
+        bool inSet = false;
+        string line;
+        SortedList sl = new SortedList();
+
+        while (null != (line = p.StandardOutput.ReadLine()))
+        {
+          if (!inSet)
+          {
+            if (line.StartsWith("!.!.!"))
+            {
+              inSet = true;
+              continue;
+            }
+
+            line = line.Trim('*').Trim();
+
+            if (line.Length > 0 && !line.StartsWith("Visual Studio") && !line.StartsWith("Copyright"))
+              Log(Level.Info, line);
+
+            continue;
+          }
+
+          int nIs = line.IndexOf('=');
+          if (nIs <= 0)
+            continue;
+
+          string k = line.Substring(0, nIs);
+          string v = line.Substring(nIs+1);
+
+          sl[k] = v;
+        }
+
+        p.WaitForExit();
+        if (p.ExitCode != 0)
+          throw new InvalidOperationException("Environment script failed");
+
+        return sl;
+     }
+   }
+
+   protected override void ExecuteTask()
+   {
+      SortedList envItems = LoadEnv();
+      SortedList oldEnv = new SortedList();
+      string oldDir = Environment.CurrentDirectory;
+
+      try
+      {
+         foreach(DictionaryEntry e in envItems)
+         {
+           string key = (string)e.Key;
+           string old = Environment.GetEnvironmentVariable(key);
+           oldEnv.Add(key, old);
+           Environment.SetEnvironmentVariable(key, (string)e.Value);
+         }
+         if (WorkDir != null)
+           Environment.CurrentDirectory = WorkDir.FullName;
+
+         base.ExecuteTask();
+       }
+       finally
+       {
+          Environment.CurrentDirectory = oldDir;
+          foreach(DictionaryEntry e in oldEnv)
+          {
+            Environment.SetEnvironmentVariable((string)e.Key, (string)e.Value);
+          }
+       }
+   }
+}
+
+]]>
+    </code>
+  </script>
+  <TweakSslOptions />
+</project>
+

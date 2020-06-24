@@ -1,0 +1,56 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SharpSvnAnnotateIncluded>true</SharpSvnAnnotateIncluded>
+  </PropertyGroup>
+
+  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(MSBuildThisFileDirectory)\SharpSvn.MSBuild.dll" Condition="$(SharpSvnIncluded) != 'true'" />
+
+  <Target Name="SharpSvnPatchAssemblyInfoFileViaNuGet"
+          AfterTargets="BuildGenerateSources"
+          BeforeTargets="Compile;XamlPreCompile;CoreCompile"
+          Condition="'$(SharpSvnPatchAssemblyInfo)' == 'true' and $(SharpSvnIncluded) != 'true'">
+
+    <ItemGroup>
+      <AssemblyInfoFile
+            Include="@(Compile->'$(IntermediateOutputPath)_SharpSvn\%(Filename)%(Extension)')"
+            Condition="'%(filename)' == 'AssemblyInfo'">
+        <InfoIdentity>%(Identity)</InfoIdentity>
+        <InfoSource>%(FullPath)</InfoSource>
+      </AssemblyInfoFile>
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="%(AssemblyInfoFile.InfoIdentity)" />
+      <Compile Include="@(AssemblyInfoFile)" />
+    </ItemGroup>
+
+    <TransformAssemblyInfo
+      Language                   ="fsharp"
+
+      Sources                    ="@(AssemblyInfoFile)"
+
+      SetVersion                 ="$(ForceAssemblyVersion)"
+
+      SetOnlyAssemblyVersion     ="$(ForceOnlyAssemblyVersion)"
+      SetFileVersion             ="$(ForceAssemblyFileVersion)"
+      SetInformationalVersion    ="$(ForceAssemblyInformationalVersion)"
+      SetSatelliteContractVersion="$(ForceSatelliteContractVersion)"
+      SetComCompatibleVersion    ="$(ForceComCompatibleVersion)"
+
+      SetCopyright               ="$(ForceAssemblyCopyright)"
+      SetCompany                 ="$(ForceAssemblyCompany)"
+      SetTrademark               ="$(ForceAssemblyTrademark)"
+      SetConfiguration           ="$(ForceAssemblyConfiguration)"
+      SetDescription             ="$(ForceAssemblyDescription)"
+
+      SetProduct                 ="$(ForceAssemblyProduct)"
+      SetTitle                   ="$(ForceAssemblyTitle)"
+
+      SetCLSCompliant            ="$(ForceCLSCompliant)"
+      SetComVisible              ="$(ForceComVisible)"
+      SetNeutralResourceLanguage ="$(ForceNeutralResourceLanguage)"
+      >
+
+      <Output TaskParameter="FilesWritten" ItemName="FileWrites"/>
+    </TransformAssemblyInfo>
+  </Target>
+</Project>

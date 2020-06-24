@@ -1,0 +1,33 @@
+Index: engines/e_capi.c
+===================================================================
+--- engines/e_capi.c	(revision 38600)
++++ engines/e_capi.c	(working copy)
+@@ -1498,20 +1498,28 @@ static CAPI_KEY *capi_get_key(CAPI_CTX *ctx, const
+         char *_contname = wide_to_asc(contname);
+         char *_provname = wide_to_asc(provname);
+ 
+         CAPI_trace(ctx, "capi_get_key, contname=%s, provname=%s, type=%d\n",
+                    _contname, _provname, ptype);
+         OPENSSL_free(_provname);
+         OPENSSL_free(_contname);
+     }
+     if (ctx->store_flags & CERT_SYSTEM_STORE_LOCAL_MACHINE)
+         dwFlags = CRYPT_MACHINE_KEYSET;
++    if ((ptype == PROV_RSA_FULL)
++        && !wcscmp(provname, MS_ENHANCED_PROV_W)
++        && CryptAcquireContextW(&key->hprov, contname,
++                                L"Microsoft Enhanced RSA and AES Cryptographic Provider"
++                                /* = MS_ENH_RSA_AES_PROV_W, except when using Windows SDK 6.0 when compiling for XP PRE SP1 this has the " (Prototype)" suffix :( */,
++                                PROV_RSA_AES, dwFlags)) {
++        /* NO-OP */
++    } else
+     if (!CryptAcquireContextW(&key->hprov, contname, provname, ptype,
+                               dwFlags)) {
+         CAPIerr(CAPI_F_CAPI_GET_KEY, CAPI_R_CRYPTACQUIRECONTEXT_ERROR);
+         capi_addlasterror();
+         goto err;
+     }
+     if (!CryptGetUserKey(key->hprov, keyspec, &key->key)) {
+         CAPIerr(CAPI_F_CAPI_GET_KEY, CAPI_R_GETUSERKEY_ERROR);
+         capi_addlasterror();
+         CryptReleaseContext(key->hprov, 0);

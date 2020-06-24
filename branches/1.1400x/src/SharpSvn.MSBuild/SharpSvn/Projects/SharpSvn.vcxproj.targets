@@ -1,0 +1,87 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SharpSvnUpdateVersionResource Condition="$(SharpSvnUpdateVersionResource) == ''">true</SharpSvnUpdateVersionResource>
+  </PropertyGroup>
+
+  <UsingTask TaskName="UpdateNativeVersionResource" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+  <UsingTask TaskName="PdbSourceAnnotate" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+
+  <PropertyGroup>
+    <AfterBuildLinkTargets>
+      $(AfterBuildLinkTargets);
+      SharpSvnPostLink;
+      SharpSvnAnnotateSymbols
+    </AfterBuildLinkTargets>
+  </PropertyGroup>
+
+  <Target Name="SharpSvnPostLink"
+          Condition="'@(Link)' != '' and '$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
+
+    <UpdateNativeVersionResource
+      Source          ="%(Link.OutputFile)"
+      TempDir         ="$(IntermediateOutputPath)_SharpSvn\Res"
+      SourceUpdated   ="$(SharpSvnUpdatedResource)"
+      KeyContainer    ="%(Link.KeyContainer)"
+      KeyFile         ="$(LinkKeyFile)"
+
+      Condition="%(Link.OutputFile) != ''"/>
+  </Target>
+
+  <Target Name="SharpSvnPatchAssemblyInfoFile"
+          AfterTargets="BuildGenerateSources"
+          BeforeTargets="BuildCompile;Compile"
+          Condition="'$(SharpSvnPatchAssemblyInfo)' == 'true'">
+
+    <ItemGroup>
+      <AssemblyInfoFile Include="@(ClCompile->'$(IntermediateOutputPath)_SharpSvn\%(Filename)%(Extension)')" Condition="'%(filename)' == 'AssemblyInfo'">
+        <InfoIdentity>%(Identity)</InfoIdentity>
+        <InfoSource>%(FullPath)</InfoSource>
+      </AssemblyInfoFile>
+    </ItemGroup>
+    <ItemGroup>
+      <ClCompile Remove="%(AssemblyInfoFile.InfoIdentity)" />
+      <ClCompile Include="@(AssemblyInfoFile)" />
+    </ItemGroup>
+
+    <TransformAssemblyInfo
+      Language                   ="cpp"
+
+      Sources                    ="@(AssemblyInfoFile)"
+
+      SetVersion                 ="$(ForceAssemblyVersion)"
+
+      SetOnlyAssemblyVersion     ="$(ForceOnlyAssemblyVersion)"
+      SetFileVersion             ="$(ForceAssemblyFileVersion)"
+      SetInformationalVersion    ="$(ForceAssemblyInformationalVersion)"
+      SetSatelliteContractVersion="$(ForceSatelliteContractVersion)"
+      SetComCompatibleVersion    ="$(ForceComCompatibleVersion)"
+
+      SetCopyright               ="$(ForceAssemblyCopyright)"
+      SetCompany                 ="$(ForceAssemblyCompany)"
+      SetTrademark               ="$(ForceAssemblyTrademark)"
+      SetConfiguration           ="$(ForceAssemblyConfiguration)"
+      SetDescription             ="$(ForceAssemblyDescription)"
+
+      SetProduct                 ="$(ForceAssemblyProduct)"
+      SetTitle                   ="$(ForceAssemblyTitle)"
+
+      SetCLSCompliant            ="$(ForceCLSCompliant)"
+      SetComVisible              ="$(ForceComVisible)"
+      SetNeutralResourceLanguage ="$(ForceNeutralResourceLanguage)"
+      >
+
+      <Output TaskParameter="FilesWritten" ItemName="FileWrites"/>
+    </TransformAssemblyInfo>
+  </Target>
+
+  <Target Name="SharpSvnAnnotateSymbols"
+          Condition="$(AnnotatePdbFile) == 'true'">
+
+    <PdbSourceAnnotate
+          Condition="%(Link.GenerateDebugInformation) == 'true'"
+          Sources="%(Link.ProgramDatabaseFile)"
+          ToolPath="$(SharpSvnTargetsDir)\bin" />
+  </Target>
+  
+</Project>
