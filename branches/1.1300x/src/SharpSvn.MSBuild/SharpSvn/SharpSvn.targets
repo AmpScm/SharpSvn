@@ -1,0 +1,37 @@
+<!-- SharpSvn.net ImportAfter Targets -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Guard against multiple imports -->
+  <PropertyGroup>
+    <SharpSvnIncluded>true</SharpSvnIncluded>
+    <SharpSvnEnabled Condition="$(SharpSvnEnabled) == ''">true</SharpSvnEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(SharpSvnEnabled) != 'false'">
+    <SharpSvnPatchAssemblyInfo
+            Condition="$(SharpSvnPatchAssemblyInfo) == ''
+                       and (  $(ForceAssemblyVersion)              != '' or
+                              $(ForceOnlyAssemblyVersion)          != '' or
+                              $(ForceAssemblyFileVersion)          != '' or
+                              $(ForceAssemblyInformationalVersion) != '' or
+                              $(ForceSatelliteContractVersion)     != '' or
+                              $(ForceComCompatibleVersion)         != '' or
+                              $(ForceAssemblyCopyright)            != '' or
+                              $(ForceAssemblyCompany)              != '' or
+                              $(ForceAssemblyTrademark)            != '' or
+                              $(ForceAssemblyConfiguration)        != '' or
+                              $(ForceAssemblyDescription)          != '' or
+                              $(ForceAssemblyProduct)              != '' or
+                              $(ForceAssemblyTitle)                != '' or
+                              $(ForceCLSCompliant)                 != '' or
+                              $(ForceComVisible)                   != '' or
+                              $(ForceNeutralResourceLanguage)      != '')">true</SharpSvnPatchAssemblyInfo>
+    <SharpSvnPatchAssemblyInfo Condition="$(SharpSvnPatchAssemblyInfo) == ''">false</SharpSvnPatchAssemblyInfo>
+    <AnnotatePdbFile Condition="$(AnnotatePdbFile) == ''">false</AnnotatePdbFile>
+  </PropertyGroup>
+
+  <ImportGroup Condition="$(SharpSvnEnabled) != 'false'">
+    <Import Project="$(SharpSvnTargetsDir)\SharpSvn.common.targets"
+            Condition="Exists('$(SharpSvnTargetsDir)\SharpSvn.common.targets')" />
+    <Import Project="$(SharpSvnTargetsDir)\Projects\SharpSvn$(MSBuildProjectExtension).targets"
+            Condition="$(MSBuildProjectExtension) != '' and Exists('$(SharpSvnTargetsDir)\Projects\SharpSvn$(MSBuildProjectExtension).targets')" />
+  </ImportGroup>
+</Project>

@@ -1,0 +1,7 @@
+<!-- SharpSvn.net AnnotateAssembly Properties -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SharpSvnAnnotateAssemblyDir Condition="$(SharpSvnAnnotateAssemblyDir) == ''">$(MSBuildThisFileDirectory)</SharpSvnAnnotateAssemblyDir>
+    <SharpSvnAnnotateProjectTypeFile>$(MSBuildThisFileDirectory)projects\AnnotateAssembly$(MSBuildProjectExtension).targets</SharpSvnAnnotateProjectTypeFile>
+  </PropertyGroup>
+</Project>

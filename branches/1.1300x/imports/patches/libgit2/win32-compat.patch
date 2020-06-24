@@ -1,0 +1,19 @@
+Index: src/win32/win32-compat.h
+===================================================================
+--- src/win32/win32-compat.h	(revision 36802)
++++ src/win32/win32-compat.h	(working copy)
+@@ -7,7 +7,14 @@
+ #ifndef INCLUDE_win32_compat__
+ #define INCLUDE_win32_compat__
+ 
++#if !defined(_MSC_VER) || (_MSC_VER >= 1600) /* Not MSVC or 2010+ */
+ #include <stdint.h>
++#else
++typedef __int32 int32_t;
++typedef unsigned __int32 uint32_t;
++typedef __int64 int64_t;
++typedef unsigned __int64 uint64_t;
++#endif
+ #include <time.h>
+ #include <wchar.h>
+ #include <sys/stat.h>

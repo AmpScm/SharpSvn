@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." default="build">
+  <regex pattern="^(?'opensslMM'\d+\.\d+)" input="${opensslVersion}" />
+  <property name="opensslDir" value="${platformRoot}/openssl" />
+  <property name="libcryptoFullName" value="${dllPrefix}libcrypto-${string::replace(opensslMM, '.','_')}.dll" if="${platform=='win32'}"/>
+  <property name="libcryptoFullName" value="${dllPrefix}libcrypto-${string::replace(opensslMM, '.','_')}-${platform}.dll" if="${platform!='win32'}"/>
+  <property name="libcryptoName" value="libcrypto.lib"  />
+  <property name="libsslName" value="libssl.lib" />
+
+  <property name="opensslMakefile" value="${opensslDir}\ms\nt.mak" if="${static and opensslVersion &lt; '1.1.'}" />
+  <property name="opensslMakefile" value="${opensslDir}\ms\ntdll.mak" if="${not static and opensslVersion &lt; '1.1.'}" />
+  <property name="opensslMakefile" value="${opensslDir}\makefile" if="${opensslVersion &gt;= '1.1.'}" />
+
+  <target name="openssl-prepare" depends="checkout">
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/openssl">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${opensslDir}" />
+          </Svn>
+        </do>
+      </foreach>
+    </OnceBlock>
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
+      <Perl workingdir="${opensslDir}">
+        <arg value="Configure" />
+        <arg value="VC-WIN32" if="${platform=='win32'}" />
+        <arg value="VC-WIN64A" if="${platform=='x64'}" />
+        <!-- Provide a sane, most likely secure default for loading system wide settings -->
+        <arg value="--openssldir=C:\ProgramData\OpenSSL" />
+        <!-- Now configure more -->
+        <arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
+        <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
+        <arg value="threads" />
+        <arg value="no-dso" if="${static}" />
+        <arg value="no-shared" if="${static}" />
+        <arg value="shared" if="${not static}" />
+        <arg value="no-hw" />
+        <arg value="no-ssl3" />
+        <arg value="no-gost" if="${static}"/>
+        <arg value="no-dtls" />
+        <arg value="no-srp" />
+        <arg value="no-unit-test" />
+        <arg value="no-zlib" />
+        <arg value="no-zlib-dynamic" />
+        <arg value="enable-capieng" />
+        <arg value="enable-static-engine" if="${static}" />
+        <arg value="-DSSL_FORBID_ENULL" />
+        <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
+        <arg value="-DOPENSSL_CAPIENG_DIALOG" />
+        <arg value="-D_WIN32_WINNT=0x0501" />
+        <arg value="-D_WINSOCK_DEPRECATED_NO_WARNINGS" />
+        <arg value="--prefix=${path::get-full-path(intDir)}" />
+      </Perl>
+    </OnceBlock>
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
+      <FilterFile file="${opensslMakefile}" unless="${static}">
+        <filterchain>
+          <replacestring from="LIB_LDFLAGS=/dll" to="LIB_LDFLAGS=/dll /MACHINE:${platform}" unless="${platform=='win32'}" />
+          <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
+          <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
+          <replacestring from="LIBRARY lib" to="LIBRARY ${dllPrefix}lib" if="${dllPrefix != ''}" />
+          <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
+          <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
+          <replacestring from=" /MT " to=" /MD " />
+          <LineRegexReplace re='lib(crypto|ssl)-[1-9_]+(-x64)?\.(dll|pdb)' to='${dllPrefix}$0' if="${dllPrefix != ''}" />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+          <LineRegexReplace re='^(MLFLAGS=.*)/subsystem:console' to='$1 /subsystem:windows /nxcompat /largeaddressaware /release' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslMakefile}" if="${static}">
+        <filterchain>
+          <!-- Ommit default library name -->
+          <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags} " />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/engines/e_capi.c" if="${svnAddSharpSvn}">
+        <filterchain>
+          <replacestring from='static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' to='
+
+#pragma comment(lib, "crypt32.lib")
+typedef HWND (*sharpsvn_get_ui_parent_handler_t)();
+extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
+sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler = NULL;
+static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
+          <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : (HWND)-1; 
+            if (hwnd == (HWND)-1) { idx = 0; goto err; }" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/util/mkdef.pl">
+        <filterchain>
+          <LineRegexReplace re='^\s*LIBRARY\s+[\$a-zA-Z]' to='; $0' />
+        </filterchain>
+      </FilterFile>
+    </OnceBlock>
+  </target>
+  <target name="openssl-build" depends="openssl-prepare">
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
+      <NMake workingdir="${opensslDir}" makeFile="${opensslMakefile}" />
+      <NMake workingdir="${opensslDir}" makeFile="${opensslMakefile}">
+        <arg value="install_sw" />
+      </NMake>
+    </OnceBlock>
+    <property name="binDir" value="${opensslDir}/out32dll" if="${opensslVersion &lt; '1.1.'}" />
+    <property name="binDir" value="${opensslDir}" if="${opensslVersion &gt;= '1.1.'}" />
+    <copy todir="${intDir}/bin" unless="${static}">
+      <fileset basedir="${binDir}">
+        <include name="*.pdb" />
+        <include name="*.dll" if="${opensslVersion &gt;= '1.1.'}" />
+        <exclude name="lib.*" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/lib" if="${opensslVersion &gt;= '1.1.'}" >
+      <fileset basedir="${opensslDir}">
+        <include name="*.lib" />
+        <exclude name="lib.*" />
+      </fileset>
+    </copy>
+    <property name="enginesDir" value="${opensslDir}/out32dll" if="${opensslVersion &lt; '1.1.'}" />
+    <property name="enginesDir" value="${opensslDir}/engines" if="${opensslVersion &gt;= '1.1.'}" />
+    <copy todir="${intDir}/bin/engines" unless="${static}">
+      <fileset basedir="${enginesDir}">
+        <include name="capi.*" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include" if="${opensslVersion &gt;= '1.1.'}" >
+      <fileset basedir="${opensslDir}/include">
+        <include name="openssl/**" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${intDir}/include">
+        <include name="openssl/**" />
+      </fileset>
+    </copy>
+  </target>
+</project>

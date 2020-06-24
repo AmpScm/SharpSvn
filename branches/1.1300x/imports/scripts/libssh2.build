@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="libssh2Dir" value="${platformRoot}/libssh2" />
+  <property name="buildLibssh2" value="true" overwrite="false" />
+  <property name="libssh2BuildType" value="tag" overwrite="false" />
+
+  <target name="libssh2-prepare" depends="checkout" if="${buildLibssh2}">
+    <OnceBlock file="build/libssh2_${platform}.patched">
+      <foreach item="File" property="patch" if="${applyPatches}">
+        <in>
+          <items basedir="${downloads}/../patches/libssh2">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${libssh2Dir}" />
+          </Svn>
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="libssh2-build" depends="libssh2-prepare, openssl-build" if="${buildLibssh2}">
+    <OnceBlock file="build/libssh2-${libssh2Version}_${platform}.build">
+      <FilterFile file="${libssh2Dir}\win32\config.mk">
+        <filterchain>
+          <LineRegexReplace re="(?&lt;=^OPENSSLINC=).*" to="${intDir}\include" />
+          <LineRegexReplace re="(?&lt;=^OPENSSLLIB=).*" to="${intDir}\lib" />
+          <LineRegexReplace re="(?&lt;=^ZLIBLIB=).*" to="${intDir}\lib" />
+          <LineRegexReplace re="(?&lt;=^LIBS=).*" to="" />
+          <LineRegexReplace re="(?&lt;=CFLAGS=)(.*)" to="/GL $1" />
+          <LineRegexReplace re="/I([^\s]*zlib[^\s]*)" to="/I${intDir}\include" />
+          <replacestring from="ws2_32.lib" to="ws2_32.lib Advapi32.lib" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${libssh2Dir}\src\NMakefile">
+        <filterchain>
+          <replacestring from="$(DLL)" to="$(SSHLIB)" />
+          <replacestring from=") $(RESOURCE)" to=")" />
+          <replacestring from="DLL=" to="SSHLIB=" />
+          <replacestring from=".dll" to=".lib" />
+          <replacestring from="$(DLLFLAGS) $(OBJECTS) $(RESOURCE) $(LIBS)" to="$(OBJECTS) $(LIBS)" />
+          <replacestring from="$(CC) -o $(SSHLIB)" to="lib /LTCG /out:$(SSHLIB)" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${libssh2Dir}\include\libssh2.h">
+        <filterchain>
+          <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' if="${libssh2BuildType != 'tag'}"/>
+          <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "${libssh2Version}"' if="${libssh2BuildType == 'tag'}"/>
+          <LineRegexReplace re='(#define LIBSSH2_SSH_BANNER.*)' to='$1 "_sharpsvn"' />
+          <replacestring from="__declspec(dllexport)" to="/* __declspec( dllexport ) */" />
+          <replacestring from="__declspec(dllimport)" to="/* __declspec( dllimport ) */" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${libssh2Dir}\win32\libssh2_config.h">
+        <filterchain>
+          <replacestring from='#define snprintf _snprintf' to='
+#if _MSC_VER &lt; 1900
+#define snprintf  _snprintf
+#endif'   />
+        </filterchain>
+      </FilterFile>
+      <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
+        <arg value="WITH_WINCNG=0" /><!-- CNG is not compatible with Windows XP-->
+      </NMake>
+    </OnceBlock>
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${libssh2Dir}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include/libssh2" flatten="true">
+      <fileset basedir="${libssh2Dir}\include">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <mkdir dir="${libssh2Dir}/embed" />
+    <copy todir="${libssh2Dir}/embed">
+      <fileset basedir="${libssh2Dir}">
+        <include name="include/**" />
+      </fileset>
+    </copy>
+  </target>
+</project>
