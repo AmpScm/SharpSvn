@@ -176,7 +176,7 @@
 
   <target name="misc-copy" depends="extract">
     <copy todir="${release}/lib-AnyCPU">
-      <fileset basedir="${nunitDir}/bin">
+      <fileset basedir="${nunitDir}/bin/framework">
         <include name="nunit.framework.dll" />
         <include name="nunit.framework.xml" />
       </fileset>
