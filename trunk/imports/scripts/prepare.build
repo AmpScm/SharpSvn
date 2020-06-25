@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 
-  <property name="py3cDir" value="build/py3c-${py3cVersion" />
+  <property name="py3cDir" value="build/py3c-${py3cVersion}" />
 
   <target name="checkout" depends="initialize-layout">
     <Svn
