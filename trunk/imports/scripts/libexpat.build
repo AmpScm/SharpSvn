@@ -57,5 +57,6 @@
       </fileset>
     </copy>    
     <copy file="${intDir}/lib/libexpatMD.lib" tofile="${intDir}/lib/libexpat.lib" />
+    <copy file="${intDir}/lib/libexpatMD.lib" tofile="${intDir}/lib/xml.lib" />
   </target>
 </project>
