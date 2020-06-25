@@ -31,6 +31,7 @@
       <arg value="--with-sasl=${intDir}" />
       <arg value="--with-sqlite=${intDir}" />
       <arg value="--with-libintl=${intDir}"     if="${intl != 'none'}"/>
+      <arg value="--with-py3c=${path::get-full-path(py3cDir)}" if="${wc.branch &gt;= '1.14.'}"/>
       <arg value="--with-swig=${path::get-full-path(swigDir)}"
                                                 if="${property::exists('withSwig')}" />
       <arg value="--with-jdk=${javaHome}"       if="${javaHome != ''}" />

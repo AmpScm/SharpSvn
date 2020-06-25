@@ -1,5 +1,8 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
+
+  <property name="py3cDir" value="build/py3c-${py3cVersion}" />
+
   <target name="checkout" depends="initialize-layout">
     <Svn
       if="${buildSubversion}"
@@ -191,6 +194,14 @@
       <arg value="https://github.com/memcached/memcached/branches/engine-pu" if="${memcachedBuildType == 'trunk'}" />/>
       <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}" if="${memcachedBuildType == 'tag'}" />/>
       <arg value="${memcachedDir}" />
+    </Svn>
+    
+    <Svn
+      unless="${directory::exists(py3cDir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/encukou/py3c/tags/v${py3cVersion}/" />
+      <arg value="${py3cDir}" />
     </Svn>
   </target>
 

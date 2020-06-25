@@ -29,7 +29,7 @@
 
       <CMake workingdir="${libexpatDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
-        <prop name="EXPAT_SHARED_LIBS=" value="OFF" />
+        <prop name="EXPAT_SHARED_LIBS" value="OFF" />
       </CMake>
       <!--FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${enableAprCrypto and vcxproj}" generated="true">
         <filterchain>
@@ -55,6 +55,7 @@
       <fileset basedir="${libexpatDir}/lib">
         <include name="*.h" />
       </fileset>
-    </copy>
+    </copy>    
+    <copy file="${intDir}/lib/libexpatMD.lib" tofile="${intDir}/lib/libexpat.lib" />
   </target>
 </project>

@@ -59,6 +59,12 @@
   <property name="PythonExe" value="C:\python\python.exe" if="${file::exists('C:/python/python.exe')}" />
   <property name="PythonExe" value="C:\python27amd64\python.exe" if="${file::exists('C:/python27amd64/python.exe')}" />
   <property name="PythonExe" value="C:\python27\python.exe" if="${file::exists('C:/python27/python.exe')}" />
+  
+  <property name="PerlExe" value="perl.exe" />
+  <property name="PerlExe" value="C:\perl64\bin\perl.exe" if="${file::exists('C:/perl64/bin/perl.exe')}" />
+  <property name="PerlExe" value="C:\perl64\perl.exe" if="${file::exists('C:/perl64/perl.exe')}" />
+  <property name="PerlExe" value="C:\perl\bin\perl.exe" if="${file::exists('C:/perl/bin/perl.exe')}" />
+  <property name="PerlExe" value="C:\perl\perl.exe" if="${file::exists('C:/perl/perl.exe')}" />
 
   <property name="buildHttpd" value="false" overwrite="false" />
 
