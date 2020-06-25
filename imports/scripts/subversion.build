@@ -105,7 +105,8 @@
         <arg value="--with-zlib=${intDir}" />
         <arg value="--with-sasl=${intDir}" />
         <arg value="--with-openssl=${intDir}" />
-        <arg value="--with-serf=${intDir}" />
+        <arg value="--with-py3c=${py3cDir}" />
+        <arg value="--with-serf=${intDir}" />        
         <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
         <arg value="--with-sqlite=${intDir}" />
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
