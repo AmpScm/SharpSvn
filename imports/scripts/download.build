@@ -6,11 +6,7 @@
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
 
   <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
-  <property name="nunitDir" value="${'build/NUnit-' + nunitVersion}" />
   
-  <regex pattern="^(?'nunitVersionMMR'\d+\.\d+(\.\d+))" input="${nunitVersion}" />
-  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
-
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
   <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
   <property name="cmakeDir" value="build/cmake-${cmakeVersion}-win32-x86" />
@@ -30,7 +26,7 @@
       unless="${file::exists(downloads + dbFilename)}" />
 
     <get
-      src="https://github.com/nunit/nunitv2/releases/download/${nunitVersionMMR}/${nunitFilename}"
+      src="https://github.com/nunit-legacy/nunitv2/releases/download/${nunitVersion}/${nunitFilename}"
       dest="${downloads + nunitFilename}"
       unless="${file::exists(downloads + nunitFilename)}" />
 
