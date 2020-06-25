@@ -42,6 +42,12 @@
       <copy file="${sconsDir}/src/script/sconsign.py"
           tofile="${sconsDir}/src/script/sconsign" />
 
+      <FilterFile file="${sconsDir}/src/setup.py">
+        <filterchain>
+          <LineRegexReplace re="'docbook-[^']*'," to="" />
+        </filterchain>
+      </FilterFile>
+
       <Python workingdir="${sconsDir}/src">
         <arg value="setup.py" />
         <arg value="install" />

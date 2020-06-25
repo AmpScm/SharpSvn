@@ -95,7 +95,7 @@
 
     <unzip
       zipfile="${downloads + nunitFilename}"
-      todir="build"
+      todir="${nunitDir}"
       unless="${directory::exists(nunitDir)}"
       if="${downloadNUnit}" />
 
