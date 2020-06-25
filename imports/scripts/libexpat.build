@@ -37,12 +37,12 @@
         </filterchain>
       </FilterFile-->
 
-      <FilterFile file="${libexpatDir}/expat.${vcproj}" generated="true">
+      <FilterFile file="${libexpatDir}/libexpat.${vcproj}" generated="true">
         <filterchain refid="cmake-lib" />
       </FilterFile>
 
       <MSBuild src="${libexpatDir}/expat.sln">
-        <target value="expat" />
+        <target value="libexpat" />
       </MSBuild>
     </OnceBlock>
     
@@ -56,6 +56,6 @@
         <include name="*.h" />
       </fileset>
     </copy>
-    <copy file="${intDir}/lib/expat.lib" tofile="${intDir}/lib/xml.lib" />
+    <copy file="${intDir}/lib/libexpat.lib" tofile="${intDir}/lib/xml.lib" />
   </target>
 </project>
