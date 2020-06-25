@@ -56,6 +56,5 @@
         <include name="*.h" />
       </fileset>
     </copy>
-    <copy file="${intDir}/lib/libexpat.lib" tofile="${intDir}/lib/xml.lib" />
   </target>
 </project>
