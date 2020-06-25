@@ -29,7 +29,7 @@
 
       <CMake workingdir="${libexpatDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
-        <prop name="BUILD_shared" value="OFF" />
+        <prop name="EXPAT_SHARED_LIBS=" value="OFF" />
       </CMake>
       <!--FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${enableAprCrypto and vcxproj}" generated="true">
         <filterchain>
