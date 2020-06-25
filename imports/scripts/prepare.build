@@ -200,7 +200,7 @@
       unless="${directory::exists(py3cDir)}">
 
       <arg value="co" />
-      <arg value="https://github.com/encukou/py3c/tags/${py3cVersion}/" />
+      <arg value="https://github.com/encukou/py3c/tags/v${py3cVersion}/" />
       <arg value="${py3cDir}" />
     </Svn>
   </target>
