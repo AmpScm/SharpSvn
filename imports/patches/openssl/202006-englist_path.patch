@@ -1,18 +1,21 @@
 Index: crypto/engine/eng_list.c
 ===================================================================
---- crypto/engine/eng_list.c	(revision 38600)
+--- crypto/engine/eng_list.c	(revision 41666)
 +++ crypto/engine/eng_list.c	(working copy)
-@@ -7,8 +7,9 @@
+@@ -6,10 +6,11 @@
+  * this file except in compliance with the License.  You can obtain a copy
   * in the file LICENSE in the source distribution or at
   * https://www.openssl.org/source/license.html
   */
  
 +#include <windows.h>
- #include "eng_int.h"
+ #include "eng_local.h"
  
  /*
   * The linked-list of pointers to engine types. engine_list_head incorporates
-@@ -316,10 +317,43 @@ ENGINE *ENGINE_by_id(const char *id)
+  * an implicit structural reference but engine_list_tail does not - the
+@@ -315,12 +316,45 @@
+         return iterator;
      /*
       * Prevent infinite recursion if we're looking for the dynamic engine.
       */
@@ -58,3 +61,4 @@ Index: crypto/engine/eng_list.c
          if (!iterator || !ENGINE_ctrl_cmd_string(iterator, "ID", id, 0) ||
              !ENGINE_ctrl_cmd_string(iterator, "DIR_LOAD", "2", 0) ||
              !ENGINE_ctrl_cmd_string(iterator, "DIR_ADD",
+                                     load_dir, 0) ||
