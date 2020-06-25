@@ -6,6 +6,7 @@
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
 
   <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
+  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
   
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
   <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
