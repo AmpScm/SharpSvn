@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
-  <Package InstallerVersion="300" Compressed="yes" Platform="x86" 
+  <Package InstallerVersion="301" Compressed="yes" Platform="x86" 
            InstallPrivileges="elevated" InstallScope="perMachine"/>
 
   <DirectoryRef Id="TARGETDIR">
