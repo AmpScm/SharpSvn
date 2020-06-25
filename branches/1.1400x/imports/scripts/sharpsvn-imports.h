@@ -59,7 +59,7 @@
 #pragma comment(lib, "libsvn_repos-1.lib")
 #pragma comment(lib, "libsvn_subr-1.lib")
 #pragma comment(lib, "libsvn_wc-1.lib")
-#pragma comment(lib, "xml.lib")
+#pragma comment(lib, "libexpat.lib")
 
 #pragma comment(lib, "zlib.lib")
 #pragma comment(lib, "ws2_32.lib")
