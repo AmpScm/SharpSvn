@@ -36,6 +36,8 @@ namespace Errors2Enum
 
             if (!File.Exists(winerror))
                 winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
+            if (!File.Exists(winerror))
+                winerror = Path.Combine(usdkPath, "..", "shared", "winerror.h");
 
             if (!File.Exists(winerror))
             {
