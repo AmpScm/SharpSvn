@@ -12,9 +12,9 @@ pipeline {
 nant -f:tools/buildbot.build "-D:CCNetNumericLabel=%BUILD_NUMBER%" "-D:CCNetProject=%JOB_NAME%" "-D:build.include=%BUILD_NANTINCLUDE%" buildbot-build
 @IF ERRORLEVEL 1 EXIT /B %ERRORLEVEL%
 
-%MSBUILD_VS2010% src/SharpSvn.sln /p:Configuration=Release /p:Platform=x86 /p:PlatformToolset=v100
+%MSBUILD_VS2019% src/SharpSvn.sln /p:Configuration=Release /p:Platform=x86 /p:PlatformToolset=v140
 @IF ERRORLEVEL 1 EXIT /B %ERRORLEVEL%
-%MSBUILD_VS2010% src/SharpSvn.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v100
+%MSBUILD_VS2019% src/SharpSvn.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v140
 @IF ERRORLEVEL 1 EXIT /B %ERRORLEVEL%
 
 nant -f:tools/buildbot.build "-D:CCNetNumericLabel=%BUILD_NUMBER%" "-D:CCNetProject=%JOB_NAME%" "-D:build.include=%BUILD_NANTINCLUDE%" buildbot-package
