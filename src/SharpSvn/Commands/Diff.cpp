@@ -67,7 +67,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
     if (!diffArgs)
         diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-    svn_error_t *r = svn_client_diff6(
+    svn_error_t *r = svn_client_diff7(
         AllocArray(diffArgs, %pool),
         from->AllocAsString(%pool),
         from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
@@ -83,6 +83,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
         args->NoProperties,
         args->PropertiesOnly,
         args->UseGitFormat,
+        args->PrettyPrintMergeInfo,
         pool.AllocString(args->HeaderEncoding),
         outstream,
         errstream,
@@ -135,7 +136,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
     if (!diffArgs)
         diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-    svn_error_t *r = svn_client_diff_peg6(
+    svn_error_t *r = svn_client_diff_peg7(
         AllocArray(diffArgs, %pool),
         source->AllocAsString(%pool),
         &pegRev,
@@ -151,6 +152,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
         args->NoProperties,
         args->PropertiesOnly,
         args->UseGitFormat,
+        args->PrettyPrintMergeInfo,
         pool.AllocString(args->HeaderEncoding),
         outstream,
         errstream,
