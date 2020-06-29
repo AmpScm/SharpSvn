@@ -6,13 +6,12 @@
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "credui.lib")
 
-#define verify_ssh_host_key putty_verify_ssh_host_key
+#include "PuttySrc/Windows/winstuff.h"
+#define console_verify_ssh_host_key putty_verify_ssh_host_key
 #define console_get_userpass_input putty_console_get_userpass_input
 #define cleanup_exit putty_cleanup_exit
-
-#include "PuttySrc/Windows/winstuff.h"
 #include "PuttySrc/Windows/wincons.c"
-#undef verify_ssh_host_key
+#undef console_verify_ssh_host_key
 #undef console_get_userpass_input
 #undef cleanup_exit
 
@@ -235,9 +234,10 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
     return 1; // Success
 }
 
-int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
-                                                char *keystr, char *fingerprint,
-                                                void (*callback)(void *ctx, int result), void *ctx)
+int console_verify_ssh_host_key(
+    Seat* seat, const char* host, int port,
+    const char* keytype, char* keystr, char* fingerprint,
+    void (*callback)(void* ctx, int result), void* ctx)
 {
     int ret;
 
@@ -277,7 +277,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
     int result;
 
     if(console_batch_mode)
-        return putty_verify_ssh_host_key(frontend, host, port, keytype, keystr, fingerprint, callback, ctx);
+        return putty_verify_ssh_host_key(seat, host, port, keytype, keystr, fingerprint, callback, ctx);
 
     /*
     * Verify the key against the registry.
@@ -332,7 +332,7 @@ struct filereq_tag {
  * save==1 -> GetSaveFileName; save==0 -> GetOpenFileName
  * `state' is optional.
  */
-BOOL request_file(filereq *state, OPENFILENAME *of, int preserve, int save)
+bool request_file(filereq* state, OPENFILENAME* of, bool preserve, bool save)
 {
     TCHAR cwd[MAX_PATH]; /* process CWD */
     BOOL ret;
