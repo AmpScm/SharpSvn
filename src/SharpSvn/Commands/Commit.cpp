@@ -190,7 +190,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
         svn_string_t *msg;
 
         SVN_HANDLE(svn_stream_open_readonly(&f, subpool.AllocDirent(msgFile), subpool.Handle, subpool.Handle));
-        SVN_HANDLE(svn_string_from_stream(&msg, f, subpool.Handle, subpool.Handle));
+        SVN_HANDLE(svn_string_from_stream2(&msg, f, 0, subpool.Handle));
         SVN_HANDLE(svn_stream_close(f));
 
         // Overwrite the previous log message with the (possibly) adjusted one from the hook script
