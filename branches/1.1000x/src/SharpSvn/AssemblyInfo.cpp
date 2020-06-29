@@ -38,7 +38,7 @@
 
 extern "C" {
 #include <svn-internal/libsvn_subr/utf8proc/utf8proc_internal.h>
-#define SVN_INTERNAL_LZ4
+#define SVN_INTERNAL_LZ4 1
 #include <svn-internal/libsvn_subr/lz4/lz4internal.h>
 };
 
