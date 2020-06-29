@@ -263,5 +263,10 @@
       </fileset>
     </copy>
     <copy tofile="${release}/include/sharpsvn-imports.h" file="${downloads}/../scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
+    
+    <get
+       dest="${release}/include/svn-internal/libsvn_subr/lz4/stdint.h"
+       src="https://github.com/mattn/gntp-send/raw/master/include/msinttypes/stdint.h"
+       if="${VSversion} &lt;= 2010" />       
   </target>
 </project>
