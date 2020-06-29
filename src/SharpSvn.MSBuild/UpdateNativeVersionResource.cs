@@ -55,7 +55,7 @@ namespace SharpSvn.MSBuild
                 AppDomainSetup setup = new AppDomainSetup();
                 setup.ApplicationName = "GenerateVersionInfoViaAssembly";
                 setup.ApplicationBase = Path.GetDirectoryName(new Uri(myAssembly.CodeBase).LocalPath);
-                setup.AppDomainInitializer = new AppDomainInitializer(OnRefreshVersionInfo);
+                setup.AppDomainInitializer = new AppDomainInitializer(ResourceRefresh.OnRefreshVersionInfo);
                 setup.AppDomainInitializerArguments = new string[] { Source.ItemSpec, TempDir, tmpFile };
 
                 AppDomain dom = AppDomain.CreateDomain("AttributeRefresher", myAssembly.Evidence, setup);
@@ -338,9 +338,12 @@ namespace SharpSvn.MSBuild
                 return p.ExitCode == 0;
             }
         }
+    }
 
+    public class ResourceRefresh
+    {
         // Called in it's own appdomain
-        static void OnRefreshVersionInfo(string[] args)
+        public static void OnRefreshVersionInfo(string[] args)
         {
             string fromFile = args[0];
             string toDir = args[1];
