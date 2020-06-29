@@ -93,10 +93,11 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
         svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
         svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
-        svn_error_t* r = svn_client_list3(
+        svn_error_t* r = svn_client_list4(
             target->AllocAsString(%pool),
             &pegrev,
             &rev,
+            nullptr /* patterns */,
             (svn_depth_t)args->Depth,
             (apr_uint32_t)args->RetrieveEntries,
             args->RetrieveLocks,
