@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <Target Name="SharpSvnPostLinkViaNuGet"
-          Condition="'@(Link)' != '' and  Condition="$(SharpSvnIncluded) != 'true'" and '$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
+          Condition="'@(Link)' != '' and '$(SharpSvnIncluded)' != 'true' and '$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
 
     <UpdateNativeVersionResource
       Source          ="%(Link.OutputFile)"
