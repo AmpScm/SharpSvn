@@ -24,6 +24,7 @@ namespace SharpSvn {
         SvnChangeListCollection^ _changelists;
         bool _clearChangelists;
         bool _metadataOnly;
+        bool _noAddedKeepLocal;
 
     public:
         SvnRevertArgs()
@@ -72,6 +73,18 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _metadataOnly = value;
+            }
+        }
+
+        property bool AddedKeepLocal
+        {
+            bool get()
+            {
+                return !_noAddedKeepLocal;
+            }
+            void set(bool value)
+            {
+                _noAddedKeepLocal = !value;
             }
         }
 
