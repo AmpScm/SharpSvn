@@ -29,6 +29,7 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2006-2018</copyright>
     <tags>msbuild assemblyinfo versioninfo</tags>
+    <developmentDependency>true</developmentDependency>
   </metadata>
   <files>
     <file target="build" src="SharpSvn.AnnotateAssembly.props" />
