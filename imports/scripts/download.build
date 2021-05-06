@@ -9,8 +9,8 @@
   <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
   
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
-  <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
-  <property name="cmakeDir" value="build/cmake-${cmakeVersion}-win32-x86" />
+  <property name="cmakeFilename" value="cmake-${cmakeVersion}-windows-x86_64.zip" />
+  <property name="cmakeDir" value="build/cmake-${cmakeVersion}-windows-x86_64" />
 
   <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
   <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
