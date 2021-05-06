@@ -9,14 +9,17 @@
   <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
   
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
-  <property name="cmakeFilename" value="cmake-${cmakeVersion}-windows-x86_64.zip" />
-  <property name="cmakeDir" value="build/cmake-${cmakeVersion}-windows-x86_64" />
+  <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
+  <property name="cmakeDir" value="build/cmake-${cmakeVersion}-win32-x86" />
 
   <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
   <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
 
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
+  <property name="nugetExe" value="${downloads + 'nuget.exe'}" />
+  
+  <property name="sconsFilename" value="scons-local-${sconsVersion}.zip" />
 
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
@@ -83,6 +86,16 @@
       dest="${downloads + junitFilename}"
       unless="${file::exists(downloads + junitFilename)}"
       if="${javaHome != '' and buildJavaHL}" />
+      
+    <get
+      src="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+      dest="${nugetExe}"
+      unless="${file::exists(nugetExe)}" />
+      
+    <get
+      src="https://prdownloads.sourceforge.net/scons/${sconsFilename}"
+      dest="${downloads + sconsFilename}"
+      unless="${file::exists(downloads + sconsFilename)}" />
   </target>
 
   <target name="extract" depends="download">
@@ -113,6 +126,10 @@
       zipfile="${downloads + cmakeFilename}"
       todir="build"
       unless="${directory::exists(cmakeDir)}" />
+      
+    <unzip
+      zipfile="${downloads + sconsFilename}" todir="build/scons"
+      unless="${directory::exists('build/scons')}" />
 
     <if test="${property::exists('withSwig') and not directory::exists(swigDir)}">
       <unzip zipfile="${downloads + swigFilename}" todir="build" />
@@ -138,5 +155,6 @@
       zipfile="${downloads + junitFilename}" todir="build"
       unless="${directory::exists(junitDir)}"
       if="${javaHome != '' and buildJavaHL}" />
+            
   </target>
 </project>

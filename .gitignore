@@ -1,4 +1,8 @@
 [Oo]bj/
 [Bb]in/
-imports/build/
-imports/NAnt.*/
+/imports/build/
+/imports/downloads/
+/imports/NAnt.*/
+/imports/release/
+.vs/
+[Uu]pgrade[Ll]og.htm

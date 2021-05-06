@@ -1,8 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="sconsDir" value="build/scons" />
-  <property name="sconsApp" value="${path::get-full-path('build/scons/scripts/scons.py')}" />
-  <property name="sconsPythonPath" value="${path::get-full-path('build/scons/Lib/site-packages/scons')}" />
+  <property name="sconsApp" value="${path::get-full-path('build/scons/scons.py')}" />
 
   <property name="sconsVSVersion" value="8.0"  if="${VSversion == '2005'}" />
   <property name="sconsVSVersion" value="9.0"  if="${VSversion == '2008'}" />
@@ -14,48 +13,6 @@
   <property name="sconsVSVersion" value="14.2" if="${VSversion == '2019'}" />
 
   <target name="scons-install" depends="checkout">
-    <OnceBlock file="build/scons-${sconsVersion}.patched">
-      <foreach item="File" property="patch">
-        <in>
-          <items basedir="${downloads}/../patches/scons">
-            <include name="*.patch" />
-          </items>
-        </in>
-        <do>
-          <Svn>
-            <arg value="patch" />
-            <arg value="${patch}" />
-            <arg value="${sconsDir}" />
-          </Svn>
-        </do>
-      </foreach>
-    </OnceBlock>
-    <OnceBlock file="build/scons-${sconsVersion}.installed">
-
-      <mkdir dir="${sconsDir}/src/script" />
-      <copy file="${sconsDir}/src/script/scons.py"
-          tofile="${sconsDir}/src/script/scons" />
-      <copy file="${sconsDir}/src/script/scons-configure-cache.py"
-          tofile="${sconsDir}/src/script/scons-configure-cache" />
-      <copy file="${sconsDir}/src/script/scons-time.py"
-          tofile="${sconsDir}/src/script/scons-time" />
-      <copy file="${sconsDir}/src/script/sconsign.py"
-          tofile="${sconsDir}/src/script/sconsign" />
-
-      <FilterFile file="${sconsDir}/src/setup.py">
-        <filterchain>
-          <LineRegexReplace re="'docbook-[^']*'," to="" />
-        </filterchain>
-      </FilterFile>
-
-      <Python workingdir="${sconsDir}/src">
-        <arg value="setup.py" />
-        <arg value="install" />
-        <arg value="--standalone-lib" />
-        <arg value="--record=CON:" />
-        <arg value="--prefix=${path::get-full-path('build/scons')}" />
-      </Python>
-    </OnceBlock>
   </target>
 
 </project>

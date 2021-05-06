@@ -20,6 +20,15 @@ jobs:
       with:
         path: build
 
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          build/imports/downloads
+          build/imports/build
+          build/imports/svn-dist/build
+        key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}-${{ hashFiles('build/imports/svn-dist/*.build') }}
+
     - name: Install NAnt
       working-directory: build/imports/
       run: nuget.exe install NAnt

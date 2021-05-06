@@ -27,7 +27,7 @@
   <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088,1861036" overwrite="false" />
 
   <!-- -->
-  <property name="opensslVersion" value="1.1.1g" overwrite="false" />
+  <property name="opensslVersion" value="1.1.1k" overwrite="false" />
 
   <property name="aprVersion" value="1.6.5" overwrite="false" />
   <property name="aprUtilVersion" value="1.6.1" overwrite="false" />
@@ -48,7 +48,7 @@
   <property name="py3cVersion" value="1.1" overwrite="false" />
 
   <!-- Building only -->
-  <property name="cmakeVersion" value="3.20.2" overwrite="false" />
+  <property name="cmakeVersion" value="3.19.8" overwrite="false" />
   <property name="sconsVersion" value="4.1.0" overwrite="false" />
 
   <!-- For testcase -->
