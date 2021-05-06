@@ -54,6 +54,7 @@
       <arg value="co" />
       <arg value="https://github.com/madler/zlib/tags/v${zlibVersion}/" />
       <arg value="${zlibDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -62,6 +63,7 @@
       <arg value="co" />
       <arg value="https://github.com/openssl/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
       <arg value="${opensslDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -72,6 +74,7 @@
       <arg value="https://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" if="${httpdBuildType == 'tag'}" />
       <arg value="https://svn.apache.org/repos/asf/httpd/httpd/branches/${httpdVersion}/" if="${httpdBuildType == 'branch'}" />
       <arg value="${httpdDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -81,6 +84,7 @@
       <arg value="co" />
       <arg value="svn://vcs.exim.org/pcre/code/tags/pcre-${pcreVersion}/" />
       <arg value="${pcreDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -90,6 +94,7 @@
       <arg value="co" />
       <arg value="https://github.com/tatsuhiro-t/nghttp2/tags/v${nghttp2Version}/" />
       <arg value="${nghttp2Dir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -100,6 +105,7 @@
       <arg value="--force" />
       <arg value="https://github.com/trawick/nghttp2-minimal-cmake/trunk" />
       <arg value="${nghttp2Dir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -108,6 +114,7 @@
       <arg value="co" />
       <arg value="https://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
       <arg value="${aprDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -116,6 +123,7 @@
       <arg value="co" />
       <arg value="https://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
       <arg value="${aprUtilDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -124,6 +132,7 @@
       <arg value="co" />
       <arg value="https://github.com/libexpat/libexpat/tags/R_${string::replace(expatVersion,'.','_')}/expat/" />
       <arg value="${libexpatDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -134,6 +143,7 @@
       <arg value="https://svn.apache.org/repos/asf/serf/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
       <arg value="https://svn.apache.org/repos/asf/serf/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
       <arg value="${serfDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -143,6 +153,7 @@
       <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
       <arg value="${sqliteDir}" />
       <arg line='--no-auth-cache --username guest --password=""' />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -151,6 +162,7 @@
       <arg value="co" />
       <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
       <arg value="${saslDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -160,6 +172,7 @@
       <arg value="https://github.com/libssh2/libssh2/trunk/"                         if="${libssh2BuildType == 'trunk'}" />
       <arg value="https://github.com/libssh2/libssh2/tags/libssh2-${libssh2Version}" if="${libssh2BuildType == 'tag'}" />
       <arg value="${libssh2Dir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -168,6 +181,7 @@
       <arg value="co" />
       <arg value="https://github.com/libevent/libevent/tags/release-${libeventVersion}"/>
       <arg value="${libeventDir}" />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -177,6 +191,7 @@
       <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/pthreads-win32/tags/${pthreadwin32Version}"/>
       <arg value="${pthreadwin32Dir}" />
       <arg line='--no-auth-cache --username guest --password=""' />
+      <arg value="-q" />
     </Svn>
 
     <Svn
@@ -186,6 +201,7 @@
       <arg value="https://github.com/memcached/memcached/branches/engine-pu" if="${memcachedBuildType == 'trunk'}" />/>
       <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}" if="${memcachedBuildType == 'tag'}" />/>
       <arg value="${memcachedDir}" />
+      <arg value="-q" />
     </Svn>
     
     <Svn
@@ -194,6 +210,7 @@
       <arg value="co" />
       <arg value="https://github.com/encukou/py3c/tags/v${py3cVersion}/" />
       <arg value="${py3cDir}" />
+      <arg value="-q" />
     </Svn>
   </target>
 
