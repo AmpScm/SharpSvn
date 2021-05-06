@@ -8,6 +8,7 @@ on:
 
 env:
   buildDir: '${{ github.workspace }}/build'
+  nant: '${{ github.workspace }}/build/imports/NAnt.0.92.0/tools/nant.exe'
 
 jobs:
   build:
@@ -18,7 +19,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: build
-        
+
     - name: Install NAnt
-      working-directory: build/imports/svn-dist
+      working-directory: build/imports/
       run: nuget.exe install NAnt
+
+    - name: Run NAnt build
+      working-directory: build
+      run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=1" "-D:CCNetProject=SlikSvn" -D:svnDist=true -D:gitBuild=true buildbot-build package-svndist

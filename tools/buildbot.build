@@ -30,35 +30,40 @@
   </target>
   
   <target name="build" depends="prepare">
-    <Svn output=".svn-info"><arg line="info imports\default.build --xml" /></Svn>
-    <xmlpeek file=".svn-info" xpath="/info/entry/commit/@revision" property="imports-rev" />
-    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="checkout-rev" />    
+    <if test="${not gitBuild}">
+      <Svn output=".svn-info"><arg line="info imports\default.build --xml" /></Svn>
+      <xmlpeek file=".svn-info" xpath="/info/entry/commit/@revision" property="imports-rev" />
+      <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="checkout-rev" />    
     
-    <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
-    <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
-      <exec program="cmd.exe" failonerror="false">
-        <arg line="/c rmdir imports\build imports\release imports\svn-dist\build imports\svn-dist\release v40 /s /q" />
-      </exec>
+      <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
+      <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
+        <exec program="cmd.exe" failonerror="false">
+          <arg line="/c rmdir imports\build imports\release imports\svn-dist\build imports\svn-dist\release v40 /s /q" />
+        </exec>
+      </if>
+    </if>
+    <if test="${gitBuild}">
+      <property name="last-rev" value="0" />
     </if>
 
     <NAntWithEnv unless="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
         workingdir="imports" buildfile="imports\Default.build"
         target="build" />
 
     <NAntWithEnv unless="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
         workingdir="imports" buildfile="imports\Default.build"
         target="build" />
 
 
     <NAntWithEnv if="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86"
         workingdir="imports/svn-dist" buildfile="imports\svn-dist\Default.build"
         target="build-svn-dist" />
 
     <NAntWithEnv if="${svnDist}"
-        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
+        env-script="${programfilesX86}\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" env-args="x86_amd64"
         workingdir="imports/svn-dist" buildfile="imports\svn-dist\Default.build"
         target="build-svn-dist" />
 
