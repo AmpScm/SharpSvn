@@ -1,0 +1,24 @@
+name: SvnDist
+
+on:
+  push:
+    branches: [ main, stable/* ]
+  pull_request:
+    branches: [ main, stable/* ]
+
+env:
+  buildDir: '${{ github.workspace }}/build'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2
+      with:
+        path: build
+        
+    - name: Install NAnt
+      working-directory: build/imports/svn-dist
+      run: nuget.exe install NAnt
