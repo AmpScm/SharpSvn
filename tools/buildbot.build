@@ -44,6 +44,8 @@
     </if>
     <if test="${gitBuild}">
       <property name="last-rev" value="0" />
+      <property name="imports-rev" value="0" />
+      <property name="checkout-rev" value="0" />
     </if>
 
     <NAntWithEnv unless="${svnDist}"
@@ -94,8 +96,8 @@
     </choose>
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
-/P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This product and its sourcecode are licensed under the Apache 2.0 license. Check http://sharpsvn.net/ for details."
-/P:ForceAssemblyCompany="SharpSvn - http://sharpsvn.net/"
+/P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This product and its sourcecode are licensed under the Apache 2.0 license."
+/P:ForceAssemblyCompany="SharpSvn - https://github.com/ampscm/SharpSvn"
 /P:ForceAssemblyProduct="SharpSvn - Subversion support for .Net"
 /P:ForceAssemblyConfiguration="Release"
 </echo>
@@ -253,13 +255,17 @@
       </fileset>
     </delete>
 
+    <exec program="nuget.exe" workingdir="imports\svn-dist\wix">
+      <arg line="restore SlikSvn.sln" />
+    </exec>
+
     <exec program="cmd.exe" workingdir="imports\svn-dist">
-      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86 &amp;&amp;' />
       <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     
     <exec program="cmd.exe" workingdir="imports\svn-dist">
-      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86 &amp;&amp;' />
       <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     

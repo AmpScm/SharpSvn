@@ -42,3 +42,11 @@ jobs:
     - name: Run NAnt build
       working-directory: build
       run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=1" "-D:CCNetProject=SlikSvn" -D:svnDist=true -D:gitBuild=true buildbot-build package-svndist
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: svndist-files
+        path: |
+          imports/**/release/**
+          !imports/**/build/**
