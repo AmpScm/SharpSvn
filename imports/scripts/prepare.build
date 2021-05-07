@@ -151,9 +151,8 @@
       unless="${directory::exists(sqliteDir)}">
 
       <arg value="co" />
-      <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
+      <arg value="https://github.com/azadkuh/sqlite-amalgamation/tags/${sqliteVersion}/" />
       <arg value="${sqliteDir}" />
-      <arg line='--no-auth-cache --username guest --password=""' />
       <arg value="-q" />
     </Svn>
 
