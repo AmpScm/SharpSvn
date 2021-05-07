@@ -110,6 +110,7 @@
         <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
         <arg value="--with-sqlite=${intDir}" />
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
+        <arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
         <arg value="--with-libintl=${intDir}" if="${intl != 'none'}" />
         <arg value="--disable-shared" if="${static or svnStatic}"/>
         <arg value="--with-static-apr" if="${static}" />

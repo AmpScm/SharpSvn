@@ -13,6 +13,7 @@
       <arg value="https://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
       <arg value="https://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
       <arg value="${svnBase}" />
+      <arg value="-q" />
     </Svn>
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.revsMerged" if="${buildSubversion}">
