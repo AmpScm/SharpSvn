@@ -48,5 +48,6 @@ jobs:
       with:
         name: svndist-files
         path: |
-          imports/**/release/**
-          !imports/**/build/**
+          build/imports/**/release/**
+          build/imports/svn-dist/dist*/**
+          !build/imports/**/build/**

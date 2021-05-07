@@ -279,9 +279,8 @@
     </copy>
 
     <copy
-      file="${sharpSvnDir}/LICENSE.txt"
-      tofile="release/licenses/SharpSvn-License.txt"
-      if="${file::exists(sharpSvnDir + '/LICENSE.txt')}">
+      file="${sharpSvnDir}/LICENSE"
+      tofile="release/licenses/SharpSvn-License.txt">
       <filterchain refid="license-filter" />
     </copy>
     <copy

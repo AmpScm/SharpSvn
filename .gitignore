@@ -2,6 +2,8 @@
 [Bb]in/
 /imports/build/
 /imports/downloads/
+/imports/svn-dist/build/
+/imports/svn-dist/release/
 /imports/NAnt.*/
 /imports/release/
 .vs/
