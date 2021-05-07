@@ -23,7 +23,7 @@
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\dist-win32\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
@@ -35,7 +35,7 @@
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\dist-x64\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>

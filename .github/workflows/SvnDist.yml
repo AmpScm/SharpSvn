@@ -31,9 +31,7 @@ jobs:
       with:
         path: |
           build/imports/downloads
-          build/imports/build
-          build/imports/svn-dist/build
-        key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}-${{ hashFiles('build/imports/svn-dist/*.build') }}
+        key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}
 
     - name: Install NAnt
       working-directory: build/imports/
@@ -48,6 +46,5 @@ jobs:
       with:
         name: svndist-files
         path: |
-          build/imports/**/release/**
-          build/imports/svn-dist/dist*/**
-          !build/imports/**/build/**
+          build/imports/svn-dist/dist*/*.zip
+          build/imports/svn-dist/dist*/*.msi
