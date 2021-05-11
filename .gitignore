@@ -9,6 +9,9 @@
 .vs/
 [Uu]pgrade[Ll]og.htm
 packages/
+/src/SharpSvn/SvnText/
+/src/SharpSvn/SharpSvnStrings.resources
+/src/SharpSvn/SvnWindowsError.h
 
 
 # Buildbot Scripting
