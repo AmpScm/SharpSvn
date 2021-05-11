@@ -240,45 +240,15 @@ int console_verify_ssh_host_key(
 	const char *keytype, char *keystr, const char *keydisp, char **fingerprints,
 	void (*callback)(void *ctx, int result), void *ctx)
 {
-	int ret;
-
-	static const char absentmsg[] =
-		"The server's host key is not cached in the registry. You\n"
-		"have no guarantee that the server is the computer you\n"
-		"think it is.\n\n"
-		"The server's %s key fingerprint is:\n"
-		"%s\n\n"
-		"If you trust this host, enter \"y\" to add the key to\n"
-		"PuTTY's cache and carry on connecting.\n\n"
-		"If you want to carry on connecting just once, without\n"
-		"adding the key to the cache, enter \"n\".\n\n"
-		"If you do not trust this host, press Return to abandon the\n"
-		"connection.\n\n"
-		"Store key in cache? (y/n) ";
-
-	static const char wrongmsg[] =
-		"WARNING - POTENTIAL SECURITY BREACH!\n"
-		"The server's host key does not match the one PuTTY has\n"
-		"cached in the registry. This means that either the\n"
-		"server administrator has changed the host key, or you\n"
-		"have actually connected to another computer pretending\n"
-		"to be the server.\n\n"
-		"The new %s key fingerprint is:\n"
-		"%s\n\n"
-		"If you were expecting this change and trust the new key,\n"
-		"enter \"y\" to update PuTTY's cache and continue connecting.\n\n"
-		"If you want to carry on connecting but without updating\n"
-		"the cache, enter \"n\".\n\n"
-		"If you want to abandon the connection completely, press\n"
-		"Return to cancel. Pressing Return is the ONLY guaranteed\n"
-		"safe choice.\n\n"
-		"Update cached key? (y/n, Return cancels connection)";
-
-	char buffer[2048] = "";
 	int result;
+	int ret;
+	DWORD i;
+	const char *common_fmt, *intro, *prompt;
+	char buffer[4096] = "";
 
-	if (console_batch_mode)
+	if (console_batch_mode) // In this case, use standard code
 		return putty_verify_ssh_host_key(seat, host, port, keytype, keystr, keydisp, fingerprints, callback, ctx);
+
 
 	/*
 	* Verify the key against the registry.
@@ -288,14 +258,23 @@ int console_verify_ssh_host_key(
 	if (ret == 0)                      /* success - key matched OK */
 		return 1;
 
-	if (ret == 2)
-	{                    /* key was different */
-		sprintf_s(buffer, sizeof(buffer), wrongmsg, keytype, fingerprints[0]);
+	if (ret == 2) {                    /* key was different */
+		common_fmt = hk_wrongmsg_common_fmt;
+		intro = hk_wrongmsg_interactive_intro;
+		prompt = hk_wrongmsg_interactive_prompt;
+	} else {                           /* key was absent */
+		common_fmt = hk_absentmsg_common_fmt;
+		intro = hk_absentmsg_interactive_intro;
+		prompt = hk_absentmsg_interactive_prompt;
 	}
-	if (ret == 1)
-	{                    /* key was absent */
-		sprintf_s(buffer, sizeof(buffer), absentmsg, keytype, fingerprints[0]);
-	}
+
+	FingerprintType fptype_default =
+		ssh2_pick_default_fingerprint(fingerprints);
+
+	sprintf_s(buffer, sizeof(buffer), hk_wrongmsg_common_fmt, keytype, fingerprints[fptype_default]);
+
+	strcat_s(buffer, sizeof(buffer), intro);
+	strcat_s(buffer, sizeof(buffer), prompt);
 
 	result = MessageBox(GetOwnerHwnd(), buffer, (ret == 2) ? "SharpPlink - POTENTIAL SECURITY BREACH" : "SharpPlink - Unknown Host Key",
 						MB_YESNOCANCEL | ((ret == 2) ? (MB_ICONSTOP | MB_DEFBUTTON3) : MB_ICONINFORMATION));
