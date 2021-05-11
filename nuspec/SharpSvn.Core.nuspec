@@ -1,9 +1,8 @@
-<?xml version="1.0"?>
-<package >
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>SharpSvn.Core</id>
     <title>SharpSvn - Subversion for .Net</title>
-    <version>$version$</version>
+    <version>1.14000.12</version>
     <authors>SharpSvn Project</authors>
     <owners>SharpSvn Project</owners>
     <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
@@ -16,11 +15,11 @@
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
   </metadata>
   <files>
-    <file src="../SharpSvn/bin/win32/release/SharpSvn.dll" target="ref/net40" />
-    <file src="../SharpSvn/bin/win32/release/SharpSvn.xml" target="ref/net40" />
-    <file src="../SharpSvn/bin/win32/release/SharpSvn.dll" target="runtimes/win-x86/lib/net40" />
-    <file src="../SharpSvn/bin/win32/release/SharpSvn.xml" target="runtimes/win-x86/lib/net40" />
-    <file src="../SharpSvn/bin/x64/release/SharpSvn.dll" target="runtimes/win-x64/lib/net40" />
-    <file src="../SharpSvn/bin/x64/release/SharpSvn.xml" target="runtimes/win-x64/lib/net40" />
+    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" target="ref/net40" />
+    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" target="ref/net40" />
+    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" target="runtimes/win-x86/lib/net40" />
+    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" target="runtimes/win-x86/lib/net40" />
+    <file src="../src/SharpSvn/bin/x64/release/SharpSvn.dll" target="runtimes/win-x64/lib/net40" />
+    <file src="../src/SharpSvn/bin/x64/release/SharpSvn.xml" target="runtimes/win-x64/lib/net40" />
   </files>
 </package>

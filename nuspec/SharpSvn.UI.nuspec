@@ -1,0 +1,23 @@
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SharpSvn.UI</id>
+    <version>1.14000.12</version>
+    <authors>SharpSvn</authors>
+    <owners>SharpSvn</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/ampscm/SharpSvn</projectUrl>
+    <description>Default UI implementation for users of SharpSvn</description>
+    <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
+    <tags>NTS Topology PROJ CRS</tags>
+    <dependencies>
+      <group targetFramework="net45">
+        <dependency id="SharpSvn.Core" version="[1.14000.12]" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" target="lib/net40" />
+    <file src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" target="lib/net40" />
+  </files>
+</package>

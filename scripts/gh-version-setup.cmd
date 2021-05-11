@@ -13,8 +13,10 @@ IF NOT EXIST "%VERFILE%" (
 echo @echo off > %CACHE%
 
 for /F "usebackq tokens=2,3" %%i in (`"type %VERFILE% |findstr /C:SVN_VER_"`) do (
-  SET %%i=%%j
-  echo SET %%i=%%j>> %CACHE%
+  if NOT "%%j" == "" (
+    SET %%i=%%j
+    echo SET %%i=%%j>> %CACHE%
+  )
 ) 
 
 set    SHARPSVN_MAJOR=%SVN_VER_MAJOR%
@@ -36,4 +38,4 @@ echo Prepare building SharpProj %SVN_VER_MAJOR%.%SHARPSVN_MINOR%.%1
   echo /p:ForceAssemblyCopyright="Apache 2.0 licensed. See https://github.com/ampscm/SharpSvn"
   echo /p:BuildBotBuild=true
   echo /p:RestoreForce=true
-) >> %RSPFILE%
+) > %RSPFILE%

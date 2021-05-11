@@ -1,8 +1,7 @@
-<?xml version="1.0"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata minClientVersion="2.5">
     <id>SharpSvn.AnnotateAssembly</id>
-    <version>$version$</version>
+    <version>1.14000.12</version>
     <title>SharpSvn.AnnotateAssembly</title>
     <authors>SharpSvn Project</authors>
     <owners>SharpSvn Project</owners>
@@ -21,20 +20,17 @@
       ForceAssemblyDescription, ForceAssemblyProduct, ForceAssemblyTitle,
       ForceCLSCompliant, ForceComVisible, ForceNeutralResourceLanguage is set then the
       assemblyinfo.(cs|vb|cpp|fs) is filtered to set the attribute to the specified value.
-      
-      Note that the same feature is also available as .msi/.vsix package globally without
-      including this package. When this feature is installed globally, individual includes
-      with this package are automatically skipped.
     </description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>
+    </releaseNotes>
     <copyright>Copyright (c) 2006-2018</copyright>
     <tags>msbuild assemblyinfo versioninfo</tags>
     <developmentDependency>true</developmentDependency>
   </metadata>
   <files>
-    <file target="build" src="SharpSvn.AnnotateAssembly.props" />
-    <file target="build" src="SharpSvn.AnnotateAssembly.targets" />
-    <file target="build" src="..\SharpSvn.MSBuild\bin\x86\Release\SharpSvn.MSBuild.dll" />
-    <file target="build\projects" src="projects\AnnotateAssembly.*.targets" />
+    <file target="build" src="..\src\asmversion-nuspec\SharpSvn.AnnotateAssembly.props" />
+    <file target="build" src="..\src\asmversion-nuspec\SharpSvn.AnnotateAssembly.targets" />
+    <file target="build" src="..\src\SharpSvn.MSBuild\bin\x86\Release\SharpSvn.MSBuild.dll" />
+    <file target="build\projects" src="..\src\asmversion-nuspec\projects\AnnotateAssembly.*.targets" />
   </files>
 </package>
