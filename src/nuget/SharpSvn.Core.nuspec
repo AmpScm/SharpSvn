@@ -13,6 +13,7 @@
     <description>SharpSvn is a binding of the Subversion Client API for .NET based on the actual Subversion code, which is included in this library.</description>
     <copyright>(C) Copyright 2006-2021 The SharpSvn Project</copyright>
     <tags>Subversion Svn SharpSvn</tags>
+    <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
   </metadata>
   <files>
     <file src="../SharpSvn/bin/win32/release/SharpSvn.dll" target="ref/net40" />
