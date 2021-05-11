@@ -80,9 +80,6 @@
     <None Include="Microsoft.Common.Targets\ImportAfter\SharpSvn.ImportAfter.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="SharpSvn.MSBuild.Inc.csproj">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="SharpSvn.MSBuild.snk" />
     <None Include="SharpSvn\Projects\SharpSvn.fsproj.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
