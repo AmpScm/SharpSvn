@@ -518,7 +518,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="SharpSvnStrings.txt">
+    <CustomBuild Include="SharpSvnStrings.txt" Condition="'$(BuildBotBuild)' != 'true'">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating SharpSvnStrings.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>

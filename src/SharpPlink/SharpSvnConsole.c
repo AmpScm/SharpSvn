@@ -242,7 +242,6 @@ int console_verify_ssh_host_key(
 {
 	int result;
 	int ret;
-	DWORD i;
 	const char *common_fmt, *intro, *prompt;
 	char buffer[4096] = "";
 

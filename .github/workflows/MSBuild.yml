@@ -51,11 +51,11 @@ jobs:
 
     - name: Build-x86
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
     - name: Build-x64
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /restore /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
     - name: Run NAnt packaging
       working-directory: build

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SharpSvn.Core</id>
+    <title>SharpSvn - Subversion for .Net</title>
+    <version>$version$</version>
+    <authors>SharpSvn Project</authors>
+    <owners>SharpSvn Project</owners>
+    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/ampscm/sharpsvn/</projectUrl>
+    <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SharpSvn is a binding of the Subversion Client API for .NET based on the actual Subversion code, which is included in this library.</description>
+    <copyright>(C) Copyright 2006-2021 The SharpSvn Project</copyright>
+    <tags>Subversion Svn SharpSvn</tags>
+  </metadata>
+  <files>
+    <file src="../SharpSvn/bin/win32/release/SharpSvn.dll" target="ref/net40" />
+    <file src="../SharpSvn/bin/win32/release/SharpSvn.xml" target="ref/net40" />
+    <file src="../SharpSvn/bin/win32/release/SharpSvn.dll" target="runtimes/win-x86/lib/net40" />
+    <file src="../SharpSvn/bin/win32/release/SharpSvn.xml" target="runtimes/win-x86/lib/net40" />
+    <file src="../SharpSvn/bin/x64/release/SharpSvn.dll" target="runtimes/win-x64/lib/net40" />
+    <file src="../SharpSvn/bin/x64/release/SharpSvn.xml" target="runtimes/win-x64/lib/net40" />
+  </files>
+</package>
