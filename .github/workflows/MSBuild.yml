@@ -1,0 +1,69 @@
+name: MSBuild
+
+on:
+  push:
+    branches: [ main, stable/* ]
+  pull_request:
+    branches: [ main, stable/* ]
+
+env:
+  SOLUTION_FILE_PATH: build/src/SharpSvn.sln
+  nant: '${{ github.workspace }}/build/imports/NAnt.0.92.0/tools/nant.exe'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2
+      with:
+        path: build
+
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          build/imports/downloads
+        key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup VSTest Path
+      uses: darenm/Setup-VSTest@v1
+
+    - name: Install NAnt
+      working-directory: build/imports/
+      run: nuget.exe install NAnt
+
+    - name: Run NAnt preparations
+      working-directory: build
+      run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=${{ github.run_number }}" "-D:CCNetProject=SharpSvn" -D:gitBuild=true buildbot-build
+
+    - name: Setup version
+      working-directory: build
+      run: cmd.exe /C scripts\gh-version-setup ${{ github.run_number }}
+      
+    - name: Run nuget
+      working-directory: build
+      run: nuget restore src/SharpSvn.sln
+
+    - name: Build-x86
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+
+    - name: Build-x64
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /restore /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+
+    - name: Run NAnt packaging
+      working-directory: build
+      run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=${{ github.run_number }}" "-D:CCNetProject=SharpSvn" -D:gitBuild=true package
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SharpSvn
+        path: |
+          build/release/**

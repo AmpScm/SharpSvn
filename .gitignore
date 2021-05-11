@@ -9,3 +9,8 @@
 .vs/
 [Uu]pgrade[Ll]og.htm
 packages/
+
+
+# Buildbot Scripting
+scripts/*.cache.bat
+scripts/msbuild-version.rsp
