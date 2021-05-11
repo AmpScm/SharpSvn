@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.props" Condition="Exists('..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -16,6 +17,8 @@
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
     <SccProvider>SubversionScc</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -143,6 +146,7 @@
     <None Include="Authentication\AuthenticationBanner-2.pdn" />
     <None Include="Authentication\AuthenticationBanner.bmp" />
     <None Include="Authentication\AuthenticationBanner.pdn" />
+    <None Include="packages.config" />
     <None Include="SharpSvn.UI.snk" />
     <EmbeddedResource Include="Authentication\SslClientCertificatePassPhraseDialog.resx">
       <DependentUpon>SslClientCertificatePassPhraseDialog.cs</DependentUpon>
@@ -198,6 +202,14 @@
     </Otherwise>
   </Choose>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.props'))" />
+    <Error Condition="!Exists('..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.targets'))" />
+  </Target>
+  <Import Project="..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.targets" Condition="Exists('..\packages\SharpSvn.AnnotateAssembly.0.25.2\build\SharpSvn.AnnotateAssembly.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
