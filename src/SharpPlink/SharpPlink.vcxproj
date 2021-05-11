@@ -211,6 +211,7 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="PuttySrc\clicons.c" />
     <ClCompile Include="PuttySrc\ecc.c" />
     <ClCompile Include="PuttySrc\mainchan.c" />
     <ClCompile Include="PuttySrc\marshal.c" />
@@ -238,7 +239,9 @@
     <ClCompile Include="PuttySrc\ssh2transhk.c" />
     <ClCompile Include="PuttySrc\ssh2transport.c" />
     <ClCompile Include="PuttySrc\ssh2userauth.c" />
+    <ClCompile Include="PuttySrc\sshargon2.c" />
     <ClCompile Include="PuttySrc\sshauxcrypt.c" />
+    <ClCompile Include="PuttySrc\sshblake2.c" />
     <ClCompile Include="PuttySrc\sshccp.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
@@ -255,11 +258,17 @@
     <ClCompile Include="PuttySrc\sshhmac.c" />
     <ClCompile Include="PuttySrc\sshmac.c" />
     <ClCompile Include="PuttySrc\sshprng.c" />
+    <ClCompile Include="PuttySrc\sshpubk.c" />
+    <ClCompile Include="PuttySrc\sshsha3.c" />
+    <ClCompile Include="PuttySrc\sshutils.c" />
     <ClCompile Include="PuttySrc\sshverstring.c" />
     <ClCompile Include="PuttySrc\stripctrl.c" />
+    <ClCompile Include="PuttySrc\supdup.c" />
     <ClCompile Include="PuttySrc\utils.c" />
     <ClCompile Include="PuttySrc\wcwidth.c" />
+    <ClCompile Include="PuttySrc\windows\wincliloop.c" />
     <ClCompile Include="PuttySrc\windows\winmiscs.c" />
+    <ClCompile Include="PuttySrc\windows\winselcli.c" />
     <ClCompile Include="SharpPlink.cpp" />
     <ClCompile Include="SharpSvnCmdLine.c" />
     <ClCompile Include="SharpSvnConsole.c" />
@@ -450,12 +459,6 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\sshdssg.c">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-    </ClCompile>
     <ClCompile Include="PuttySrc\sshgssc.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
@@ -468,18 +471,6 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\sshprime.c">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshpubk.c">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-    </ClCompile>
     <ClCompile Include="PuttySrc\sshrand.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
@@ -487,12 +478,6 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshrsa.c">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshrsag.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
@@ -648,12 +633,6 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\config.c">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-    </ClCompile>
     <ClCompile Include="PuttySrc\dialog.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
@@ -661,12 +640,6 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\wincapi.c">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../sharpplink-ex.h</ForcedIncludeFiles>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winctrls.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../sharpplink-ex.h</ForcedIncludeFiles>

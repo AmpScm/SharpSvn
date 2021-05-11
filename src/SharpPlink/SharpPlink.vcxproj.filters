@@ -27,9 +27,6 @@
     <ClCompile Include="PuttySrc\conf.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PuttySrc\config.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PuttySrc\dialog.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
@@ -37,9 +34,6 @@
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winprint.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winctrls.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winhelp.c">
@@ -147,28 +141,16 @@
     <ClCompile Include="PuttySrc\sshdss.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PuttySrc\sshdssg.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PuttySrc\sshgssc.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshmd5.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PuttySrc\sshprime.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshpubk.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PuttySrc\sshrand.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshrsa.c">
-      <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshrsag.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshsh256.c">
@@ -352,6 +334,33 @@
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\ssh2kex-client.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshutils.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winselcli.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshpubk.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshargon2.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wincliloop.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\clicons.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshblake2.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\supdup.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshsha3.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
