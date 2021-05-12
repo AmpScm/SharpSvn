@@ -105,7 +105,7 @@ namespace SharpSvn.Tests
             SvnRepositoryIOException rio = null;
             try
             {
-                cl.Info(new Uri("svn+builtin-ssh://sharpsvn.open.collab.net:80"),
+                cl.Info(new Uri("svn+builtin-ssh://sharpsvn.open.collab.net:443"),
                     delegate(object Sender, SvnInfoEventArgs e)
                     { });
             }

@@ -107,7 +107,6 @@
     <Content Include="pdbstr.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SharpSvn.PdbAnnotate.wxs" />
     <Content Include="srctool.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

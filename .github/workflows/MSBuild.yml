@@ -57,17 +57,6 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /restore /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
-    - name: Run NAnt packaging
-      working-directory: build
-      run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=${{ github.run_number }}" "-D:CCNetProject=SharpSvn" -D:gitBuild=true package
-      
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: SharpSvn
-        path: |
-          build/release/**
-
     - name: Create nupkg files
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: cmd.exe /C build\scripts\gh-build-nuget.cmd

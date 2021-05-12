@@ -12,7 +12,7 @@
     <tags>NTS Topology PROJ CRS</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.0">
-        <dependency id="SharpSvn.Core" version="[1.14000.12]" />
+        <dependency id="SharpSvn" version="[1.14000.12]" />
       </group>
     </dependencies>
   </metadata>
