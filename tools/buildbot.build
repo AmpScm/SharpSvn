@@ -53,24 +53,44 @@
   </target>
 
   <target name="package-svndist" if="${property::exists('CCNetNumericLabel')}">
-    <property name="artifactLabel" value="${CCNetNumericLabel}" />
 
-    <if test="${file::exists('release/ver.txt')}">
-      <loadfile file="release/ver.txt" property="sliksvnVersion" />
-      <loadfile file="release/tag.txt" property="svnTag" />
+    <Svn output=".svn-info-svn">
+      <arg line="info --xml" />
+      <arg value="imports\build\win32\subversion" unless="${svnDist}" />
+      <arg value="imports\svn-dist\build\win32\subversion" if="${svnDist}" />
+    </Svn>
+    <xmlpeek file=".svn-info-svn" xpath="/info/entry/url" property="svn-tag" />
+    <property name="svn-tag" value="${path::get-file-name(string::replace(svn-tag,'://', '/'))}" />
+    <property name="svn-ver" value="${string::replace(string::replace(string::replace(string::replace(svn-tag, '-alpha', '.'), '-beta', '.'),'-rc', '.'), '.x', '.0')}" />
+    <choose>
+      <when test="${svn-tag == 'trunk'}">
+        <property name="versionBase" value="1.55555" />
+      </when>
+      <when test="${svn-tag != svn-ver}">
+        <property name="v" value="0" />
+        <property name="v" value="1" if="${string::contains(svn-tag, 'alpha')}" />
+        <property name="v" value="2" if="${string::contains(svn-tag, 'beta')}" />
+        <property name="v" value="3" if="${string::contains(svn-tag, 'rc')}" />
+        <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))-1) * 1000 + 990 + int::parse(v)}" />
+      </when>
+      <otherwise>
+        <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))) * 1000 + version::get-build(version::parse(svn-ver))}" />
+      </otherwise>
+    </choose>
 
-      <property name="artifactLabel" value="${sliksvnVersion}" />
-      <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}.${version::get-minor(version::parse(sliksvnVersion)) % 1000}" />
-      <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}" />
-      <choose>
-        <when test="${(version::get-minor(version::parse(sliksvnVersion)) % 1000) &gt; 900}">
-          <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${(version::get-minor(version::parse(sliksvnVersion)) / 1000) + 1}.${version::get-revision(version::parse(sliksvnVersion))}" />
-        </when>
-        <otherwise>
-          <property name="distVersion" value="${distVersion}.${(version::get-minor(version::parse(sliksvnVersion)) % 1000) * 1000 + version::get-revision(version::parse(sliksvnVersion))}" />
-        </otherwise>
-      </choose>
-    </if>
+    <property name="sliksvnVersion" value="${versionBase}.0.${CCNetNumericLabel}" />
+    <property name="svnTag" value="${svn-tag}" />
+
+    <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}.${version::get-minor(version::parse(sliksvnVersion)) % 1000}" />
+    <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}" />
+    <choose>
+      <when test="${(version::get-minor(version::parse(sliksvnVersion)) % 1000) &gt; 900}">
+        <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${(version::get-minor(version::parse(sliksvnVersion)) / 1000) + 1}.${version::get-revision(version::parse(sliksvnVersion))}" />
+      </when>
+      <otherwise>
+        <property name="distVersion" value="${distVersion}.${(version::get-minor(version::parse(sliksvnVersion)) % 1000) * 1000 + version::get-revision(version::parse(sliksvnVersion))}" />
+      </otherwise>
+    </choose>
 
     <delete>
       <fileset basedir="imports\svn-dist\wix">
