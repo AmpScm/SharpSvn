@@ -1,4 +1,4 @@
-<!-- SharpSvn.net AnnotateAssembly Common Targets -->
+<!-- SharpSvn shorten Web paths in publish zip Targets -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="SharpSvnAddMSDeployReplaceRuleForAppPath" BeforeTargets="Package">
     <PropertyGroup>
