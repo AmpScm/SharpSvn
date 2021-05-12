@@ -294,13 +294,10 @@ namespace SharpSvn.Tests.Commands
                 }
                 catch (SvnWorkingCopyException e)
                 {
-                    Assert.That(e.Message, Does.EndWith("Failed to run the WC DB"));
+                    Assert.That(e.Message, Does.StartWith("Failed to run the WC DB"));
                     se = e.GetCause<SvnSystemException>();
                 }
-                catch (SvnSystemException e)
-                {
-                    se = e;
-                }
+
 
                 Assert.That(se, Is.Not.Null, "Have system exception");
                 Assert.That(se.Message, Does.Contain("Can't move"));
