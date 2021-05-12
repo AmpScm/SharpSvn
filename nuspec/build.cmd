@@ -27,15 +27,15 @@ pushd %0\..
 if NOT EXIST ".\obj\." mkdir obj
 if NOT EXIST ".\bin\." mkdir bin
 
-CALL :xmlpoke SharpSvn.Core.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
+CALL :xmlpoke SharpSvn.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
 
 CALL :xmlpoke SharpSvn.UI.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
-CALL :xmlpoke SharpSvn.UI.nuspec "//nu:dependency[@id='SharpSvn.Core']/@version" "[%SHARPSVN_VER%]" || EXIT /B 1
+CALL :xmlpoke SharpSvn.UI.nuspec "//nu:dependency[@id='SharpSvn']/@version" "[%SHARPSVN_VER%]" || EXIT /B 1
 
 CALL :xmlpoke SharpSvn.AnnotateAssembly.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
 CALL :xmlpoke SharpSvn.ShortMSDeployWebContentPath.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
 
-nuget pack SharpSvn.Core.nuspec -version %SVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack SharpSvn.nuspec -version %SVN_VER% -OutputDirectory bin || exit /B 1
 nuget pack SharpSvn.UI.nuspec -version %SVN_VER% -OutputDirectory bin || exit /B 1
 nuget pack SharpSvn.AnnotateAssembly.nuspec -version %SVN_VER% -OutputDirectory bin || exit /B 1
 nuget pack SharpSvn.ShortMSDeployWebContentPath.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
