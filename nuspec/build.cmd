@@ -35,9 +35,9 @@ CALL :xmlpoke SharpSvn.UI.nuspec "//nu:dependency[@id='SharpSvn']/@version" "[%S
 CALL :xmlpoke SharpSvn.AnnotateAssembly.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
 CALL :xmlpoke SharpSvn.ShortMSDeployWebContentPath.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
 
-nuget pack SharpSvn.nuspec -version %SVN_VER% -OutputDirectory bin || exit /B 1
-nuget pack SharpSvn.UI.nuspec -version %SVN_VER% -OutputDirectory bin || exit /B 1
-nuget pack SharpSvn.AnnotateAssembly.nuspec -version %SVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack SharpSvn.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack SharpSvn.UI.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack SharpSvn.AnnotateAssembly.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
 nuget pack SharpSvn.ShortMSDeployWebContentPath.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
 echo "--done--"
 popd

@@ -1,11 +1,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>SharpSvn.Core</id>
+    <id>SharpSvn</id>
     <title>SharpSvn - Subversion for .Net</title>
     <version>1.14000.12</version>
-    <authors>SharpSvn Project</authors>
-    <owners>SharpSvn Project</owners>
-    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <authors>SharpSvn</authors>
+    <owners>SharpSvn</owners>
+    <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/ampscm/sharpsvn/</projectUrl>
     <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,13 +13,37 @@
     <copyright>(C) Copyright 2006-2021 The SharpSvn Project</copyright>
     <tags>Subversion Svn SharpSvn</tags>
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.0">
+      </group>
+    </dependencies>
+    <references>
+      <group targetFramework=".NETFramework4.0">
+        <reference file="SharpSvn.dll" />
+      </group>
+    </references>
   </metadata>
   <files>
-    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" target="ref/net40" />
-    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" target="ref/net40" />
-    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" target="runtimes/win-x86/lib/net40" />
-    <file src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" target="runtimes/win-x86/lib/net40" />
-    <file src="../src/SharpSvn/bin/x64/release/SharpSvn.dll" target="runtimes/win-x64/lib/net40" />
-    <file src="../src/SharpSvn/bin/x64/release/SharpSvn.xml" target="runtimes/win-x64/lib/net40" />
+    <!-- For legacy NuGet -->
+    <file target="lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" />
+    <file target="lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" />
+    <file target="lib/net40" src="../src/SharpSvn/bin/win32/release/SharpPlink-Win32.svnExe" />
+    <!-- /legacy -->
+    <!-- For PackageReference NuGet -->
+    <!--  For compile time -->
+    <file target="ref/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" />
+    <file target="ref/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" />
+    <!-- For runtime -->
+    <file target="runtimes/win-x86/lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" />
+    <file target="runtimes/win-x86/lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.pdb" />
+    <file target="runtimes/win-x86/lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" />
+    <file target="runtimes/win-x86/lib/net40" src="../src/SharpSvn/bin/win32/release/SharpPlink-Win32.svnExe" />
+    <file target="runtimes/win-x86/lib/net40" src="../imports/release/bin/SharpSvn-DB44-20-win32.svnDll" />
+    <file target="runtimes/win-x64/lib/net40" src="../src/SharpSvn/bin/x64/release/SharpSvn.dll" />
+    <file target="runtimes/win-x64/lib/net40" src="../src/SharpSvn/bin/x64/release/SharpSvn.pdb" />
+    <file target="runtimes/win-x64/lib/net40" src="../src/SharpSvn/bin/x64/release/SharpSvn.xml" />
+    <file target="runtimes/win-x64/lib/net40" src="../src/SharpSvn/bin/x64/release/SharpPlink-x64.svnExe" />
+    <file target="runtimes/win-x64/lib/net40" src="../imports/release/bin/SharpSvn-DB44-20-x64.svnDll" />
+    <!-- /PackageReference -->
   </files>
 </package>

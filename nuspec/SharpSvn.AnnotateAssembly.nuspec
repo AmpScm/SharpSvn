@@ -3,11 +3,10 @@
     <id>SharpSvn.AnnotateAssembly</id>
     <version>1.14000.12</version>
     <title>SharpSvn.AnnotateAssembly</title>
-    <authors>SharpSvn Project</authors>
-    <owners>SharpSvn Project</owners>
-    <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
-    <projectUrl>http://sharpsvn.open.collab.net/</projectUrl>
-    <iconUrl>https://sharpsvn.open.collab.net/favicon.ico</iconUrl>
+    <authors>SharpSvn</authors>
+    <owners>SharpSvn</owners>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/ampscm/sharpsvn/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       This package provides support for explicitly setting assembly level properties
