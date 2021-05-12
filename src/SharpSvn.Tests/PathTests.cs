@@ -23,6 +23,7 @@ using SharpSvn.TestBuilder;
 using System.IO;
 
 using System.Runtime.InteropServices;
+using NUnit.Framework;
 
 namespace SharpSvn.Tests
 {
@@ -314,8 +315,8 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.GetNormalizedFullPath("c:\\"), Is.EqualTo("C:\\"));
             Assert.That(SvnTools.GetNormalizedFullPath("C:\\"), Is.EqualTo("C:\\"));
-            Assert.That(SvnTools.GetNormalizedFullPath("C:"), Is.StringStarting("C:\\"));
-            Assert.That(SvnTools.GetNormalizedFullPath("c:"), Is.StringStarting("C:\\"));
+            Assert.That(SvnTools.GetNormalizedFullPath("C:"), Does.StartWith("C:\\"));
+            Assert.That(SvnTools.GetNormalizedFullPath("c:"), Does.StartWith("C:\\"));
 
         }
 
@@ -622,7 +623,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnPathTarget.FromString("c:\\source\\.\\dump").TargetPath, Is.EqualTo("C:\\source\\dump"));
         }
 
-        public TestContext TestContext
+        public Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
         {
             get;
             set;

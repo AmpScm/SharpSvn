@@ -179,20 +179,6 @@
 
   </target>
 
-  <target name="misc-copy" depends="extract">
-    <copy todir="${release}/lib-AnyCPU">
-      <fileset basedir="${nunitDir}/bin/framework">
-        <include name="nunit.framework.dll" />
-        <include name="nunit.framework.xml" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/lib-AnyCPU">
-      <fileset basedir="${sharpZipLibDir}/net-20">
-        <include name="ICSharpCode.SharpZipLib.dll" />
-      </fileset>
-    </copy>
-  </target>
-
   <target name="clean-svn" depends="update-svn">
     <delete>
       <fileset basedir="${release}">

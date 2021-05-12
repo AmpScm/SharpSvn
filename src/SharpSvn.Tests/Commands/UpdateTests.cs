@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SharpSvn.TestBuilder;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
@@ -293,7 +294,7 @@ namespace SharpSvn.Tests.Commands
                 }
                 catch (SvnWorkingCopyException e)
                 {
-                    Assert.That(e.Message, Is.StringContaining("Failed to run the WC DB"));
+                    Assert.That(e.Message, Does.EndWith("Failed to run the WC DB"));
                     se = e.GetCause<SvnSystemException>();
                 }
                 catch (SvnSystemException e)
@@ -302,7 +303,7 @@ namespace SharpSvn.Tests.Commands
                 }
 
                 Assert.That(se, Is.Not.Null, "Have system exception");
-                Assert.That(se.Message, Is.StringContaining("Can't move"));
+                Assert.That(se.Message, Does.Contain("Can't move"));
             }
         }
 

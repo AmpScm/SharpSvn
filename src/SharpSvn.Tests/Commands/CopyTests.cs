@@ -23,6 +23,7 @@ using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
 
 using SharpSvn;
+using NUnit.Framework;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -233,9 +234,9 @@ namespace SharpSvn.Tests.Commands
                         first = false;
                         foreach (SvnChangeItem i in e.ChangedPaths)
                         {
-                            Assert.That(i.Path, Is.StringEnding("trunk/RemoteCopyBase"), "Path ends with folder/RemoteCopyBase");
+                            Assert.That(i.Path, Does.EndWith("trunk/RemoteCopyBase"), "Path ends with folder/RemoteCopyBase");
                             Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.CopyFromPath, Is.StringEnding("trunk/CopyBase"), "CopyFromPath ends with folder/CopyBase");
+                            Assert.That(i.CopyFromPath, Does.EndWith("trunk/CopyBase"), "CopyFromPath ends with folder/CopyBase");
                             Assert.That(i.CopyFromRevision, Is.GreaterThan(0L));
                             Assert.That(i.NodeKind, Is.EqualTo(SvnNodeKind.File));
                         }
@@ -245,7 +246,7 @@ namespace SharpSvn.Tests.Commands
                         foreach (SvnChangeItem i in e.ChangedPaths)
                         {
                             Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.Path, Is.StringEnding("trunk/CopyBase"), "Path ends with folder/CopyBase");
+                            Assert.That(i.Path, Does.EndWith("trunk/CopyBase"), "Path ends with folder/CopyBase");
                             Assert.That(i.NodeKind, Is.EqualTo(SvnNodeKind.File));
                             visited = true;
                         }
@@ -263,9 +264,9 @@ namespace SharpSvn.Tests.Commands
                     {
                         foreach (SvnChangeItem i in e.ChangedPaths)
                         {
-                            Assert.That(i.Path, Is.StringEnding("trunk/LocalCopy"), "Path ends with folder/LocalCopy");
+                            Assert.That(i.Path, Does.EndWith("trunk/LocalCopy"), "Path ends with folder/LocalCopy");
                             Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.CopyFromPath, Is.StringEnding("trunk/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
+                            Assert.That(i.CopyFromPath, Does.EndWith("trunk/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
                             Assert.That(i.CopyFromRevision, Is.GreaterThan(0L));
                         }
                         first = false;
@@ -274,7 +275,7 @@ namespace SharpSvn.Tests.Commands
                         foreach (SvnChangeItem i in e.ChangedPaths)
                         {
                             Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.Path, Is.StringEnding("trunk/CopyBase"), "Path ends with folder/CopyBase");
+                            Assert.That(i.Path, Does.EndWith("trunk/CopyBase"), "Path ends with folder/CopyBase");
                             visited = true;
                         }
 

@@ -5,19 +5,12 @@
   <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
 
-  <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
-  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
-  
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
   <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
   <property name="cmakeDir" value="build/cmake-${cmakeVersion}-win32-x86" />
 
-  <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
-  <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
-
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
-  <property name="nugetExe" value="${downloads + 'nuget.exe'}" />
   
   <property name="sconsFilename" value="scons-local-${sconsVersion}.zip" />
 
@@ -28,16 +21,6 @@
       src="https://download.oracle.com/berkeley-db/${dbFilename}"
       dest="${downloads + dbFilename}"
       unless="${file::exists(downloads + dbFilename)}" />
-
-    <get
-      src="https://github.com/nunit-legacy/nunitv2/releases/download/${nunitVersion}/${nunitFilename}"
-      dest="${downloads + nunitFilename}"
-      unless="${file::exists(downloads + nunitFilename)}" />
-
-    <get
-      src="https://prdownloads.sourceforge.net/sharpdevelop/${sharpZipFilename}"
-      dest="${downloads + sharpZipFilename}"
-      unless="${file::exists(downloads + sharpZipFilename)}" />
 
     <get src="https://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}"
       dest="${downloads + nasmFilename}"
@@ -88,11 +71,6 @@
       if="${javaHome != '' and buildJavaHL}" />
       
     <get
-      src="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-      dest="${nugetExe}"
-      unless="${file::exists(nugetExe)}" />
-      
-    <get
       src="https://prdownloads.sourceforge.net/scons/${sconsFilename}"
       dest="${downloads + sconsFilename}"
       unless="${file::exists(downloads + sconsFilename)}" />
@@ -105,17 +83,6 @@
       src="${downloads + dbFilename}" compression="gzip"
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
-
-    <unzip
-      zipfile="${downloads + nunitFilename}"
-      todir="${nunitDir}"
-      unless="${directory::exists(nunitDir)}"
-      if="${downloadNUnit}" />
-
-    <unzip
-      zipfile="${downloads + sharpZipFilename}"
-      todir="${sharpZipLibDir}"
-      unless="${directory::exists(sharpZipLibDir)}" />
 
     <unzip
       zipfile="${downloads + nasmFilename}"

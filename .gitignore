@@ -8,6 +8,7 @@
 /imports/release/
 .vs/
 [Uu]pgrade[Ll]og.htm
+[Mm]igration[Bb]ackup/
 packages/
 /src/SharpSvn/SvnText/
 /src/SharpSvn/SharpSvnStrings.resources

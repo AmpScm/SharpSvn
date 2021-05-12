@@ -67,3 +67,13 @@ jobs:
         name: SharpSvn
         path: |
           build/release/**
+
+    - name: Create nupkg files
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: cmd.exe /C build\scripts\gh-build-nuget.cmd
+
+    - name: Package nupkg files
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg-files
+        path: build/nuspec/bin/*.nupkg
