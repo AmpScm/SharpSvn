@@ -182,7 +182,7 @@ namespace SharpSvn.MSBuild
                     if (!string.IsNullOrWhiteSpace(SetFileVersion))
                         parser.WriteAttribute<AssemblyVersionAttribute>(sw, SetFileVersion);
                     if (!string.IsNullOrWhiteSpace(SetInformationalVersion))
-                        parser.WriteAttribute<AssemblyVersionAttribute>(sw, SetInformationalVersion);
+                        parser.WriteAttribute<AssemblyInformationalVersionAttribute>(sw, SetInformationalVersion);
                     if (!string.IsNullOrWhiteSpace(SetSatelliteContractVersion))
                         parser.WriteAttribute<SatelliteContractVersionAttribute>(sw, SetSatelliteContractVersion);
                     if (!string.IsNullOrWhiteSpace(SetComCompatibleVersion))
