@@ -19,6 +19,12 @@ for /F "usebackq tokens=2,3" %%i in (`"type %VERFILE% |findstr /C:SVN_VER_"`) do
   )
 ) 
 
+pushd %0\..
+FOR /F "usebackq" %%i in (`git rev-parse HEAD`) do (
+  SET GIT_SHA=%%i
+)
+popd
+
 set    SHARPSVN_MAJOR=%SVN_VER_MAJOR%
 set /a SHARPSVN_MINOR=%SVN_VER_MINOR% * 1000 + %SVN_VER_PATCH%
 set    SHARPSVN_PATCH=%1
@@ -30,10 +36,12 @@ echo Prepare building SharpProj %SVN_VER_MAJOR%.%SHARPSVN_MINOR%.%1
   echo SET SHARPSVN_MAJOR=%SHARPSVN_MAJOR%
   echo SET SHARPSVN_MINOR=%SHARPSVN_MINOR%
   echo SET SHARPSVN_PATCH=%SHARPSVN_PATCH%
+  echo SET GIT_SHA=%GIT_SHA%
 ) >> %CACHE%
 
 (
   echo /p:ForceAssemblyVersion=%SHARPSVN_MAJOR%.%SHARPSVN_MINOR%.%SHARPSVN_PATCH%
+  echo /p:ForceAssemblyInformationalVersion=%SHARPSVN_MAJOR%.%SHARPSVN_MINOR%.%SHARPSVN_PATCH%-%GIT_SHA%
   echo /p:ForceAssemblyCompany="SharpSvn Project, powered by AmpScm, QQn & GitHub"
   echo /p:ForceAssemblyCopyright="Apache 2.0 licensed. See https://github.com/ampscm/SharpSvn"
   echo /p:BuildBotBuild=true
