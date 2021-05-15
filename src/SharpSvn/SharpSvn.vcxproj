@@ -31,10 +31,14 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6DD8A600-5A7E-4B7A-91EE-86AB78F58AAC}</ProjectGuid>
     <RootNamespace>SharpSvn</RootNamespace>
-    <SccProjectName>Svn</SccProjectName>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccProvider>SubversionScc</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
     <Keyword>ManagedCProj</Keyword>
     <SharpSvnUpdateVersionResource>true</SharpSvnUpdateVersionResource>
   </PropertyGroup>

@@ -14,10 +14,14 @@
     <RootNamespace>Po2Resx</RootNamespace>
     <AssemblyName>Po2Resx</AssemblyName>
     <StartupObject>Po2Resx.Program</StartupObject>
-    <SccProjectName>Svn</SccProjectName>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccProvider>SubversionScc</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Po2Resx.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
