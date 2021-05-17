@@ -498,7 +498,7 @@ namespace SharpSvn.Tests
         public void Path_UriStrangeness()
         {
             // Somehow the behavior reverts to 2.0 like for the VS Test runner?
-            if (Environment.Version.Major < 4 || (TestContext != null))
+            if (Environment.Version.Major < 4 /* Or .Net 4.0 like runtime, but not .Net 4.5+ */)
             {
                 // This is where we wrote this test for
                 Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
