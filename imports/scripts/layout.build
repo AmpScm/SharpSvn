@@ -7,12 +7,8 @@
 
   <property name="buildRoot" value="${path::get-full-path(buildRoot)}" />
 
-  <property name="platform" value="x64" if="${platform=='auto' and string::contains(string::to-upper(LIB), 'LIB\AMD64')}" />
-  <property name="platform" value="ia64" if="${platform=='auto' and string::contains(string::to-upper(LIB), 'LIB\INTEL64')}" />
-  <property name="platform" value="win32" if="${platform=='auto'}" />
-
-  <if test="${platform != 'win32' and platform != 'x64' and platform != 'ia64'}">
-    <fail message="Platform must be win32, x64 or ia64 but is ${platform}" />
+  <if test="${platform != 'win32' and platform != 'x64' and platform != 'ARM' and platform != 'ARM64' and platform != 'ia64'}">
+    <fail message="Platform must be win32, x64, ARM, ARM64 or ia64 but is ${platform}" />
   </if>
 
   <property name="platformRoot" value="${buildRoot}" if="${singlePlatform=='true'}" />
@@ -21,10 +17,10 @@
   <property name="intDir" value="${platformRoot}\release" />
 
   <property name="release" value="${path::get-full-path(release)}" />
-  <property name="releaseLib" value="${release}\lib" if="${singlePlatform or platform=='win32'}" />
-  <property name="releaseLib" value="${release}\lib-${platform}" if="${(not singlePlatform) and platform!='win32'}" />
-  <property name="releaseBin" value="${release}\bin" if="${singlePlatform or platform=='win32'}" />
-  <property name="releaseBin" value="${release}\bin-${platform}" if="${(not singlePlatform) and platform!='win32'}" />
+  <property name="releaseLib" value="${release}\lib" if="${singlePlatform or platform == 'win32'}" />
+  <property name="releaseLib" value="${release}\lib-${platform}" if="${(not singlePlatform) and platform != 'win32'}" />
+  <property name="releaseBin" value="${release}\bin" if="${singlePlatform or platform == 'win32'}" />
+  <property name="releaseBin" value="${release}\bin-${platform}" if="${(not singlePlatform) and platform != 'win32'}" />
   <property name="releaseInc" value="${release}\include" />
 
   <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />

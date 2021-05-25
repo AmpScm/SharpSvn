@@ -22,8 +22,8 @@
   <property name="buildPthreadwin32" value="true" overwrite="false" if="${buildMemcached}" />
   <property name="buildPthreadwin32" value="false" overwrite="false" />
 
-  <if test="${platform != 'win32' and platform != 'x64'}">
-    <fail message="Platform must be win32 or x64 at this time" />
+  <if test="${platform != 'win32' and platform != 'x64' and platform != 'ARM'}">
+    <fail message="Platform must be win32, x64 or ARM at this time" />
   </if>
 
   <if test="${not property::exists('VSversion')}">
