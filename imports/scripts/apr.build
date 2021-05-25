@@ -37,9 +37,6 @@
         <filterchain>
           <replacestring from='attributes |= FILE_FLAG_DELETE_ON_CLOSE;'
                            to='attributes |= FILE_FLAG_DELETE_ON_CLOSE | FILE_ATTRIBUTE_TEMPORARY;' />
-          <!--replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
-                           to='DWORD sharemode = FILE_SHARE_READ;' if="${applyMerges}" /-->
-          <replacestring from='FILE_SHARE_DELETE;' to= '0; // FILE_SHARE_DELETE' unless="${buildSubversion == 'false'}" />
         </filterchain>
       </FilterFile>
       <FilterFile file="${aprDir}\include\apr.hwc">
@@ -57,6 +54,15 @@
 #define strnicmp(s1, s2, n) _strnicmp(s1, s2, n)' />
         </filterchain>
       </FilterFile>
+      <FilterFile file="${aprDir}\CMakeLists.txt">
+        <filterchain>
+          <replacestring from='ADD_DEPENDENCIES(libapr-1 test_char_header)'
+                           to="ADD_DEPENDENCIES(libapr-1 ${'$'}{PROJECT_BINARY_DIR}/apr_escape_test_char.h)" if="${platform != 'win32' and platform != 'x64'}" />
+          <replacestring from="OUTPUT ${'$'}{PROJECT_BINARY_DIR}/apr_escape_test_char.h"
+                           to="OUTPUT ${'$'}{PROJECT_BINARY_DIR}/generated_apr_escape_test_char.h" if="${platform != 'win32' and platform != 'x64'}" />
+        </filterchain>
+      </FilterFile>
+      <copy todir="${aprDir}" file="scripts/apr_escape_test_char.h" if="${platform != 'win32' and platform != 'x64'}" />
     </OnceBlock>
   </target>
   <target name="apr-build" depends="checkout, apr-merge, cmake-prepare">
@@ -69,9 +75,7 @@
       <CMake workingdir="${aprDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
-        <prop name="APR_BUILD_TESTAPR" value="ON" />
-
-        <prop name="MIN_WINDOWS_VER" value="0x0501" /><!-- Windows XP -->
+        <prop name="APR_BUILD_TESTAPR" value="ON" if="${platform=='win32'}" />
 
         <prop name="APR_INSTALL_PRIVATE_H" value="ON" />
       </CMake>
@@ -90,7 +94,7 @@
       </FilterFile>
       <MSBuild src="${aprDir}/APR.sln">
         <target value="apr-1" />
-        <target value="libapr-1" />
+        <target value="libapr-1" if="${platform == 'win32' or platform == 'x64'}" />
       </MSBuild>
     </OnceBlock>
 

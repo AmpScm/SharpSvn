@@ -33,6 +33,7 @@
         <arg value="Configure" />
         <arg value="VC-WIN32" if="${platform=='win32'}" />
         <arg value="VC-WIN64A" if="${platform=='x64'}" />
+        <arg value="VC-WIN32-ARM" if="${platform=='ARM'}" />
         <!-- Provide a sane, most likely secure default for loading system wide settings -->
         <arg value="--openssldir=C:\ProgramData\OpenSSL" />
         <!-- Now configure more -->
@@ -55,7 +56,7 @@
         <arg value="-DSSL_FORBID_ENULL" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
-        <arg value="-D_WIN32_WINNT=0x0501" />
+        <arg value="-D_WIN32_WINNT=0x0600" />
         <arg value="-D_WINSOCK_DEPRECATED_NO_WARNINGS" />
         <arg value="--prefix=${path::get-full-path(intDir)}" />
       </Perl>
@@ -73,6 +74,7 @@
           <LineRegexReplace re='lib(crypto|ssl)-[1-9_]+(-x64)?\.(dll|pdb)' to='${dllPrefix}$0' if="${dllPrefix != ''}" />
           <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
           <LineRegexReplace re='^(MLFLAGS=.*)/subsystem:console' to='$1 /subsystem:windows /nxcompat /largeaddressaware /release' />
+          <replacestring from='setargv.obj' to='' if="${platform != 'win32' and platform != 'x64'}" />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslMakefile}" if="${static}">
@@ -80,6 +82,8 @@
           <!-- Ommit default library name -->
           <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags} " />
           <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+          <replacestring from='setargv.obj' to='' if="${platform != 'win32' and platform != 'x64'}" />
+          <replacestring from=" /MT " to=" /MD " />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/engines/e_capi.c" if="${svnAddSharpSvn}">
