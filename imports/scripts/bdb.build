@@ -45,6 +45,7 @@
         <prop name="TargetName" value="${editedDbDllName}" />
         <prop name="TargetExt" value=".${svnDll}" if="${svnDll != 'dll'}" />
         <prop name="OutDir" value="bin\${platform}\Release\\" />
+        <prop name="IntDir" value="obj\${platform}\Release\\" />
       </MSBuild>
 
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="Debug" if="${svn-dev}">

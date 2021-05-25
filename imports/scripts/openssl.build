@@ -34,6 +34,7 @@
         <arg value="VC-WIN32" if="${platform=='win32'}" />
         <arg value="VC-WIN64A" if="${platform=='x64'}" />
         <arg value="VC-WIN32-ARM" if="${platform=='ARM'}" />
+        <arg value="VC-WIN64-ARM" if="${platform=='ARM64'}" />
         <!-- Provide a sane, most likely secure default for loading system wide settings -->
         <arg value="--openssldir=C:\ProgramData\OpenSSL" />
         <!-- Now configure more -->
