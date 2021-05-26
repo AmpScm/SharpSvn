@@ -170,7 +170,7 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>.\Release\libdb44.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)libdb44.lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OUTDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <BaseAddress>0x13000000</BaseAddress>
       <AdditionalDependencies>kernel32.lib;user32.lib;advapi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -213,7 +213,7 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>.\Release\libdb44.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)libdb44.lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OUTDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;advapi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\libdb.def</ModuleDefinitionFile>
@@ -255,7 +255,7 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>.\Release\libdb44.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)libdb44.lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OUTDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;advapi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\libdb.def</ModuleDefinitionFile>
@@ -297,7 +297,7 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>.\Release\libdb44.lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)libdb44.lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OUTDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;advapi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\libdb.def</ModuleDefinitionFile>

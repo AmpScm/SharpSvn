@@ -14,7 +14,7 @@
   <property name="sconsPlatform" value="${platform}" />
   <property name="sconsPlatform" value="x86" if="${platform == 'win32'}" />
   <property name="sconsPlatform" value="x86_64" if="${platform == 'x64'}" />
-  <property name="sconsPlatform" value="x86_arm64" if="${platform == 'ARM64'}" />
+  <property name="sconsPlatform" value="arm64" if="${platform == 'ARM64'}" />
   <property name="sconsPlatform" value="arm" if="${platform == 'ARM'}" />
 
   <target name="scons-install" depends="checkout">

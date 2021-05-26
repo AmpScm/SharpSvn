@@ -49,7 +49,8 @@
       </delete>
       <FilterFile file="${serfDir}\SConstruct">
         <filterchain>
-          <replacestring from="allowed_values=('x86'," to="allowed_values=('${sconsPlatform}', 'x86'," if="${sconsPlatform != 'x86' and sconsPlatform != 'x86_64'}" />
+          <replacestring from="EnumVariable('TARGET_ARCH'," tp="EnumVariable('IGNORED_TARGET_ARCH'," />
+          <replacestring from="if unknown:," to="if unknown and 1 == 0:" />
         </filterchain>
       </FilterFile>
       <SCons workingdir="${serfDir}">

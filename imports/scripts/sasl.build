@@ -98,6 +98,7 @@ $1
           <replacestring from=' $(libsasl_res)' to='' if="${static}" />
           <replacestring from='/implib:"libsasl.lib" ' to='' if="${static}" />
           <replacestring from='libsasl.dll' to='libsasl.lib' if="${static}" />
+          <replacestring from=' /Wp64 ' to=' /D_CRT_SECURE_NO_DEPRECATE ' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
