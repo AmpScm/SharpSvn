@@ -47,6 +47,11 @@
           <include name="libserf-?.pdb" />
         </fileset>
       </delete>
+      <FilterFile file="${serfDir}\SConstruct">
+        <filterchain>
+          <replacestring from="allowed_values=('x86'," to="allowed_values=('${sconsPlatform}', 'x86'," if="${sconsPlatform != 'x86' and sconsPlatform != 'x86_64'}" />
+        </filterchain>
+      </FilterFile>
       <SCons workingdir="${serfDir}">
         <environment>
           <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
@@ -60,7 +65,7 @@
         <arg value="APU=${intDir}" />
         <arg value="SOURCE_LAYOUT=no" />
         <arg value="DEBUG=yes" if="${serfDebug}" />
-        <arg value="TARGET_ARCH=${platform}" />
+        <arg value="TARGET_ARCH=${sconsPlatform}" />
         <arg value="MSVC_VERSION=${sconsVSVersion}" />
         <arg value="APR_STATIC=yes" if="${static}" />
         <arg value="install-lib" />

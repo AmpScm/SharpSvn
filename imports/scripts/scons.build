@@ -11,6 +11,11 @@
   <property name="sconsVSVersion" value="14.0" if="${VSversion == '2015'}" />
   <property name="sconsVSVersion" value="14.1" if="${VSversion == '2017'}" />
   <property name="sconsVSVersion" value="14.2" if="${VSversion == '2019'}" />
+  <property name="sconsPlatform" value="${platform}" />
+  <property name="sconsPlatform" value="x86" if="${platform == 'win32'}" />
+  <property name="sconsPlatform" value="x86_64" if="${platform == 'x64'}" />
+  <property name="sconsPlatform" value="x86_arm64" if="${platform == 'ARM64'}" />
+  <property name="sconsPlatform" value="arm" if="${platform == 'ARM'}" />
 
   <target name="scons-install" depends="checkout">
   </target>

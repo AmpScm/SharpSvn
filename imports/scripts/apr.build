@@ -94,7 +94,7 @@
       </FilterFile>
       <MSBuild src="${aprDir}/APR.sln">
         <target value="apr-1" />
-        <target value="libapr-1" if="${platform == 'win32' or platform == 'x64'}" />
+        <target value="libapr-1" />
       </MSBuild>
     </OnceBlock>
 

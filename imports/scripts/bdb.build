@@ -34,7 +34,7 @@
       </FilterFile>
       <FilterFile file="${dbDir}/dbInc/mutex_int.h">
         <filterchain>
-          <replacestring from='#ifndef _WIN64' to='#if !defined(_M_AMD64) &amp;&amp; !defined(_M_ARM)' />
+          <replacestring from='#ifndef _WIN64' to='#if !defined(_M_AMD64) &amp;&amp; !defined(_M_ARM) &amp;&amp; !defined(_M_ARM64)' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
