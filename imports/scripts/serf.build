@@ -49,8 +49,8 @@
       </delete>
       <FilterFile file="${serfDir}\SConstruct">
         <filterchain>
-          <replacestring from="EnumVariable('TARGET_ARCH'," tp="EnumVariable('IGNORED_TARGET_ARCH'," />
-          <replacestring from="if unknown:," to="if unknown and 1 == 0:" />
+          <replacestring from="EnumVariable('TARGET_ARCH'," to="EnumVariable('IGNORED_TARGET_ARCH'," />
+          <replacestring from="if unknown:" to="if unknown and 1 == 0:" />
         </filterchain>
       </FilterFile>
       <SCons workingdir="${serfDir}">
@@ -100,7 +100,7 @@
       <arg value="APU=${intDir}" />
       <arg value="SOURCE_LAYOUT=no" />
       <arg value="DEBUG=yes" if="${serfDebug}" />
-      <arg value="TARGET_ARCH=${platform}" />
+      <arg value="TARGET_ARCH=${sconsPlatform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
       <arg value="APR_STATIC=yes" if="${static}" />
       <arg value="--clean" />
@@ -120,7 +120,7 @@
       <arg value="APU=${intDir}" />
       <arg value="SOURCE_LAYOUT=no" />
       <arg value="DEBUG=yes" if="${serfDebug}" />
-      <arg value="TARGET_ARCH=${platform}" />
+      <arg value="TARGET_ARCH=${sconsPlatform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
       <arg value="APR_STATIC=yes" if="${static}" />
       <arg value="DEBUG=yes"/>
