@@ -98,6 +98,7 @@
     <CLRSupport>NetCore</CLRSupport>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -138,6 +139,7 @@
     <CLRSupport>NetCore</CLRSupport>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -157,8 +159,9 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-	<SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
+    <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -177,6 +180,7 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -195,7 +199,8 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
-	<SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

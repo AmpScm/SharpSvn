@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
-  <Package InstallerVersion="301" Compressed="yes" Platform="ARM64"
+  <Package InstallerVersion="500" Compressed="yes" Platform="arm64"
              InstallPrivileges="elevated" InstallScope="perMachine"/>
 
   <DirectoryRef Id="TARGETDIR">
