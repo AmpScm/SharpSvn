@@ -14,11 +14,16 @@
     <tags>Subversion Svn SharpSvn</tags>
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
     <dependencies>
-      <group targetFramework=".NETFramework4.0">
+      <group targetFramework="net40">
+      </group>
+      <group targetFramework="netcore">
       </group>
     </dependencies>
     <references>
-      <group targetFramework=".NETFramework4.0">
+      <group targetFramework="net40">
+        <reference file="SharpSvn.dll" />
+      </group>
+      <group targetFramework="netcore">
         <reference file="SharpSvn.dll" />
       </group>
     </references>

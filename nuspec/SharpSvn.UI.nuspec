@@ -9,15 +9,28 @@
     <projectUrl>https://github.com/ampscm/SharpSvn</projectUrl>
     <description>Default UI implementation for users of SharpSvn</description>
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
-    <tags>NTS Topology PROJ CRS</tags>
+    <tags>Subversion Svn SharpSvn</tags>
     <dependencies>
-      <group targetFramework=".NETFramework4.0">
+      <group targetFramework="net40">
+        <dependency id="SharpSvn" version="[1.14000.12]" />
+      </group>
+      <group targetFramework="netcore">
         <dependency id="SharpSvn" version="[1.14000.12]" />
       </group>
     </dependencies>
+    <references>
+      <group targetFramework="net40">
+        <reference file="SharpSvn.UI.dll" />
+      </group>
+      <group targetFramework="netcore">
+        <reference file="SharpSvn.UI.dll" />
+      </group>
+    </references>
   </metadata>
   <files>
     <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
     <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
+    <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
+    <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
   </files>
 </package>
