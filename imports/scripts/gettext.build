@@ -21,8 +21,6 @@
           <replacestring from="#undef inline" to="#define inline __inline" />
           <replacestring from="#undef HAVE_UINTMAX_T" to="#define HAVE_UINTMAX_T 1" />
           <replacestring from="#undef HAVE_INTMAX_T" to="#define HAVE_INTMAX_T 1" />
-          <replacestring from="#undef uintmax_t" to="#define uintmax_t unsigned __int64" />
-          <replacestring from="#undef intmax_t" to="#define intmax_t __int64" />
           <replacestring from="#define glthread_" to="// #undef glthread_" />
         </filterchain>
       </loadfile>
@@ -40,6 +38,7 @@
       </loadfile>
       <echo file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" append="true">
 ${intlh}
+#include &lt;stdint.h&gt;
 #define nls_uint32 unsigned int
 #define LOCALEDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Locales"
 #define LOCALE_ALIAS_PATH "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\LocaleAliases"
@@ -48,8 +47,7 @@ ${intlh}
 
 </echo>
       <echo file="${gettextDir}/gettext-runtime/intl/config.h" append="true">
-#define uintmax_t unsigned __int64
-#define intmax_t __int64
+#include &lt;stdint.h&gt;
 #ifndef SIZE_MAX
 # define SIZE_MAX ((size_t) -1)
 #endif
@@ -133,8 +131,10 @@ ${intlh}
       <rc rcfile="${gettextDir}/gettext-runtime/intl/libintl.rc" output="${gettextDir}/obj/${platform}/release/libintl.res" verbose="true"
         options="/n /dPACKAGE_VERSION_MAJOR=${GETTEXT_MAJOR} /dPACKAGE_VERSION_MINOR=${GETTEXT_MINOR} /dPACKAGE_VERSION_SUBMINOR=${GETTEXT_MICRO} /dPACKAGE_VERSION_STRING=${gettextVersion}">
       </rc>
+      <property name="baseAddr" value="/BASE:0x6EEC0000" if="${platform=='win32'}" />
+      <property name="baseAddr" value="" if="${platform!='win32'}" />
       <link output="${gettextDir}/bin/${platform}/release/${libintlDllName}"
-        options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
+        options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF ${baseAddr}
         /IMPLIB:"${gettextDir}/bin/${platform}/release/intl.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
         /DEF:${gettextDir}/gettext-runtime/intl/gettext.def /NXCOMPAT /LARGEADDRESSAWARE'>
         <sources basedir="${gettextDir}/obj/${platform}/release">
