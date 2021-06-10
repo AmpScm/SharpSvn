@@ -49,7 +49,7 @@
       </delete>
       <FilterFile file="${serfDir}\SConstruct">
         <filterchain>
-          <replacestring from="EnumVariable('TARGET_ARCH'," to="EnumVariable('IGNORED_TARGET_ARCH'," />
+          <replacestring from="allowed_values=('x86'," to="allowed_values=('${sconsPlatform}', 'x86'," />
           <replacestring from="if unknown:" to="if unknown and 1 == 0:" />
         </filterchain>
       </FilterFile>

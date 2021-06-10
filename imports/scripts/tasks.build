@@ -1044,6 +1044,58 @@ public class NAntWithEnv : NAnt.Core.Tasks.NAntTask
    }
 }
 
+[TaskName("VSWhere")]
+public class VSWhere : ExternalAppTask
+{
+    string _findPath;
+    string _property;
+
+    [TaskAttribute("findPath")]
+    public string FindPath
+    {
+       set { _findPath = value; }
+       get { return _findPath; }
+    }
+
+    [TaskAttribute("property")]
+    public string Property
+    {
+       set { _property = value; }
+       get { return _property; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(FindPath))
+            {
+                sb.AppendFormat("-find {0}", FindPath);
+            }
+            else
+                throw new NotImplementedException();
+
+            return sb.ToString().Trim();
+        }
+    }
+
+    protected override void ExecuteTask()
+    {
+        if (!string.IsNullOrEmpty(Property))
+        {
+          string p;
+          if (File.Exists(p = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"))
+              Properties[Property] = p;
+          else if (File.Exists(p = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat"))
+              Properties[Property] = p;
+          else
+              Properties[Property] = "vcvarsall.bat";
+        }
+    }
+}
+
 ]]>
     </code>
   </script>

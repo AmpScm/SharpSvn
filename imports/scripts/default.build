@@ -52,9 +52,7 @@
   </if>
 
   <property name="MSBuildExe" value="MSBuild.exe" />
-  <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
-
-  <property name="PythonExe" value="python3.exe" />
+  <property name="PythonExe" value="python.exe" />
   
   <property name="PerlExe" value="perl.exe" />
   <property name="PerlExe" value="C:\perl64\bin\perl.exe" if="${file::exists('C:/perl64/bin/perl.exe')}" />

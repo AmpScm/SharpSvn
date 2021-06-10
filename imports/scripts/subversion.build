@@ -61,21 +61,6 @@
                          to='[if-any depends.delayload]${dllPrefix}[depends.delayload];[end]' />
         </filterchain>
       </FilterFile>
-      <FilterFile file="${svnBase}\build\generator\gen_win.py" if="${platform != 'win32' and platform != 'x64'}">
-        <filterchain>
-          <replacestring from="self.platforms = ['Win32','x64']" to="self.platforms = ['Win32','x64', '${platform}']" />
-        </filterchain>
-      </FilterFile>
-      <FilterFile file="${svnBase}\subversion\svn_private_config.hw">
-        <filterchain>
-          <replacestring from="#if defined(_M_X64)"
-to='#if defined(_M_ARM64)
-#define SVN_BUILD_TARGET "arm64-microsoft-windows"
-#elif defined(_M_ARM)
-#define SVN_BUILD_TARGET "arm-microsoft-windows"
-#elif defined(_M_X64)' />
-        </filterchain>
-      </FilterFile>
     </OnceBlock>
   </target>
 
