@@ -62,7 +62,7 @@
                            to="OUTPUT ${'$'}{PROJECT_BINARY_DIR}/generated_apr_escape_test_char.h" if="${platform != 'win32' and platform != 'x64'}" />
         </filterchain>
       </FilterFile>
-      <copy todir="${aprDir}" file="scripts/apr_escape_test_char.h" if="${platform != 'win32' and platform != 'x64'}" />
+      <copy todir="${aprDir}" file="${downloads}/../scripts/apr_escape_test_char.h" if="${platform != 'win32' and platform != 'x64'}" />
     </OnceBlock>
   </target>
   <target name="apr-build" depends="checkout, apr-merge, cmake-prepare">
