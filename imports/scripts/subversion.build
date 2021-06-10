@@ -187,7 +187,7 @@
     </OnceBlock>
   </target>
   <target name="copy-result" depends="svn-build,copy-licenses,gettext-translate" if="${buildSubversion}">
-    <copy todir="${release}/lib" flatten="true">
+    <copy todir="${release}/lib" flatten="true" if="${platform == 'win32'}">
       <fileset basedir="build/win32">
         <include name="subversion/${Configuration}/**/*.lib" />
         <include name="subversion/${Configuration}/**/*.pdb" />
@@ -195,8 +195,8 @@
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${release}/lib-x64" flatten="true">
-      <fileset basedir="build/x64">
+    <copy todir="${release}/lib-${platform}" flatten="true" unless="${platform == 'win32'}">
+      <fileset basedir="build/${platform}">
         <include name="subversion/${Configuration}/**/*.lib" />
         <include name="subversion/${Configuration}/**/*.pdb" />
         <!-- Don't copy pdb's for executables -->

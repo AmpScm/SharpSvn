@@ -14,6 +14,18 @@
     <SDK40ToolsPath Condition="'$(SDK40ToolsPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0A\WinSDK-NetFx40Tools-x86@InstallationFolder)</SDK40ToolsPath>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugCore|ARM64">
+      <Configuration>DebugCore</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugCore|Win32">
+      <Configuration>DebugCore</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugCore|x64">
+      <Configuration>DebugCore</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|ARM64">
       <Configuration>Debug</Configuration>
       <Platform>ARM64</Platform>
@@ -24,6 +36,18 @@
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseCore|ARM64">
+      <Configuration>ReleaseCore</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseCore|Win32">
+      <Configuration>ReleaseCore</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseCore|x64">
+      <Configuration>ReleaseCore</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|ARM64">
@@ -52,6 +76,7 @@
     </SccProvider>
     <Keyword>ManagedCProj</Keyword>
     <SharpSvnUpdateVersionResource>true</SharpSvnUpdateVersionResource>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -64,6 +89,16 @@
     <CLRSupport>true</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
@@ -73,6 +108,15 @@
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
@@ -81,6 +125,16 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
@@ -93,6 +147,17 @@
     <CLRSupport>true</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+	<SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
@@ -101,6 +166,15 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -111,29 +185,64 @@
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
+	<SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
@@ -147,6 +256,13 @@
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
     <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">
+    <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
@@ -154,7 +270,22 @@
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
     <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">
+    <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
@@ -170,7 +301,23 @@
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
     <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">
+    <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
@@ -181,7 +328,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -216,10 +363,47 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <DataExecutionPrevention>true</DataExecutionPrevention>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">
+    <PreBuildEvent>
+      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+$(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);SHARPSVN_NETCORE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <PreLinkEvent>
+      <Message>Copying libraries</Message>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "Debug" "$(Platform)" ""</Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <TargetMachine>MachineX86</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -236,7 +420,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
-      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)" "$(Configuration)" "$(Platform)" ""</Command>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "$(Configuration)" "$(Platform)" ""</Command>
     </PreLinkEvent>
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
@@ -253,10 +437,46 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <DataExecutionPrevention>true</DataExecutionPrevention>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">
+    <PreBuildEvent>
+      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+$(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);SHARPSVN_NETCORE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <PreLinkEvent>
+      <Message>Copying libraries</Message>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "Debug" "$(Platform)" ""</Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <TargetMachine>MachineX64</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -273,7 +493,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
-      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)" "$(Configuration)" "$(Platform)" ""</Command>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "$(Configuration)" "$(Platform)" ""</Command>
     </PreLinkEvent>
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
@@ -289,10 +509,45 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <DataExecutionPrevention>true</DataExecutionPrevention>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">
+    <PreBuildEvent>
+      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+$(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);SHARPSVN_NETCORE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <PreLinkEvent>
+      <Message>Copying libraries</Message>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "Debug" "$(Platform)" ""</Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-ARM64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <KeyFile>SharpSvn.snk</KeyFile>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -315,6 +570,43 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <TargetMachine>MachineX86</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
+      <SetChecksum>true</SetChecksum>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">
+    <PreBuildEvent>
+      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+$(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);SHARPSVN_NETCORE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <PreLinkEvent>
+      <Message>Copying libraries</Message>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "Release" "$(Platform)" ""</Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
@@ -330,7 +622,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -364,10 +656,46 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <DataExecutionPrevention>true</DataExecutionPrevention>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">
+    <PreBuildEvent>
+      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+$(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);SHARPSVN_NETCORE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <PreLinkEvent>
+      <Message>Copying libraries</Message>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "Release" "$(Platform)" ""</Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <TargetMachine>MachineX64</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
+      <SetChecksum>true</SetChecksum>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -400,7 +728,42 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <DataExecutionPrevention>true</DataExecutionPrevention>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">
+    <PreBuildEvent>
+      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+$(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);SHARPSVN_NETCORE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <PreLinkEvent>
+      <Message>Copying libraries</Message>
+      <Command>$(SolutionDir)Copy-Dependencies.cmd "$(TargetDir)." "Release" "$(Platform)" ""</Command>
+    </PreLinkEvent>
+    <Link>
+      <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-ARM64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <KeyFile>SharpSvn.snk</KeyFile>
+      <SetChecksum>true</SetChecksum>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release' Or '$(Configuration)' == 'Debug'">
     <Reference Include="System">
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
@@ -592,9 +955,11 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="WorkingCopyArgs\WorkingCopyRestore.h" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SharpSvnStrings.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+	<EmbeddedResource Include="SharpSvnStrings.resx">
+	  <SubType>Designer</SubType>
+	</EmbeddedResource>
+  </ItemGroup>
+	<ItemGroup Condition="'$(Platform)' != 'ARM64'">
     <EmbeddedResource Include="SvnText\SvnText.de.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
@@ -644,38 +1009,68 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' != 'ReleaseCore' And '$(Configuation)' != 'DebugCore'">
     <CustomBuild Include="SharpSvnStrings.txt" Condition="'$(BuildBotBuild)' != 'true'">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating SharpSvnStrings.h</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">Generating SharpSvnStrings.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SharpSvnStrings.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">SharpSvnStrings.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating SharpSvnStrings.h</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Generating SharpSvnStrings.h</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">Generating SharpSvnStrings.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SharpSvnStrings.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">SharpSvnStrings.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">SharpSvnStrings.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">SharpSvnStrings.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating SharpSvnStrings.h</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">Generating SharpSvnStrings.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SharpSvnStrings.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">SharpSvnStrings.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating SharpSvnStrings.h</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Generating SharpSvnStrings.h</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">Generating SharpSvnStrings.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SharpSvnStrings.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">SharpSvnStrings.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">SharpSvnStrings.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">SharpSvnStrings.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -700,11 +1095,17 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="ReposCommands\VerifyRepository.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SvnAbortHandler.cpp" />
     <ClCompile Include="SvnBase.cpp" />

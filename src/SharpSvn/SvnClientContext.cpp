@@ -315,6 +315,7 @@ void SvnClientContext::ApplyMimeTypes()
 
 void SvnClientContext::LoadTortoiseSvnHooks()
 {
+#if !defined(SHARPSVN_NETCORE)
     if (_parent)
         throw gcnew InvalidOperationException();
     if (0 != (int)(_xState & SvnExtendedState::TortoiseSvnHooksLoaded))
@@ -417,6 +418,7 @@ void SvnClientContext::LoadTortoiseSvnHooks()
     hooks->Sort();
     hooks->Reverse();
     _tsvnHooks = hooks->ToArray();
+#endif
 }
 
 bool SvnClientContext::FindHook(String^ path, SvnClientHookType hookType, [Out] SvnClientHook^% hook)
@@ -586,7 +588,7 @@ void SvnClientContext::ApplyOverrideFlags()
     }
 }
 
-
+#if !defined(SHARPSVN_NETCORE)
 static String^ ReadRegKey(RegistryKey^ key, String^ path, String^ name)
 {
     if (!key)
@@ -619,6 +621,7 @@ static String^ ReadRegKey(RegistryKey^ key, String^ path, String^ name)
 
     return nullptr;
 }
+#endif
 
 void SvnClientContext::ApplyCustomRemoteConfig()
 {
@@ -652,6 +655,7 @@ void SvnClientContext::ApplyCustomRemoteConfig()
         || _sshOverride == SvnSshOverride::ForceSharpPlinkAfterConfig
         || _sshOverride == SvnSshOverride::ForceInternalAfterConfig)
     {
+#if !defined(SHARPSVN_NETCORE)
         String^ customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
         if (!customSshConfig)
@@ -670,6 +674,7 @@ void SvnClientContext::ApplyCustomRemoteConfig()
             _useBuiltinSsh = false;
             return;
         }
+#endif
 
         AprPool pool(_pool);
 
