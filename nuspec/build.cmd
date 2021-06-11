@@ -37,8 +37,8 @@ CALL :xmlpoke SharpSvn.ShortMSDeployWebContentPath.nuspec //nu:metadata/nu:versi
 
 nuget pack -Symbols SharpSvn.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
 nuget pack -Symbols SharpSvn.UI.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
-nuget pack -Symbols SharpSvn.AnnotateAssembly.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
-nuget pack -Symbols SharpSvn.ShortMSDeployWebContentPath.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack SharpSvn.AnnotateAssembly.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack SharpSvn.ShortMSDeployWebContentPath.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
 echo "--done--"
 popd
 goto :eof

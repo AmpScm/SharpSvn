@@ -30,7 +30,9 @@
   <files>
     <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
     <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
+    <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.pdb" />
     <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
     <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
+    <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.pdb" />
   </files>
 </package>
