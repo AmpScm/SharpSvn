@@ -79,6 +79,14 @@
       <include name="${intDir}/lib/*.pdb" />
       <include name="${intDir}/bin/*.pdb" />
       <include name="${svnBase}/release/**/*.pdb" />
+      <exclude name="**/vc1??.pdb" />
+    </fileset>
+  </zip>
+  <zip zipfile="dist-${platform}/WrappedBinaries-Subversion-${subversionVersion}-${platform}.zip" flatten="true" ziplevel="9">
+    <fileset>
+      <include name="${intDir}/bin/*.dll" />
+      <include name="${svnBase}/release/**/*.dll" />
+      <include name="${svnBase}/release/**/*.exe" />
     </fileset>
   </zip>
 </target>
