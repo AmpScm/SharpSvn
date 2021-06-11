@@ -77,7 +77,7 @@
     <file target="runtimes/win-arm64/lib/netcore" src="../src/SharpSvn/bin/arm64/releasecore/ijwhost.dll" />
     <file target="runtimes/win-arm64/lib/netcore" src="../src/SharpSvn/bin/arm64/releasecore/SharpSvn.pdb" />
     <file target="runtimes/win-arm64/lib/netcore" src="../src/SharpSvn/bin/arm64/releasecore/SharpSvn.xml" />
-    <file target="runtimes/win-arm64/lib/netcore" src="../src/SharpSvn/bin/arm64/releasecore/SharpPlink-x64.svnExe" />
+    <file target="runtimes/win-arm64/lib/netcore" src="../src/SharpSvn/bin/arm64/releasecore/SharpPlink-ARM64.svnExe" />
     <file target="runtimes/win-arm64/lib/netcore" src="../imports/release/bin/SharpSvn-DB44-20-ARM64.svnDll" />
   </files>
 </package>

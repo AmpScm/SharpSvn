@@ -127,5 +127,4 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
 
 #include "../../imports/release/include/sharpsvn-imports.h"
-#pragma comment(lib, "libssh2.lib")
 [assembly:AssemblyVersionAttribute("1.12999.*")];

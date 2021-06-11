@@ -74,24 +74,21 @@
 #pragma comment(lib, "libsvn_fs_x-1.lib")
 #endif
 
-#if (APR_MAJOR_VERSION == 0)
-#  pragma comment(lib, "apr.lib")
-#  pragma comment(lib, "aprutil.lib")
-#elif (APR_MAJOR_VERSION == 1)
-#  pragma comment(lib, "apr-1.lib")
-#  pragma comment(lib, "aprutil-1.lib")
+#if (APR_MAJOR_VERSION == 1)
+#pragma comment(lib, "apr-1.lib")
+#pragma comment(lib, "aprutil-1.lib")
+#elif (APR_MAJOR_VERSION == 2)
+#pragma comment(lib, "apr-2.lib")
 #else
-#  error Only apr 0.9.* and 1.* are supported at this time
+#error Only apr 1.x and 2.x are supported at this time
 #endif
 
-#if (SERF_MAJOR_VERSION == 0)
-#pragma comment(lib, "serf.lib")
-#elif (SERF_MAJOR_VERSION == 1)
+#if (SERF_MAJOR_VERSION == 1)
 #pragma comment(lib, "serf-1.lib")
 #elif (SERF_MAJOR_VERSION == 2)
 #pragma comment(lib, "serf-2.lib")
 #else
-#error Only Serf 0.x, 1.x and 2.x are supported
+#error Only Serf 1.x and 2.x are supported
 #endif
 
 #pragma comment(lib, "ole32.lib")
@@ -103,3 +100,4 @@
 #pragma comment(lib, "Psapi.lib")
 #endif
 
+#pragma comment(lib, "libssh2.lib")

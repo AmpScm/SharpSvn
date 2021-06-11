@@ -64,7 +64,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /restore /p:Platform=x64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /t:SharpSvn /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
-    - name: Build-ARM64-Core
+    - name: Build-arm64-Core
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /restore /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /t:SharpSvn /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 

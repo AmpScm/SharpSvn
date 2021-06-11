@@ -441,12 +441,14 @@ namespace SharpSvn.MSBuild
 
                 return Path.Combine(outputDirectory, tmpFile);
             }
-            catch (FileLoadException)
+            catch (FileLoadException e)
             {
+                Console.WriteLine(e.ToString());
                 return null;
             }
-            catch (IOException)
+            catch (IOException e)
             {
+                Console.WriteLine(e.ToString());
                 return null;
             }
         }
