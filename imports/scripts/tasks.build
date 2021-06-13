@@ -1085,13 +1085,16 @@ public class VSWhere : ExternalAppTask
     {
         if (!string.IsNullOrEmpty(Property))
         {
-          string p;
-          if (File.Exists(p = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"))
-              Properties[Property] = p;
-          else if (File.Exists(p = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat"))
-              Properties[Property] = p;
-          else
-              Properties[Property] = "vcvarsall.bat";
+            foreach (var edition in new[] { "Enterprise", "Professional", "Community", "BuildTools" })
+            {
+                string p;
+                if (File.Exists(p = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\" + edition + @"\VC\Auxiliary\Build\vcvarsall.bat"))
+                {
+                    Properties[Property] = p;
+                    return;
+                }
+            }
+            Properties[Property] = "vcvarsall.bat";
         }
     }
 }
