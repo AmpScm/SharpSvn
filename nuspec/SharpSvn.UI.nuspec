@@ -14,7 +14,7 @@
       <group targetFramework="net40">
         <dependency id="SharpSvn" version="[1.14000.12]" />
       </group>
-      <group targetFramework="netcore">
+      <group targetFramework="netcoreapp">
         <dependency id="SharpSvn" version="[1.14000.12]" />
       </group>
     </dependencies>
@@ -22,7 +22,7 @@
       <group targetFramework="net40">
         <reference file="SharpSvn.UI.dll" />
       </group>
-      <group targetFramework="netcore">
+      <group targetFramework="netcoreapp">
         <reference file="SharpSvn.UI.dll" />
       </group>
     </references>
@@ -31,8 +31,8 @@
     <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
     <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
     <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.pdb" />
-    <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
-    <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
-    <file target="lib/netcore" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.pdb" />
+    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
+    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
+    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.pdb" />
   </files>
 </package>
