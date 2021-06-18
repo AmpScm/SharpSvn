@@ -87,19 +87,26 @@
     <unzip
       zipfile="${downloads + nasmFilename}"
       todir="build"
+      encoding="utf-8"
       unless="${directory::exists(nasmDir)}" />
 
     <unzip
       zipfile="${downloads + cmakeFilename}"
       todir="build"
+      encoding="utf-8"
       unless="${directory::exists(cmakeDir)}" />
       
     <unzip
-      zipfile="${downloads + sconsFilename}" todir="build/scons"
+      zipfile="${downloads + sconsFilename}"
+      todir="build/scons"
+      encoding="utf-8"
       unless="${directory::exists('build/scons')}" />
 
     <if test="${property::exists('withSwig') and not directory::exists(swigDir)}">
-      <unzip zipfile="${downloads + swigFilename}" todir="build" />
+      <unzip
+        zipfile="${downloads + swigFilename}"
+        todir="build"
+        encoding="utf-8" />
     </if>
     <if test="${intl == 'gettext'}">
       <untar
@@ -110,16 +117,21 @@
     <if test="${intl == 'gettext' and not directory::exists(gettextToolsDir)}">
       <unzip
         zipfile="${downloads + gettextToolsFilename}"
-        todir="${gettextToolsDir}" />
+        todir="${gettextToolsDir}"
+        encoding="utf-8" />
       <unzip
         zipfile="${downloads + gettextToolsRuntimeFilename}"
-        todir="${gettextToolsDir}" />
+        todir="${gettextToolsDir}"
+        encoding="utf-8" />
       <unzip
         zipfile="${downloads + gettextToolsIconvFilename}"
-        todir="${gettextToolsDir}" />
+        todir="${gettextToolsDir}"
+        encoding="utf-8" />
     </if>
     <unzip
-      zipfile="${downloads + junitFilename}" todir="build"
+      zipfile="${downloads + junitFilename}"
+      todir="build"
+      encoding="utf-8"
       unless="${directory::exists(junitDir)}"
       if="${javaHome != '' and buildJavaHL}" />
             
