@@ -41,7 +41,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.MSBuild", "SharpSv
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.TestBuilder", "SharpSvn.TestBuilder\SharpSvn.TestBuilder.csproj", "{691CBC4F-CC38-4342-8738-A08E48812141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpSvn.TestBuilder", "SharpSvn.TestBuilder\SharpSvn.TestBuilder.csproj", "{691CBC4F-CC38-4342-8738-A08E48812141}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.PdbAnnotate", "SharpSvn.PdbAnnotate\SharpSvn.PdbAnnotate.csproj", "{3645E16F-6B5A-43D7-A81D-77E681E9A636}"
 EndProject
