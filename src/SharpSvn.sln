@@ -24,10 +24,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpSvn", "SharpSvn\SharpS
 		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0} = {80CA13E9-790A-4DC3-A45A-EDF6996D82D0}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.Tests", "SharpSvn.Tests\SharpSvn.Tests.csproj", "{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595} = {3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpSvn.Tests", "SharpSvn.Tests\SharpSvn.Tests.csproj", "{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpPlink", "SharpPlink\SharpPlink.vcxproj", "{F47E6F0F-0639-45AE-B029-7EDD8CD5910A}"
 EndProject
