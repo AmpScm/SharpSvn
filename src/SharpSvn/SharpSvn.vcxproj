@@ -200,7 +200,7 @@
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	  <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
+    <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -334,7 +334,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Debug\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -372,7 +372,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Debug\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -409,7 +409,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Debug\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -446,7 +446,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Debug\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -482,7 +482,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Debug\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -509,6 +509,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
+      <TargetMachine>MachineARM64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <LargeAddressAware>true</LargeAddressAware>
@@ -518,7 +519,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Debug\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -544,6 +545,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
+      <TargetMachine>MachineARM64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <LargeAddressAware>true</LargeAddressAware>
@@ -553,7 +555,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Release\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -591,7 +593,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Release\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -628,7 +630,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Release\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -665,7 +667,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Release\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -701,7 +703,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Release\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -726,6 +728,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <TargetMachine>MachineARM64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
       <SetChecksum>true</SetChecksum>
       <OptimizeReferences>true</OptimizeReferences>
@@ -737,7 +740,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">
     <PreBuildEvent>
-      <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
+      <Command>$(SolutionDir)tools\Po2Resx\bin\Release\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
 $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(UniversalCRT_IncludePath)" "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(SolutionDir)..\imports\release\include\libssh2\libssh2.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
@@ -761,6 +764,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <AdditionalLibraryDirectories>..\..\imports\release\lib-ARM64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <TargetMachine>MachineARM64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
       <SetChecksum>true</SetChecksum>
       <OptimizeReferences>true</OptimizeReferences>
@@ -962,11 +966,11 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <ClInclude Include="WorkingCopyArgs\WorkingCopyRestore.h" />
   </ItemGroup>
   <ItemGroup>
-	<EmbeddedResource Include="SharpSvnStrings.resx">
-	  <SubType>Designer</SubType>
-	</EmbeddedResource>
+    <EmbeddedResource Include="SharpSvnStrings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
-	<ItemGroup Condition="'$(Platform)' != 'ARM64'">
+  <ItemGroup Condition="'$(Platform)' != 'ARM64'">
     <EmbeddedResource Include="SvnText\SvnText.de.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
