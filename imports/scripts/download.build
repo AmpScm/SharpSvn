@@ -11,8 +11,10 @@
 
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
-  
+
   <property name="sconsFilename" value="scons-local-${sconsVersion}.zip" />
+
+  <property name="refasmerFilename" value="Refasmer.net461.${refasmerVersion}.zip" />
 
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
@@ -69,11 +71,17 @@
       dest="${downloads + junitFilename}"
       unless="${file::exists(downloads + junitFilename)}"
       if="${javaHome != '' and buildJavaHL}" />
-      
+
     <get
       src="https://prdownloads.sourceforge.net/scons/${sconsFilename}"
       dest="${downloads + sconsFilename}"
       unless="${file::exists(downloads + sconsFilename)}" />
+
+
+    <get
+      src="https://github.com/JetBrains/Refasmer/releases/download/${refasmerVersion}/Refasmer.net461.${refasmerVersion}.zip"
+      dest="${downloads + refasmerFilename}"
+      unless="${file::exists(downloads + refasmerFilename)}" />
   </target>
 
   <target name="extract" depends="download">
@@ -95,7 +103,7 @@
       todir="build"
       encoding="utf-8"
       unless="${directory::exists(cmakeDir)}" />
-      
+
     <unzip
       zipfile="${downloads + sconsFilename}"
       todir="build/scons"
@@ -134,6 +142,12 @@
       encoding="utf-8"
       unless="${directory::exists(junitDir)}"
       if="${javaHome != '' and buildJavaHL}" />
-            
+
+    <unzip
+      zipfile="${downloads + refasmerFilename}"
+      todir="build/refasmer"
+      encoding="utf-8"
+      unless="${directory::exists('build/refasmer')}" />
+
   </target>
 </project>

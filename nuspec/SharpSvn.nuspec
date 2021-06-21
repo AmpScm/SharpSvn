@@ -37,7 +37,7 @@
 
     <!-- For PackageReference NuGet on .Net 4.x -->
     <!--  For compile time -->
-    <file target="ref/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" />
+    <file target="ref/net40" src="obj/SharpSvn.dll" />
     <file target="ref/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" />
 
     <!-- For runtime -->
@@ -55,7 +55,7 @@
 
     <!-- And for .Net Core -->
     <!--  For compile time -->
-    <file target="ref/netcoreapp" src="../src/SharpSvn/bin/win32/releasecore/SharpSvn.dll" />
+    <file target="ref/netcoreapp" src="obj/SharpSvn.dll" />
     <file target="ref/netcoreapp" src="../src/SharpSvn/bin/win32/releasecore/SharpSvn.xml" />
 
     <!-- For runtime -->
