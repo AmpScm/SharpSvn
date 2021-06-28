@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SharpSvn.PdbAnnotate")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("SharpSvn Project")]
 [assembly: AssemblyProduct("SharpSvn.PdbAnnotate")]
-[assembly: AssemblyCopyright("Copyright © 2006-2014 SharpSvn Project")]
+[assembly: AssemblyCopyright("Copyright (c) 2006-2021 SharpSvn Project")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

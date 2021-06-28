@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Errors2Enum")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("SharpSvn Project")]
 [assembly: AssemblyProduct("Errors2Enum")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCopyright("Copyright (c) 2010-2021 SharpSvn Project")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

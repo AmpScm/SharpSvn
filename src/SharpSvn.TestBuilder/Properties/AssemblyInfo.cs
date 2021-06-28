@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SharpSvn.TestBuilder")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("SharpSvn Project")]
 [assembly: AssemblyProduct("SharpSvn.TestBuilder")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright (c) 2013-2021 SharpSvn Project")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

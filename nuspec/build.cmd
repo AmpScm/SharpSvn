@@ -29,7 +29,7 @@ if NOT EXIST ".\bin\." mkdir bin
 
 pushd obj
 ..\..\imports\build\refasmer\refasmerExe ..\..\src\SharpSvn\bin\Win32\Release\SharpSvn.dll && copy SharpSvn.dll.refasm.dll SharpSvn.dll || exit /B 1
-popd obj
+popd
 
 
 CALL :xmlpoke SharpSvn.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1

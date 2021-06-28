@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SharpSvn Project")]
 [assembly: AssemblyProduct("HookNotifier")]
-[assembly: AssemblyCopyright("Copyright © SharpSvn Project 2015")]
+[assembly: AssemblyCopyright("Copyright (c) 2015-2021 SharpSvn Project")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -25,9 +25,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SharpSvn.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("SharpSvn Project")]
 [assembly: AssemblyProduct("SharpSvn.Tests")]
-[assembly: AssemblyCopyright("Copyright © QQn Project 2007")]
+[assembly: AssemblyCopyright("Copyright (c) 2007-2021 SharpSvn Project")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
