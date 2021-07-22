@@ -30,5 +30,5 @@ SharpSvn there, but releases will now most likely follow the Subversion releases
 The last packages are now just available on
 https://nuget.org/packages/SharpSvn
 
-This package contains x86 and x64 binaries that are automatically selected by the NuGet tool for you.
+This package contains x86, x64 and ARM64 binaries that are automatically selected by the NuGet tool for you.
 We are no longer building .Net 2.0 compatible versions as the build support for that is not available on GitHub.
