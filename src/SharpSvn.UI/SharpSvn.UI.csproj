@@ -11,7 +11,6 @@
   <PropertyGroup>
     <Configurations>Debug;Release;DebugCore;ReleaseCore</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutDir>bin\$(Configuration)\</OutDir>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -21,7 +20,7 @@
 
   <PropertyGroup>
     <!-- Somehow needed for NuGet restore -->
-    <TargetFramework>net4</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
     <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">netcoreapp3.1</TargetFramework>
     <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">netcoreapp3.1</TargetFramework>
   </PropertyGroup>
@@ -32,12 +31,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
     <Optimize>True</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|AnyCPU'">
