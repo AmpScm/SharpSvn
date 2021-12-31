@@ -11,7 +11,7 @@
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
     <tags>Subversion Svn SharpSvn</tags>
     <dependencies>
-      <group targetFramework="net40">
+      <group targetFramework="net45">
         <dependency id="SharpSvn" version="[1.14000.12]" />
       </group>
       <group targetFramework="netcoreapp">
@@ -19,7 +19,7 @@
       </group>
     </dependencies>
     <references>
-      <group targetFramework="net40">
+      <group targetFramework="net45">
         <reference file="SharpSvn.UI.dll" />
       </group>
       <group targetFramework="netcoreapp">
@@ -28,11 +28,11 @@
     </references>
   </metadata>
   <files>
-    <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
-    <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
-    <file target="lib/net40" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.pdb" />
-    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.dll" />
-    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.xml" />
-    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\x86\release\SharpSvn.UI.pdb" />
+    <file target="lib/net45" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.dll" />
+    <file target="lib/net45" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.xml" />
+    <file target="lib/net45" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.pdb" />
+    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.dll" />
+    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.xml" />
+    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.pdb" />
   </files>
 </package>
