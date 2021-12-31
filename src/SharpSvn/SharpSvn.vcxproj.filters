@@ -1141,4 +1141,7 @@
     <None Include="SharpSvn.vcproj" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="SharpSvnStrings.txt" />
+  </ItemGroup>
 </Project>
