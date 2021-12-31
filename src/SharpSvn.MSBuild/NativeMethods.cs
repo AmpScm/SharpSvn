@@ -46,12 +46,6 @@ namespace SharpSvn.MSBuild
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr hModule);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern DllHandle LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
-
-        [DllImport("kernel32.dll")]
-        public static extern bool EnumResourceLanguages(DllHandle hModule, IntPtr lpszType, IntPtr lpName, EnumResLangDelegate lpEnumFunc, IntPtr lParam);
-
         [return: MarshalAs(UnmanagedType.Bool)]
         public delegate bool EnumResLangDelegate(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, ushort wIDLanguage, IntPtr lParam);
 
