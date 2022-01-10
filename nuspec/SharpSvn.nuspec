@@ -10,7 +10,7 @@
     <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>SharpSvn is a binding of the Subversion Client API for .NET based on the actual Subversion code, which is included in this library.</description>
-    <copyright>(C) Copyright 2006-2021 The SharpSvn Project</copyright>
+    <copyright>(C) Copyright 2006-2022 The SharpSvn Project</copyright>
     <tags>Subversion Svn SharpSvn</tags>
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" />
     <dependencies>
@@ -22,9 +22,11 @@
     <references>
       <group targetFramework="net40">
         <reference file="SharpSvn.dll" />
+        <reference file="SharpSvn.xml" />
       </group>
       <group targetFramework="netcoreapp">
         <reference file="SharpSvn.dll" />
+        <reference file="SharpSvn.xml" />
       </group>
     </references>
   </metadata>

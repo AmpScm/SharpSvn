@@ -50,23 +50,41 @@ jobs:
 
     - name: Build-x86
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
+      run: msbuild /r /v:m /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
     - name: Build-x64
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
+      run: msbuild /r /v:m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
     - name: Build-x86-Core
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /t:SharpSvn /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
+      run: msbuild /r /v:m /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
     - name: Build-x64-Core
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=x64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /t:SharpSvn /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
+      run: msbuild /r /v:m /p:Platform=x64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
     - name: Build-arm64-Core
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /t:SharpSvn /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
+      run: msbuild /r /v:m /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
+
+
+    - name: VSTest-x86
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
+    - name: VSTest-x64
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
+    - name: VSTest-Core-x86
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
+    - name: VSTest-Core-x64
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
 
     - name: Create nupkg files
       working-directory: ${{env.GITHUB_WORKSPACE}}
