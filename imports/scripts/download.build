@@ -5,9 +5,8 @@
   <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
 
-  <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
-  <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
-  <property name="cmakeDir" value="build/cmake-${cmakeVersion}-win32-x86" />
+  <property name="cmakeFilename" value="cmake-${cmakeVersion}-windows-i386.zip" />
+  <property name="cmakeDir" value="build/cmake-${cmakeVersion}-windows-i386" />
 
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
@@ -28,7 +27,7 @@
       dest="${downloads + nasmFilename}"
       unless="${file::exists(downloads + nasmFilename)}" />
 
-    <get src="https://cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
+    <get src="https://github.com/Kitware/CMake/releases/download/v${cmakeVersion}/${cmakeFilename}"
       dest="${downloads + cmakeFilename}"
       unless="${file::exists(downloads + cmakeFilename)}" />
 

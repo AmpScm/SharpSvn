@@ -53,7 +53,7 @@
   <!-- Building only -->
   <property name="cmakeVersion" value="3.22.1" overwrite="false" />
   <property name="sconsVersion" value="4.1.0" overwrite="false" />
-  <property name="refasmerVersion" value="1.0.12" overwrite="false" />
+  <property name="refasmerVersion" value="1.0.24" overwrite="false" />
 
   <!-- For testcase -->
   <property name="junitVersion" value="4.10" overwrite="false" />

@@ -796,7 +796,7 @@ public class CMake : ExternalAppTask
                   sb.AppendFormat(" \"-D{0}={1}\"", o.OptionName, o.Value);
             }
 
-            sb.Append(" --build .");
+            sb.Append(" .");
 
             bool haveTargets = false;
             foreach(Argument a in Targets)
@@ -1089,6 +1089,15 @@ public class VSWhere : ExternalAppTask
             {
                 string p;
                 if (File.Exists(p = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\" + edition + @"\VC\Auxiliary\Build\vcvarsall.bat"))
+                {
+                    Properties[Property] = p;
+                    return;
+                }
+            }
+            foreach (var edition in new[] { "Enterprise", "Professional", "Community", "BuildTools" })
+            {
+                string p;
+                if (File.Exists(p = @"C:\Program Files\Microsoft Visual Studio\2022\" + edition + @"\VC\Auxiliary\Build\vcvarsall.bat"))
                 {
                     Properties[Property] = p;
                     return;

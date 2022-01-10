@@ -1,8 +1,7 @@
 <?xml version="1.0" ?>
 <project>
   <property name="vcxproj" value="${VSversion != '2008'}" />
-  <property name="vcproj" value="vcxproj" if="${vcxproj}" />
-  <property name="vcproj" value="vcproj" unless="${vcxproj}" />
+  <property name="vcproj" value="vcxproj" />
 
   <property name="cmakeGenerator" value="Visual Studio 9 2008" overwrite="false" if="${VSversion == '2008'}" />
   <property name="cmakeGenerator" value="Visual Studio 10 2010" overwrite="false" if="${VSversion == '2010'}" />
@@ -11,6 +10,7 @@
   <property name="cmakeGenerator" value="Visual Studio 14 2015" overwrite="false" if="${VSversion == '2015'}" />
   <property name="cmakeGenerator" value="Visual Studio 15 2017" overwrite="false" if="${VSversion == '2017'}" />
   <property name="cmakeGenerator" value="Visual Studio 16 2019" overwrite="false" if="${VSversion == '2019'}" />
+  <property name="cmakeGenerator" value="Visual Studio 17 2022" overwrite="false" if="${VSversion == '2022'}" />
 
   <property name="cmakePlatform" value="${platform}" />
 
