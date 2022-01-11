@@ -238,6 +238,8 @@ namespace SharpSvn.Tests
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"), "Shortcut route via IsNormalized");
 
+            if (File.Exists("C:\\Progra~1"))
+                Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\Progra~1"), Is.EqualTo("C:\\Program Files"));
 
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\asdasdashdadhjadjahjdhasjhajhfasdjsdf\\sdsdfsdfsdfgsdjhfsda hjsdsdf sdaf\\sad sad sad f\\"),
                 Is.EqualTo("C:\\asdasdashdadhjadjahjdhasjhajhfasdjsdf\\sdsdfsdfsdfgsdjhfsda hjsdsdf sdaf"));

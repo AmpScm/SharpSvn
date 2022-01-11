@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2007-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,7 +94,7 @@ namespace SharpSvn.Tests
 
                 Assert.That(paths, Is.Not.Null);
                 Assert.That(paths.Count, Is.EqualTo(1));
-                Assert.That(paths[0].Path, Is.EqualTo(Path.GetFullPath(file2)));
+                Assert.That(paths[0].Path, Is.EqualTo(SvnTools.GetNormalizedFullPath(file2)));
 
                 a = new SvnListChangeListArgs();
                 a.ChangeLists.Add("ChangeListTest-4");
