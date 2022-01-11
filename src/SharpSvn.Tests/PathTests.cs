@@ -199,10 +199,14 @@ namespace SharpSvn.Tests
                 ptl = e;
             }
 
-            if (Environment.Version.Major < 4 && !IsCore())
+            if (IsCore())
+                Assert.That(ptl, Is.Null, "Expected no error on Core");
+            else if (Environment.Version.Major < 4)
                 Assert.That(ptl, Is.Not.Null, "Expected error in v2.0");
             else
-                Assert.That(ptl, Is.Null, "Expected no error in v4.0+");
+            {
+                // In .Net 4.x this is configurable on system and app level
+            }
         }
 
         [TestMethod]
@@ -241,7 +245,13 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
             string drive = Environment.CurrentDirectory.Substring(0, 2).ToLowerInvariant();
-            Assert.That(SvnTools.GetNormalizedDirectoryName(drive), Is.EqualTo(drive.ToUpperInvariant()+Path.GetDirectoryName(Environment.CurrentDirectory).Substring(2))); // CWD on current drive
+            var curDir = Environment.CurrentDirectory;
+            if (curDir.Contains("~"))
+            {
+                // This case triggers on the GitHub bot
+                curDir = SvnTools.GetNormalizedFullPath(curDir);
+            }
+            Assert.That(SvnTools.GetNormalizedDirectoryName(drive), Is.EqualTo(drive.ToUpperInvariant()+Path.GetDirectoryName(curDir).Substring(2))); // CWD on current drive
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("c:\\a"), Is.EqualTo("C:\\"));
