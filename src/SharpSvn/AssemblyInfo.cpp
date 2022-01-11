@@ -15,6 +15,8 @@
 #include "stdafx.h"
 #include "SvnLibraryAttribute.h"
 
+#include <stdint.h>
+
 #pragma warning(disable: 4635)
 #pragma warning(disable: 4634) // XML document comment: cannot be applied:  Discarding XML document comment for invalid target.
 
@@ -120,7 +122,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 
 [assembly:CLSCompliantAttribute(true)];
 
-#if __CLR_VER < 40000000
+#if __CLR_VER < 40000000 && !defined(SHARPSVN_NETCORE)
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 #endif
 

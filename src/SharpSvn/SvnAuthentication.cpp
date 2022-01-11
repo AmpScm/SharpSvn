@@ -793,6 +793,14 @@ Uri^ SvnAuthenticationEventArgs::RealmUri::get()
         if (Uri::TryCreate(uriValue, UriKind::Absolute, uri))
             _realmUri = uri;
     }
+    else if (Uri::TryCreate(Realm, UriKind::Absolute, uri))
+    {
+        if (String::IsNullOrEmpty(uri->PathAndQuery))
+        {
+            Uri::TryCreate(Realm + "/", UriKind::Absolute, uri);
+        }
+        _realmUri = uri;
+    }
 
     return _realmUri;
 }
