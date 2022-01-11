@@ -3,8 +3,6 @@ name: SvnDist
 on:
   push:
     branches: [ main, stable/* ]
-  pull_request:
-    branches: [ main, stable/* ]
 
 env:
   buildDir: '${{ github.workspace }}/build'
