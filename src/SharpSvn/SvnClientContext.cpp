@@ -315,14 +315,13 @@ void SvnClientContext::ApplyMimeTypes()
 
 void SvnClientContext::LoadTortoiseSvnHooks()
 {
-#if !defined(SHARPSVN_NETCORE)
     if (_parent)
         throw gcnew InvalidOperationException();
     if (0 != (int)(_xState & SvnExtendedState::TortoiseSvnHooksLoaded))
         return;
 
     _xState = _xState | SvnExtendedState::TortoiseSvnHooksLoaded;
-
+#if !defined(SHARPSVN_NETCORE)
     String^ tsvnVersion = nullptr;
     String^ hookScripts = nullptr;
     RegistryKey ^rk = Registry::CurrentUser->OpenSubKey("Software\\TortoiseSVN", false);

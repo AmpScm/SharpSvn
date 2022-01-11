@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ using System.IO;
 using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace SharpSvn.Tests.LookCommands
 {
@@ -84,13 +85,11 @@ namespace SharpSvn.Tests.LookCommands
             }
         }
 
-        delegate void Action();
-
         class ThreadStopper : IDisposable
         {
             public bool Cancel;
             Action Action;
-            IAsyncResult _result;
+            Task _task;
 
 
             public ThreadStopper()
@@ -100,7 +99,8 @@ namespace SharpSvn.Tests.LookCommands
             public void Start(Action action)
             {
                 Action = action;
-                _result = action.BeginInvoke(null, null);
+
+                _task = Task.Run(action);
             }
 
             #region IDisposable Members
@@ -108,7 +108,7 @@ namespace SharpSvn.Tests.LookCommands
             public void Dispose()
             {
                 Cancel = true;
-                Action.EndInvoke(_result);
+                Task.WaitAll(_task);
             }
 
             #endregion

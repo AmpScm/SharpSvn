@@ -32,20 +32,26 @@ bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blame
     return Blame(target, gcnew SvnBlameArgs(), blameHandler);
 }
 
-static svn_error_t *svn_client_blame_receiver_handler3(void *baton,
-                                                       svn_revnum_t start_revnum,
-                                                       svn_revnum_t end_revnum,
-                                                       apr_int64_t line_no,
-                                                       svn_revnum_t revision,
-                                                       apr_hash_t *rev_props,
-                                                       svn_revnum_t merged_revision,
-                                                       apr_hash_t *merged_rev_props,
-                                                       const char *merged_path,
-                                                       const char *line,
-                                                       svn_boolean_t local_change,
-                                                       apr_pool_t *pool)
+struct blame_baton
 {
-    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    void* inner_baton;
+    svn_revnum_t start_revnum;
+    svn_revnum_t end_revnum;
+};
+
+static svn_error_t *svn_client_blame_receiver_handler(void* baton,
+                                                      apr_int64_t line_no,
+                                                      svn_revnum_t revision,
+                                                      apr_hash_t* rev_props,
+                                                      svn_revnum_t merged_revision,
+                                                      apr_hash_t* merged_rev_props,
+                                                      const char* merged_path,
+                                                      const svn_string_t* line,
+                                                      svn_boolean_t local_change,
+                                                      apr_pool_t* pool)
+{
+    blame_baton* bb = (blame_baton*)baton;
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)bb->inner_baton);
 
     AprPool thePool(pool, false);
 
@@ -54,7 +60,7 @@ static svn_error_t *svn_client_blame_receiver_handler3(void *baton,
         return nullptr;
 
     SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, rev_props, merged_revision, merged_rev_props,
-        merged_path, line, local_change != FALSE, start_revnum, end_revnum, %thePool);
+        merged_path, line, local_change != FALSE, bb->start_revnum, bb->end_revnum, %thePool);
     try
     {
         args->RaiseBlame(e);
@@ -95,7 +101,11 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
         options->ignore_space = (svn_diff_file_ignore_space_t)args->IgnoreSpacing;
         options->ignore_eol_style = args->IgnoreLineEndings;
 
-        svn_error_t *r = svn_client_blame5(
+        blame_baton bb = { (void*)_clientBaton->Handle, 0, 0 };
+       
+
+        svn_error_t *r = svn_client_blame6(
+            &bb.start_revnum, &bb.end_revnum,
             target->AllocAsString(%pool),
             target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
             args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool),
@@ -103,8 +113,8 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
             options,
             args->IgnoreMimeType,
             args->RetrieveMergedRevisions,
-            svn_client_blame_receiver_handler3,
-            (void*)_clientBaton->Handle,
+            svn_client_blame_receiver_handler,
+            &bb,
             CtxHandle,
             pool.Handle);
 

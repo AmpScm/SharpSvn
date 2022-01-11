@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,6 +52,7 @@ namespace SharpSvn.Tests.Misc
         }
 
         [TestMethod]
+        [DoNotParallelize]
         public void TestUrlFromFilePath()
         {
             SvnSandBox sbox = new SvnSandBox(this);
@@ -167,6 +168,7 @@ namespace SharpSvn.Tests.Misc
         }
 
         [TestMethod]
+        [DoNotParallelize]
         public void TestHasBinaryProp()
         {
             SvnSandBox sbox = new SvnSandBox(this);

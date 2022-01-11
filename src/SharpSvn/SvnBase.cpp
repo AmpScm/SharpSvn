@@ -299,7 +299,12 @@ Uri^ SvnBase::PathToUri(String^ path)
 
     bool afterFirst = false;
 
-    for each (String^ p in path->Split(Path::DirectorySeparatorChar, Path::AltDirectorySeparatorChar))
+    auto path_splitters = gcnew array<wchar_t>(2) {
+        Path::DirectorySeparatorChar,
+            Path::AltDirectorySeparatorChar
+    };
+
+    for each (String^ p in path->Split(path_splitters))
     {
         if (afterFirst)
             sb->Append((Char)'/');

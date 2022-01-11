@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,11 +24,12 @@ using System.IO;
 
 using System.Runtime.InteropServices;
 using NUnit.Framework;
+using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests
 {
     [TestClass]
-    public class PathTests : IHasTestContext
+    public class PathTests : TestBase, IHasTestContext
     {
         readonly string _casedFile;
 
@@ -198,8 +199,10 @@ namespace SharpSvn.Tests
                 ptl = e;
             }
 
-            if (Environment.Version.Major < 4)
+            if (Environment.Version.Major < 4 && !IsCore())
                 Assert.That(ptl, Is.Not.Null, "Expected error in v2.0");
+            else
+                Assert.That(ptl, Is.Null, "Expected no error in v4.0+");
         }
 
         [TestMethod]
@@ -351,7 +354,7 @@ namespace SharpSvn.Tests
                 gotException = true;
             }
 
-            if (Environment.Version.Major >= 4)
+            if (Environment.Version.Major >= 4 || IsCore())
                 Assert.That(result, Is.Not.Null);
             else
                 Assert.That(gotException, "Got exception");
@@ -498,7 +501,7 @@ namespace SharpSvn.Tests
         public void Path_UriStrangeness()
         {
             // Somehow the behavior reverts to 2.0 like for the VS Test runner?
-            if (Environment.Version.Major < 4 /* Or .Net 4.0 like runtime, but not .Net 4.5+ */)
+            if (Environment.Version.Major < 4 && !IsCore() /* Or .Net 4.0 like runtime, but not .Net 4.5+ */)
             {
                 // This is where we wrote this test for
                 Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
@@ -621,12 +624,6 @@ namespace SharpSvn.Tests
             Assert.That(SvnPathTarget.FromString("c:\\source\\.").TargetPath, Is.EqualTo("C:\\source"));
             Assert.That(SvnPathTarget.FromString("c:\\source\\.\\").TargetPath, Is.EqualTo("C:\\source"));
             Assert.That(SvnPathTarget.FromString("c:\\source\\.\\dump").TargetPath, Is.EqualTo("C:\\source\\dump"));
-        }
-
-        public Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
-        {
-            get;
-            set;
         }
     }
 }

@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,16 +22,17 @@ using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
 
 using System.Collections.ObjectModel;
+using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests
 {
     [TestClass]
-    public class SvnRemoteTests
+    public class SvnRemoteTests : TestBase
     {
         [TestMethod]
         public void RemoteList()
         {
-            SvnClient cl = new SvnClient();
+            SvnClient cl = NewSvnClient(false, false);
             bool found = false;
         SvnListArgs la = new SvnListArgs();
         la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;

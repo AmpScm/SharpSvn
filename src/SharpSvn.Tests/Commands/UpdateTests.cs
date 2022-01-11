@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -275,6 +275,7 @@ namespace SharpSvn.Tests.Commands
         }
 
         [TestMethod]
+        [DoNotParallelize]
         public void UpdateInUse()
         {
             SvnSandBox sbox = new SvnSandBox(this);
@@ -305,6 +306,7 @@ namespace SharpSvn.Tests.Commands
         }
 
         [TestMethod]
+        [DoNotParallelize]
         public void UpdateInUseWrite()
         {
             SvnSandBox sbox = new SvnSandBox(this);

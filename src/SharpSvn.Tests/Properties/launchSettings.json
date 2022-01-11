@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SharpSvn.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

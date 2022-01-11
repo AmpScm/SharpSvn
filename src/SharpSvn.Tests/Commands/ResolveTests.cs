@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -87,7 +87,7 @@ namespace SharpSvn.Tests.Commands
             SvnSandBox sbox = new SvnSandBox(this);
             Uri projectRoot = new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/scripts");
 
-            using (var svnClient = new SvnClient())
+            using (var svnClient = NewSvnClient(false, false))
             {
                 for (int i = 0; i < 3; i++)
                 {

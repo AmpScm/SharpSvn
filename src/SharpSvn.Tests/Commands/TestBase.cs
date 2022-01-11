@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,37 @@ namespace SharpSvn.Tests.Commands
             this.client = new SvnClient();
             client.Configuration.LogMessageRequired = false;
             client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
+
+            SetupAuth(client);
+        }
+
+        public bool IsCore()
+        {
+#if NETCOREAPP
+            return true;
+#elif NETFRAMEWORK
+            return false;
+#else
+#error What?
+#endif
+        }
+        public static void SetupAuth(SvnClient client)
+        {
+            client.Authentication.UserNamePasswordHandlers += (sender, e) =>
+            {
+                if (e.RealmUri == new Uri("https://ctf.open.collab.net/"))
+                {
+                    e.UserName = "guest";
+                    e.Password = "";
+                }
+            };
+            client.Authentication.SslServerTrustHandlers += (sender, e) =>
+            {
+                if (e.RealmUri == new Uri("https://ctf.open.collab.net/"))
+                {
+                    e.AcceptedFailures = e.Failures;
+                }
+            };
         }
 
         protected SvnClient NewSvnClient(bool expectCommit, bool expectConflict)
@@ -69,6 +100,8 @@ namespace SharpSvn.Tests.Commands
 
                 GC.KeepAlive(e.Items);
             };
+
+            SetupAuth(client);
 
             client.Notify += OnClientNotify;
 

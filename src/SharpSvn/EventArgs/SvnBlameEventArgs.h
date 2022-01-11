@@ -22,7 +22,7 @@ namespace SharpSvn {
     {
         initonly __int64 _revision;
         initonly __int64 _lineNr;
-        const char* _pcLine;
+        const svn_string_t* _pcLine;
         initonly DateTime _date;
         String^ _author;
         String^ _line;
@@ -43,7 +43,7 @@ namespace SharpSvn {
     internal:
         SvnBlameEventArgs(__int64 revision, __int64 lineNr, apr_hash_t *rev_props,
             svn_revnum_t merged_revision, apr_hash_t *merged_rev_props,
-            const char *merged_path, const char* line, bool localChange,
+            const char *merged_path, const svn_string_t* line, bool localChange,
             __int64 start_revnum, __int64 end_revnum, AprPool^ pool)
         {
             if (!pool)
