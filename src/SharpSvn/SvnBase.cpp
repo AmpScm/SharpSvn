@@ -17,6 +17,7 @@
 #include "svn_dso.h"
 #include "svn_utf.h"
 #include "svn_cache_config.h"
+#include "private/svn_cache.h"
 
 using System::Text::StringBuilder;
 using System::IO::Path;
@@ -68,12 +69,15 @@ void SvnBase::EnsureLoaded()
                 }
 
                 svn_utf_initialize2(TRUE, pool);
+
+                // Enable a very limited cache for fsfs file:/// access to avoid errors with 14.x
                 {
                     svn_cache_config_t settings = *svn_cache_config_get();
-                    settings.cache_size = 0;
-                    settings.file_handle_count = 0;
+                    settings.cache_size = 2 * 1024 * 1024;
+                    settings.file_handle_count = 16;
                     settings.single_threaded = FALSE;
                     svn_cache_config_set(&settings);
+                    svn_cache__get_global_membuffer_cache();
                 }
 
                 if (getenv("SVN_ASP_DOT_NET_HACK"))
