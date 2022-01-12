@@ -29,7 +29,7 @@
   <files>
     <file target="build" src="..\src\SharpSvn.AnnotateAssembly-nuspec\SharpSvn.AnnotateAssembly.props" />
     <file target="build" src="..\src\SharpSvn.AnnotateAssembly-nuspec\SharpSvn.AnnotateAssembly.targets" />
-    <file target="build" src="..\src\SharpSvn.MSBuild\bin\x86\Release\SharpSvn.MSBuild.dll" />
+    <file target="build" src="..\src\SharpSvn.MSBuild\bin\Release\SharpSvn.MSBuild.dll" />
     <file target="build\projects" src="..\src\SharpSvn.AnnotateAssembly-nuspec\projects\AnnotateAssembly.*.targets" />
   </files>
 </package>

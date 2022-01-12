@@ -51,7 +51,7 @@ echo Prepare building SharpProj %SVN_VER_MAJOR%.%SHARPSVN_MINOR%.%1
   echo /p:ForceAssemblyInformationalVersion=%SHARPSVN_MAJOR%.%SHARPSVN_MINOR%.%SHARPSVN_PATCH%-%GIT_SHA%
   echo /p:ForceAssemblyCompany="SharpSvn Project, powered by AmpScm, QQn & GitHub"
   echo /p:ForceAssemblyCopyright="Apache 2.0 licensed. See https://github.com/ampscm/SharpSvn"
-  
+
   REM For scripting
   echo /p:BuildBotBuild=true
   echo /p:RestoreForce=true

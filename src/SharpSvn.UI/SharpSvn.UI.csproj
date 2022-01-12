@@ -3,8 +3,6 @@
 
   <PropertyGroup>
     <LanguageVersion>Latest</LanguageVersion>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Deterministic>false</Deterministic>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
@@ -49,10 +47,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.80">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.Build.Tasks.Git" Version="1.1.1" />
+    <PackageReference Include="Microsoft.SourceLink.Common" Version="1.1.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
   </ItemGroup>
 
 

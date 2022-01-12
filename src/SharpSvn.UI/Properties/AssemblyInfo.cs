@@ -1,35 +1,8 @@
-//
-// Copyright 2007-2009 The SharpSvn Project
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Resources;
-
-// General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("SharpSvn.UI")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SharpSvn Project")]
-[assembly: AssemblyProduct("SharpSvn.UI")]
-[assembly: AssemblyCopyrightAttribute("Copyright (c) 2007-2021 SharpSvn Project")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false make the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
@@ -37,17 +10,3 @@ using System.Resources;
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7ca9bb43-4163-41f6-a094-b300679e08ef")]
-
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Revision and Build Numbers
-// by using the '*' as shown below:
-[assembly:AssemblyVersionAttribute("1.8999.*")] 

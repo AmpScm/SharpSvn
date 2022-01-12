@@ -10,7 +10,7 @@ if "%1" == "-gh" (
   SET SVN_VER=%SVN_VER_MAJOR%.%SVN_VER_MINOR%.%SVN_VER_PATCH%
   SET SHARPSVN_VER=%SHARPSVN_MAJOR%.%SHARPSVN_MINOR%.%SHARPSVN_PATCH%
 ) else if "%2" == "" (
-  echo "%0 <proj-ver> <sharpproj-ver>"
+  echo "%0 <svn-ver> <sharpsvn-ver>"
   exit /b 1
 ) else (
   SET SVN_VER=%1

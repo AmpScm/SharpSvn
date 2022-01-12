@@ -36,8 +36,9 @@ jobs:
       with:
         path: |
           build/imports/release
-          build/imports/release/bin/*.pdb
+          build/imports/build/refasmer
           !build/imports/release/bin-*
+          !build/imports/release/bin/*.pdb
         key: ${{runner.os}}-MSBuild-${{ hashFiles('build/imports/*.build') }}-${{ hashFiles('build/imports/scripts/*.build') }}
 
     - name: Cache Import Downloads
