@@ -378,7 +378,7 @@ static void keylist_update_callback(
         ptrlen algname = get_string(src);
         const ssh_keyalg *alg = find_pubkey_alg_len(algname);
 
-        bool include_bit_count = (alg == &ssh_dss && alg == &ssh_rsa);
+        bool include_bit_count = (alg == &ssh_dss || alg == &ssh_rsa);
 
         int wordnumber = 0;
         for (const char *p = fingerprint; *p; p++) {
@@ -1656,8 +1656,10 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmdline, int show)
     DWORD wm_copydata_threadid;
     wmct.ev_msg_ready = CreateEvent(NULL, false, false, NULL);
     wmct.ev_reply_ready = CreateEvent(NULL, false, false, NULL);
-    CreateThread(NULL, 0, wm_copydata_threadfunc,
-                 &inst, 0, &wm_copydata_threadid);
+    HANDLE hThread = CreateThread(NULL, 0, wm_copydata_threadfunc,
+                                  &inst, 0, &wm_copydata_threadid);
+    if (hThread)
+        CloseHandle(hThread);          /* we don't need the thread handle */
     handle_add_foreign_event(wmct.ev_msg_ready, wm_copydata_got_msg, NULL);
 
     if (show_keylist_on_startup)
