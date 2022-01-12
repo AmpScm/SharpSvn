@@ -36,6 +36,7 @@ namespace SharpSvn {
         bool _noPostCommitHook;
         bool _noPropertyValidation;
         bool _noDateVerify;
+        bool _normalizeProperties;
         __int64 _startRev;
         __int64 _endRev;
 
@@ -147,6 +148,18 @@ namespace SharpSvn {
             void set(__int64 value)
             {
                 _endRev = value;
+            }
+        }
+
+        property bool NormalizeProperties
+        {
+            bool get()
+            {
+                return _normalizeProperties;
+            }
+            void set(bool value)
+            {
+                _normalizeProperties = value;
             }
         }
 

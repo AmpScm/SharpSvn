@@ -22,6 +22,7 @@ namespace SharpSvn {
     /// <threadsafety static="true" instance="false"/>
     public ref class SvnLookRevisionPropertyArgs : public SvnLookClientArgs
     {
+        bool _noRefresh;
     public:
         SvnLookRevisionPropertyArgs()
         {
@@ -32,6 +33,15 @@ namespace SharpSvn {
             virtual SvnCommandType get() override sealed
             {
                 return SvnCommandType::Unknown;
+            }
+        }
+
+        property bool NoRefresh
+        {
+            bool get() { return _noRefresh; }
+            void set(bool value)
+            {
+                _noRefresh = value;
             }
         }
     };

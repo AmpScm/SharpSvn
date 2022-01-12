@@ -120,15 +120,19 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 
     SvnStreamWrapper strmTo(to, false, true, %pool);
 
-    r = svn_repos_dump_fs3(
+    r = svn_repos_dump_fs4(
         repos,
         strmTo.Handle,
         start,
         end,
         args->Incremental,
         args->Deltas,
+        true /* include_revprops */,
+        true /* include_changes */,
         repos_notify_func,
         _clientBaton->Handle,
+        nullptr /* filter_func */,
+        nullptr /* filter_baton */,
         CtxHandle->cancel_func,
         CtxHandle->cancel_baton,
         pool.Handle);

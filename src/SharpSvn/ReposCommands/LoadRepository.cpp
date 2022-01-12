@@ -73,7 +73,7 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 
     SvnStreamWrapper strmFrom(from, true, false, %pool);
 
-    r = svn_repos_load_fs5(
+    r = svn_repos_load_fs6(
         repos,
         strmFrom.Handle,
         (svn_revnum_t)args->StartRevision,
@@ -84,6 +84,7 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
         args->RunPostCommitHook,
         args->VerifyPropertyValues,
         !args->VerifyDates,
+        args->NormalizeProperties,
         repos_notify_func,
         _clientBaton->Handle,
         CtxHandle->cancel_func,
@@ -140,7 +141,7 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, String^ from, S
 
     SVN_HANDLE(svn_stream_open_readonly(&src, pool.AllocDirent(from), pool.Handle, pool.Handle));
 
-    r = svn_repos_load_fs5(
+    r = svn_repos_load_fs6(
         repos,
         src,
         (svn_revnum_t)args->StartRevision,
@@ -151,6 +152,7 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, String^ from, S
         args->RunPostCommitHook,
         args->VerifyPropertyValues,
         !args->VerifyDates,
+        args->NormalizeProperties,
         repos_notify_func,
         _clientBaton->Handle,
         CtxHandle->cancel_func,

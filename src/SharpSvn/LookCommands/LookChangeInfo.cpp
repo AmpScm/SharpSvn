@@ -19,8 +19,8 @@
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetChangeInfo(SharpSvn.SvnLookOrigin,SharpSvn.SvnChangeInfoArgs,SharpSvn.SvnChangeInfoEventArgs&)", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetChangeInfo(SharpSvn.SvnLookOrigin,SharpSvn.SvnChangeInfoEventArgs&)", MessageId="1#")];
+[module:SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope = "member", Target = "SharpSvn.SvnLookClient.#GetChangeInfo(SharpSvn.SvnLookOrigin,SharpSvn.SvnChangeInfoArgs,SharpSvn.SvnChangeInfoEventArgs&)", MessageId = "2#")];
+[module:SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope = "member", Target = "SharpSvn.SvnLookClient.#GetChangeInfo(SharpSvn.SvnLookOrigin,SharpSvn.SvnChangeInfoEventArgs&)", MessageId = "1#")] ;
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
@@ -35,13 +35,13 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, EventHandler<SvnChange
     return ChangeInfo(lookOrigin, gcnew SvnChangeInfoArgs(), changeInfoHandler);
 }
 
-static const char* create_name(svn_repos_node_t *node, AprPool ^pool)
+static const char* create_name(svn_repos_node_t* node, AprPool^ pool)
 {
-    if(!node)
+    if (!node)
         return "";
-    else if(!node->parent)
+    else if (!node->parent)
         return "/";
-    else if(!node->parent->name || !node->parent->name[0])
+    else if (!node->parent->name || !node->parent->name[0])
         return apr_pstrcat(pool->Handle, "/", node->name, (const char*)nullptr);
     else
         return apr_pstrcat(pool->Handle, create_name(node->parent, pool), "/", node->name, (const char*)nullptr);
@@ -56,11 +56,11 @@ static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, AprPool^
     else if (!pool)
         throw gcnew ArgumentNullException("pool");
 
-    if(node->action != 'R' || node->text_mod || node->prop_mod || node->copyfrom_path)
+    if (node->action != 'R' || node->text_mod || node->prop_mod || node->copyfrom_path)
     {
         svn_log_changed_path2_t* chg = (svn_log_changed_path2_t*)svn_log_changed_path2_create(pool->Handle);
 
-        if(node->action == 'R' && !node->copyfrom_path)
+        if (node->action == 'R' && !node->copyfrom_path)
             chg->action = 'M';
         else
             chg->action = node->action;
@@ -78,10 +78,10 @@ static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, AprPool^
         chg->node_kind = node->kind;
     }
 
-    if(node->child)
+    if (node->child)
         create_changes_hash(ht, node->child, pool, tmpPool);
 
-    if(node->sibling)
+    if (node->sibling)
         create_changes_hash(ht, node->sibling, pool, tmpPool);
 }
 
@@ -93,8 +93,8 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
         throw gcnew ArgumentNullException("args");
 
     EnsureState(SvnContextState::ConfigLoaded);
-    AprPool pool(%_pool);
-    ArgsStore store(this, args, %pool);
+    AprPool pool(% _pool);
+    ArgsStore store(this, args, % pool);
 
     if (changeInfoHandler)
         args->ChangeInfo += changeInfoHandler;
@@ -153,8 +153,10 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
             else
                 rev = (svn_revnum_t)lookOrigin->Revision;
 
-            if (r = svn_fs_revision_proplist(&props, fs, rev, pool.Handle))
+            if (r = svn_fs_revision_proplist2(&props, fs, rev, !args->NoRefresh, pool.Handle, pool.Handle))
+            {
                 return args->HandleResult(this, r);
+            }
 
             entry->revision = rev;
             base_rev = rev - 1;
@@ -174,14 +176,14 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 
             svn_repos_node_t* tree;
             {
-                AprPool tmpPool(%pool);
-                void *edit_baton;
+                AprPool tmpPool(% pool);
+                void* edit_baton;
 
                 svn_fs_root_t* base_root;
                 if (r = svn_fs_revision_root(&base_root, fs, base_rev, tmpPool.Handle))
                     return args->HandleResult(this, r);
 
-                const svn_delta_editor_t *editor;
+                const svn_delta_editor_t* editor;
 
                 if (r = svn_repos_node_editor(
                     &editor,
@@ -213,13 +215,13 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 
                 apr_hash_t* changes = apr_hash_make(pool.Handle);
 
-                create_changes_hash(changes, tree, %pool, %tmpPool);
+                create_changes_hash(changes, tree, % pool, % tmpPool);
 
                 entry->changed_paths2 = entry->changed_paths = changes;
             }
         }
 
-        SvnChangeInfoEventArgs^ e = gcnew SvnChangeInfoEventArgs(entry, base_rev, %pool);
+        SvnChangeInfoEventArgs^ e = gcnew SvnChangeInfoEventArgs(entry, base_rev, % pool);
         try
         {
             args->OnChangeInfo(e);

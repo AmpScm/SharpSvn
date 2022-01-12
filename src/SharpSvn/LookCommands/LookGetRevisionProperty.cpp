@@ -18,12 +18,12 @@
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,SharpSvn.SvnPropertyValue&)", MessageId="3#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,System.String&)", MessageId="3#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnPropertyValue&)", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,System.String&)", MessageId="2#")];
+[module:SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope = "member", Target = "SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,SharpSvn.SvnPropertyValue&)", MessageId = "3#")];
+[module:SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope = "member", Target = "SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,System.String&)", MessageId = "3#")] ;
+[module:SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope = "member", Target = "SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnPropertyValue&)", MessageId = "2#")] ;
+[module:SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope = "member", Target = "SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,System.String&)", MessageId = "2#")] ;
 
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,SharpSvn.SvnPropertyValue&)")];
+[module:SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope = "member", Target = "SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,SharpSvn.SvnPropertyValue&)")] ;
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
@@ -80,15 +80,15 @@ bool SvnLookClient::GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ prope
         throw gcnew ArgumentNullException("args");
 
     EnsureState(SvnContextState::ConfigLoaded);
-    AprPool pool(%_pool);
-    ArgsStore store(this, args, %pool);
+    AprPool pool(% _pool);
+    ArgsStore store(this, args, % pool);
 
     value = nullptr;
 
     svn_error_t* r;
     svn_repos_t* repos;
     if (r = svn_repos_open3(&repos, pool.AllocDirent(lookOrigin->RepositoryPath), nullptr,
-                            pool.Handle, pool.Handle))
+        pool.Handle, pool.Handle))
         return args->HandleResult(this, r);
 
     svn_fs_t* fs = svn_repos_fs(repos);
@@ -120,11 +120,11 @@ bool SvnLookClient::GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ prope
             rev = (svn_revnum_t)lookOrigin->Revision;
         }
 
-        if (r = svn_fs_revision_prop(&val, fs, rev, pName, pool.Handle))
+        if (r = svn_fs_revision_prop2(&val, fs, rev, pName, !args->NoRefresh, pool.Handle, pool.Handle))
             return args->HandleResult(this, r);
     }
 
-    if(val)
+    if (val)
         value = SvnPropertyValue::Create(pName, val, nullptr, propertyName);
 
     return args->HandleResult(this, r);

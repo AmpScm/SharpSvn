@@ -23,6 +23,7 @@ namespace SharpSvn {
     public ref class SvnChangeInfoArgs : public SvnLookClientArgs
     {
         bool _noLogChangedPaths;
+        bool _noRefresh;
     public:
         SvnChangeInfoArgs()
         {
@@ -56,6 +57,15 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _noLogChangedPaths = !value;
+            }
+        }
+
+        property bool NoRefresh
+        {
+            bool get() { return _noRefresh; }
+            void set(bool value)
+            {
+                _noRefresh = value;
             }
         }
     };
