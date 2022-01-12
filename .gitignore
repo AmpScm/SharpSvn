@@ -14,7 +14,7 @@ packages/
 /src/SharpSvn/SvnText/
 /src/SharpSvn/SharpSvnStrings.resources
 /src/SharpSvn/SvnWindowsError.h
-
+/src/SharpSvn/CppCodeProvider.dll
 
 # Buildbot Scripting
 scripts/*.cache.bat

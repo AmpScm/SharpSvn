@@ -3,7 +3,7 @@
     <SharpSvnAnnotateIncluded>true</SharpSvnAnnotateIncluded>
   </PropertyGroup>
 
-  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(MSBuildThisFileDirectory)\SharpSvn.MSBuild.dll" Condition="$(SharpSvnIncluded) != 'true'" Architecture="x86" Runtime="CLR4" />
+  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(MSBuildThisFileDirectory)\SharpSvn.MSBuild.dll" Condition="$(SharpSvnIncluded) != 'true'" />
 
   <Target Name="SharpSvnPatchAssemblyInfoFileViaNuGet"
           AfterTargets="BuildGenerateSources"

@@ -1025,9 +1025,9 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <CustomBuild Include="SharpSvnStrings.txt" Condition="'$(BuildBotBuild)' != 'true'">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">Generating SharpSvnStrings.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
@@ -1037,13 +1037,13 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">Generating SharpSvnStrings.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
@@ -1055,9 +1055,9 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugCore|ARM64'">SharpSvnStrings.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">Generating SharpSvnStrings.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|Win32'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
@@ -1067,13 +1067,13 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Generating SharpSvnStrings.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">Generating SharpSvnStrings.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|ARM64'">..\MyResGen.cmd /str:c++,$(RootNamespace) SharpSvnStrings.resx
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">SharpSvnStrings.resx;%(AdditionalInputs)</AdditionalInputs>
