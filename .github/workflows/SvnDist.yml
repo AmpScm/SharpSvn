@@ -1,9 +1,9 @@
 name: SvnDist
 
 on:
-  push:
-    workflow_dispatch:
-    #branches: [ main, stable/* ]
+  #push:
+  #  branches: [ main, stable/* ]
+  workflow_dispatch:
 
 env:
   nant: '${{ github.workspace }}/imports/NAnt.0.92.0/tools/nant.exe'
