@@ -7,8 +7,8 @@ on:
     branches: [ main, stable/* ]
 
 env:
-  SOLUTION_FILE_PATH: build/src/SharpSvn.sln
-  nant: '${{ github.workspace }}/build/imports/NAnt.0.92.0/tools/nant.exe'
+  SOLUTION_FILE_PATH: src/SharpSvn.sln
+  nant: '${{ github.workspace }}/imports/NAnt.0.92.0/tools/nant.exe'
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v2
       with:
-        path: build
+        path: ${{env.GITHUB_WORKSPACE}}
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
@@ -27,7 +27,7 @@ jobs:
       uses: darenm/Setup-VSTest@v1
 
     - name: Install NAnt
-      working-directory: build/imports/
+      working-directory: imports/
       run: nuget.exe install NAnt
 
     - name: Cache preparations
@@ -35,27 +35,27 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          build/imports/release
-          build/imports/build/refasmer
-          !build/imports/release/bin-*
-          !build/imports/release/bin/*.pdb
-        key: ${{runner.os}}-MSBuild-${{ hashFiles('build/imports/*.build') }}-${{ hashFiles('build/imports/scripts/*.build') }}
+          imports/release
+          imports/build/refasmer
+          !imports/release/bin-*
+          !imports/release/bin/*.pdb
+        key: ${{runner.os}}-MSBuild-${{ hashFiles('imports/*.build') }}-${{ hashFiles('imports/scripts/*.build') }}
 
     - name: Cache Import Downloads
       if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/cache@v2
       with:
         path: |
-          build/imports/downloads
-        key: ${{runner.os}}-Import-Downloads-${{ hashFiles('build/imports/*.build') }}
+          imports/downloads
+        key: ${{runner.os}}-Import-Downloads-${{ hashFiles('imports/*.build') }}
 
     - name: Run NAnt preparations
       if: steps.cache.outputs.cache-hit != 'true'
-      working-directory: build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
       run: ${{env.nant}} -f:tools/buildbot.build buildbot-build
 
     - name: Setup version
-      working-directory: build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
       run: cmd.exe /C scripts\gh-version-setup ${{ github.run_number }}
       
     - name: Run nuget
@@ -83,19 +83,19 @@ jobs:
 
 #    - name: VSTest-x86
 #      working-directory: ${{env.GITHUB_WORKSPACE}}
-#      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+#      run: vstest.console.exe /InIsolation /Platform:x86 src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 #
 #    - name: VSTest-x64
 #      working-directory: ${{env.GITHUB_WORKSPACE}}
-#      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+#      run: vstest.console.exe /InIsolation /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 #
 #    - name: VSTest-Core-x86
 #      working-directory: ${{env.GITHUB_WORKSPACE}}
-#      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+#      run: vstest.console.exe /InIsolation /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 #
 #    - name: VSTest-Core-x64
 #      working-directory: ${{env.GITHUB_WORKSPACE}}
-#      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+#      run: vstest.console.exe /InIsolation /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
     - name: Create nupkg files
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -105,4 +105,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: nupkg-files
-        path: build/nuspec/bin/*.nupkg
+        path: nuspec/bin/*.nupkg

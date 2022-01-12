@@ -1,5 +1,5 @@
 @echo off
 setlocal enableextensions 
-xcopy "%VSAPPIDDIR%\PublicAssemblies\CppCodeProvider.dll" .
-resgen %* || exit /B 1
-del CppCodeProvider.dll
+xcopy /y "%VSAPPIDDIR%\PublicAssemblies\CppCodeProvider.dll" . > nul:
+resgen.exe %* || exit /B 1
+REM del CppCodeProvider.dll

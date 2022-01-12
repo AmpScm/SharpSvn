@@ -77,6 +77,9 @@ struct svn_wc_context_t
 struct svn_client_mtcc_t
 {};
 
+struct svn_membuffer_t
+{};
+
 struct _LIBSSH2_SESSION
 {};
 

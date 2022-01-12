@@ -19,6 +19,8 @@
 #include "svn_cache_config.h"
 #include "private/svn_cache.h"
 
+#include "UnmanagedStructs.h"
+
 using System::Text::StringBuilder;
 using System::IO::Path;
 using System::Globalization::CultureInfo;
