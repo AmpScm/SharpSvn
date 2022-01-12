@@ -21,11 +21,17 @@ jobs:
         path: build
 
     - name: Cache
+      id: cache
       uses: actions/cache@v2
       with:
         path: |
           build/imports/downloads
-        key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}
+          build/imports/release
+          build/imports/build/*-*.*d
+          build/imports/build/*-version.txt
+          !build/imports/release/bin
+          !build/imports/release/bin-*
+        key: ${{runner.os}}-MSBuild-${{ hashFiles('build/imports/*.build') }}-${{ hashFiles('build/imports/scripts/*.build') }}
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
@@ -38,8 +44,9 @@ jobs:
       run: nuget.exe install NAnt
 
     - name: Run NAnt preparations
+      if: steps.cache.outputs.cache-hit != 'true'
       working-directory: build
-      run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=${{ github.run_number }}" "-D:CCNetProject=SharpSvn" -D:gitBuild=true buildbot-build
+      run: ${{env.nant}} -f:tools/buildbot.build buildbot-build
 
     - name: Setup version
       working-directory: build
@@ -68,23 +75,21 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /r /v:m /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
 
-
-    - name: VSTest-x86
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-
-    - name: VSTest-x64
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-
-    - name: VSTest-Core-x86
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-
-    - name: VSTest-Core-x64
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-
+#    - name: VSTest-x86
+#      working-directory: ${{env.GITHUB_WORKSPACE}}
+#      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+#
+#    - name: VSTest-x64
+#      working-directory: ${{env.GITHUB_WORKSPACE}}
+#      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+#
+#    - name: VSTest-Core-x86
+#      working-directory: ${{env.GITHUB_WORKSPACE}}
+#      run: vstest.console.exe /InIsolation /Platform:x86 build/src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+#
+#    - name: VSTest-Core-x64
+#      working-directory: ${{env.GITHUB_WORKSPACE}}
+#      run: vstest.console.exe /InIsolation /Platform:x64 build/src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
     - name: Create nupkg files
       working-directory: ${{env.GITHUB_WORKSPACE}}

@@ -16,6 +16,13 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- Somehow needed for NuGet restore -->
+    <TargetFramework>net45</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">netcoreapp3.1</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <TargetFramework>net45</TargetFramework>
     <DebugSymbols>true</DebugSymbols>
