@@ -20,19 +20,6 @@ jobs:
       with:
         path: build
 
-    - name: Cache
-      id: cache
-      uses: actions/cache@v2
-      with:
-        path: |
-          build/imports/downloads
-          build/imports/release
-          build/imports/build/*-*.*d
-          build/imports/build/*-version.txt
-          !build/imports/release/bin
-          !build/imports/release/bin-*
-        key: ${{runner.os}}-MSBuild-${{ hashFiles('build/imports/*.build') }}-${{ hashFiles('build/imports/scripts/*.build') }}
-
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
 
@@ -42,6 +29,24 @@ jobs:
     - name: Install NAnt
       working-directory: build/imports/
       run: nuget.exe install NAnt
+
+    - name: Cache preparations
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          build/imports/release
+          !build/imports/release/bin
+          !build/imports/release/bin-*
+        key: ${{runner.os}}-MSBuild-${{ hashFiles('build/imports/*.build') }}-${{ hashFiles('build/imports/scripts/*.build') }}
+
+    - name: Cache Import Downloads
+      if: steps.cache.outputs.cache-hit != 'true'
+      uses: actions/cache@v2
+      with:
+        path: |
+          build/imports/downloads
+        key: ${{runner.os}}-Import-Downloads-${{ hashFiles('build/imports/*.build') }}
 
     - name: Run NAnt preparations
       if: steps.cache.outputs.cache-hit != 'true'

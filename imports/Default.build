@@ -46,7 +46,7 @@
   <property name="httpdVersion" value="2.4.43" overwrite="false" />
   <property name="gettextVersion" value="0.18.3.2" overwrite="false" />
   <property name="sqliteVersion" value="3.35.5" overwrite="false" />
-  <property name="libssh2Version" value="1.9.0" overwrite="false" />
+  <property name="libssh2Version" value="1.10.0" overwrite="false" />
   <property name="nghttp2Version" value="1.43.0" overwrite="false" />
   <property name="py3cVersion" value="1.1" overwrite="false" />
 
