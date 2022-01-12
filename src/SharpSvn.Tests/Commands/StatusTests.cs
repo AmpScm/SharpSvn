@@ -57,7 +57,7 @@ namespace SharpSvn.Tests.Commands
             a.Depth = SvnDepth.Empty;
 
             Client.Status(unversioned, a,
-                delegate(object sender, SvnStatusEventArgs e)
+                delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(SvnStatus.NotVersioned, Is.EqualTo(e.LocalContentStatus),
                 "Wrong text status on " + unversioned);
@@ -65,7 +65,7 @@ namespace SharpSvn.Tests.Commands
                 });
 
             Client.Status(added, a,
-                delegate(object sender, SvnStatusEventArgs e)
+                delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(SvnStatus.Added, Is.EqualTo(e.LocalContentStatus),
                         "Wrong text status on " + added);
@@ -74,7 +74,7 @@ namespace SharpSvn.Tests.Commands
 
 
             Client.Status(changed, a,
-                delegate(object sender, SvnStatusEventArgs e)
+                delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(SvnStatus.Modified, Is.EqualTo(e.LocalContentStatus),
                         "Wrong text status " + changed);
@@ -82,7 +82,7 @@ namespace SharpSvn.Tests.Commands
                 });
 
             Client.Status(propChange, a,
-                delegate(object sender, SvnStatusEventArgs e)
+                delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(SvnStatus.Modified, Is.EqualTo(e.LocalPropertyStatus),
                         "Wrong property status " + propChange);
@@ -92,7 +92,7 @@ namespace SharpSvn.Tests.Commands
             a.RetrieveAllEntries = true;
 
             Client.Status(ignored, a,
-                delegate(object sender, SvnStatusEventArgs e)
+                delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Ignored),
                         "Wrong content status " + ignored);
@@ -119,7 +119,7 @@ namespace SharpSvn.Tests.Commands
             //Status s = SingleStatus(client, form);
 
             SvnStatusArgs a = new SvnStatusArgs();
-            this.Client.Status(form, a, delegate(object sender, SvnStatusEventArgs e)
+            this.Client.Status(form, a, delegate (object sender, SvnStatusEventArgs e)
             { });
         }
 
@@ -331,7 +331,7 @@ namespace SharpSvn.Tests.Commands
 
             SvnStatusArgs sa = new SvnStatusArgs();
 
-            this.Client.Status(form, delegate(object sender, SvnStatusEventArgs e)
+            this.Client.Status(form, delegate (object sender, SvnStatusEventArgs e)
             {
                 Assert.IsNotNull(e.LocalLock);
                 Assert.That(e.LocalLock.Token, Is.Not.Null);
@@ -365,8 +365,10 @@ namespace SharpSvn.Tests.Commands
 
         [TestMethod, Obsolete]
         [DoNotParallelize]
-        public void MoreStatusTestsObsolete()
+        public void MoreStatusTests_WorkingCopyInfo()
         {
+            // This method is marked Obsolete as it uses the Obsolete 'SvnClientStatusEventArgs.WorkingCopyInfo' property
+            // The new variant uses the new properties on the status object itself.
             SvnSandBox sbox = new SvnSandBox(this);
             sbox.Create(SandBoxRepository.AnkhSvnCases, false);
             string WcPath = sbox.Wc;
@@ -420,7 +422,7 @@ namespace SharpSvn.Tests.Commands
 
                     int n = 0;
 
-                    client.Status(Path.Combine(WcPath, "statTst"), a, delegate(object sender, SvnStatusEventArgs e)
+                    client.Status(Path.Combine(WcPath, "statTst"), a, delegate (object sender, SvnStatusEventArgs e)
                     {
                         n++;
                         string p = e.Path;
@@ -640,7 +642,7 @@ namespace SharpSvn.Tests.Commands
 
                 File.Delete(local);
 
-                client.Status(local, delegate(object sender, SvnStatusEventArgs e)
+                client.Status(local, delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
                     Assert.That(e.WorkingCopyInfo.IsIncomplete, Is.False);
@@ -650,7 +652,7 @@ namespace SharpSvn.Tests.Commands
                 SvnDeleteArgs da = new SvnDeleteArgs();
                 da.Force = true;
                 client.Delete(local, da);
-                client.Status(local, delegate(object sender, SvnStatusEventArgs e)
+                client.Status(local, delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
                     Assert.That(e.WorkingCopyInfo.IsIncomplete, Is.False);
@@ -718,7 +720,7 @@ namespace SharpSvn.Tests.Commands
 
                     int n = 0;
 
-                    client.Status(Path.Combine(WcPath, "statTst"), a, delegate(object sender, SvnStatusEventArgs e)
+                    client.Status(Path.Combine(WcPath, "statTst"), a, delegate (object sender, SvnStatusEventArgs e)
                     {
                         n++;
                         string p = e.Path;
@@ -942,7 +944,7 @@ namespace SharpSvn.Tests.Commands
 
                 File.Delete(local);
 
-                client.Status(local, delegate(object sender, SvnStatusEventArgs e)
+                client.Status(local, delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
                     Assert.That(e.WorkingCopyInfo.IsIncomplete, Is.False);
@@ -952,7 +954,7 @@ namespace SharpSvn.Tests.Commands
                 SvnDeleteArgs da = new SvnDeleteArgs();
                 da.Force = true;
                 client.Delete(local, da);
-                client.Status(local, delegate(object sender, SvnStatusEventArgs e)
+                client.Status(local, delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
                     Assert.That(e.WorkingCopyInfo.IsIncomplete, Is.False);
@@ -1110,7 +1112,7 @@ namespace SharpSvn.Tests.Commands
 
             SvnStatusArgs sa = new SvnStatusArgs() { RetrieveRemoteStatus = true };
             this.Client.Status(form, sa,
-                delegate(object sender, SvnStatusEventArgs e)
+                delegate (object sender, SvnStatusEventArgs e)
                 {
                     Assert.IsNotNull(e.RemoteLock);
                     Assert.That(e.RemoteLock.Owner, Is.EqualTo(Environment.UserName));

@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,7 +78,7 @@ namespace SharpSvn.Tests.Commands
             la.ThrowOnCancel = false;
             int n = 0;
             Client.Log(new Uri("http://svn.apache.org/repos/asf/subversion/branches/1.5.x-reintegrate-improvements/"), la,
-                delegate(object sender, SvnLogEventArgs le)
+                delegate (object sender, SvnLogEventArgs le)
                 {
                     n++;
 
@@ -120,7 +120,7 @@ namespace SharpSvn.Tests.Commands
 
                 int n = 0;
                 client.Log(Path.Combine(dir, "index.html"),
-                    delegate(object sender, SvnLogEventArgs e)
+                    delegate (object sender, SvnLogEventArgs e)
                     {
                         switch (n++)
                         {
@@ -151,7 +151,7 @@ namespace SharpSvn.Tests.Commands
             Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
 
             bool touched = false;
-            Client.Log(dir, delegate(object sender, SvnLogEventArgs e)
+            Client.Log(dir, delegate (object sender, SvnLogEventArgs e)
             {
                 touched = true;
             });
@@ -160,7 +160,7 @@ namespace SharpSvn.Tests.Commands
             touched = false;
 
             touched = false;
-            Client.Log(dir, a, delegate(object sender, SvnLogEventArgs e)
+            Client.Log(dir, a, delegate (object sender, SvnLogEventArgs e)
             {
                 touched = true;
 
@@ -168,7 +168,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
 
             touched = false;
-            Client.Log(Path.Combine(dir, "index.html"), a, delegate(object sender, SvnLogEventArgs e)
+            Client.Log(Path.Combine(dir, "index.html"), a, delegate (object sender, SvnLogEventArgs e)
             {
                 touched = true;
 
@@ -181,7 +181,7 @@ namespace SharpSvn.Tests.Commands
             {
                 dir,
                 Path.Combine(dir, "index.html")
-            }, a, delegate(object sender, SvnLogEventArgs e)
+            }, a, delegate (object sender, SvnLogEventArgs e)
             {
                 touched = true;
             });
@@ -201,7 +201,7 @@ namespace SharpSvn.Tests.Commands
             Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
             touched = false;
 
-            Client.Log(Path.Combine(dir, "index.html"), a, delegate(object sender, SvnLogEventArgs e)
+            Client.Log(Path.Combine(dir, "index.html"), a, delegate (object sender, SvnLogEventArgs e)
                 {
                     touched = true;
 
@@ -226,7 +226,7 @@ namespace SharpSvn.Tests.Commands
                 Path.Combine(dir, "products/big.html"),
                 Path.Combine(dir, "news/index.html"),
                 Path.Combine(dir, "index.html"),
-            }, a, delegate(object sender, SvnLogEventArgs e)
+            }, a, delegate (object sender, SvnLogEventArgs e)
             {
                 touched = true;
             });
@@ -234,39 +234,12 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [TestMethod, Ignore]
-        public void Log_Test14Server()
-        {
-            SvnLogArgs la = new SvnLogArgs();
-            la.Limit = 1;
-
-            DateTime now = DateTime.UtcNow;
-
-            for (int i = 0; i < 20; i++)
-                Assert.That(Client.Log(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn"), la,
-                    delegate(object sender, SvnLogEventArgs e)
-                    {
-                        e.Cancel = true;
-                        Assert.That(e.MergeLogNestingLevel, Is.EqualTo(0));
-                        Assert.That(e.Revision, Is.GreaterThan(3000L));
-                        Assert.That(e.LogMessage, Is.Not.Null);
-                        Assert.That(e.Time, Is.GreaterThan(new DateTime(2008, 01, 01)));
-                        Assert.That(e.Author, Is.Not.Null);
-                        Assert.That(e.ChangedPaths, Is.Not.Null);
-                        Assert.That(e.LogOrigin, Is.Null);
-                    }), Is.False);
-
-            DateTime end = DateTime.UtcNow;
-
-            Debug.WriteLine(string.Format("Time spend: {0}", end - now));
-        }
-
         [TestMethod]
         public void Log_MultiLogs()
         {
             bool touched = false;
             Assert.That(Client.Log(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/"),
-                delegate(object sender, SvnLogEventArgs e)
+                delegate (object sender, SvnLogEventArgs e)
                 {
                     touched = true;
                     e.Cancel = true;
@@ -285,7 +258,7 @@ namespace SharpSvn.Tests.Commands
             long rev = 0;
 
             Assert.That(Client.Log(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/"),
-                delegate(object sender, SvnLogEventArgs e)
+                delegate (object sender, SvnLogEventArgs e)
                 {
                     foreach (SvnChangeItem item in e.ChangedPaths)
                     {
@@ -315,7 +288,7 @@ namespace SharpSvn.Tests.Commands
             args.Limit = 100;
             args.OperationalRevision = 863074;
             touched = false;
-            Client.Log(uris, args, delegate(object sender, SvnLogEventArgs e)
+            Client.Log(uris, args, delegate (object sender, SvnLogEventArgs e)
             {
                 Assert.That(e.LogOrigin, Is.Not.Null);
                 touched = true;
@@ -347,7 +320,7 @@ namespace SharpSvn.Tests.Commands
             Client.Commit(file);
 
             Client.Log(repos,
-                delegate(object sender, SvnLogEventArgs e)
+                delegate (object sender, SvnLogEventArgs e)
                 {
                     if (e.Revision != 0)
                         foreach (SvnChangeItem ci in e.ChangedPaths)
@@ -395,7 +368,7 @@ namespace SharpSvn.Tests.Commands
             la.StrictNodeHistory = false;
 
 
-            EventHandler<SvnLogEventArgs> verify = delegate(object sender, SvnLogEventArgs e)
+            EventHandler<SvnLogEventArgs> verify = delegate (object sender, SvnLogEventArgs e)
             {
                 SvnChangeItem ci;
                 SvnChangeItem ci2;
@@ -481,7 +454,7 @@ namespace SharpSvn.Tests.Commands
                 uris.Add(new Uri("http://svn.apache.org/repos/asf/subversion/README"));
                 uris.Add(new Uri("http://svn.apache.org/repos/asf/subversion/INSTALL"));
                 SvnLogArgs args = new SvnLogArgs();
-                client.Log(uris, args, delegate(object sender, SvnLogEventArgs e)
+                client.Log(uris, args, delegate (object sender, SvnLogEventArgs e)
                 { });
             }
         }

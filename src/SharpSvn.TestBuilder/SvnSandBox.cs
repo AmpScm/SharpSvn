@@ -12,6 +12,7 @@ namespace SharpSvn.TestBuilder
     {
         readonly SvnSandboxContainer _container;
         readonly TestContext _context;
+        readonly string _testName;
 
         public SvnSandBox(TestContext context)
         {
@@ -19,6 +20,7 @@ namespace SharpSvn.TestBuilder
                 throw new ArgumentNullException("context");
 
             _container = SvnSandboxContainer.Current;
+            TestName = context.TestName;
             _context = context;
         }
 
@@ -32,11 +34,7 @@ namespace SharpSvn.TestBuilder
             get { return _container; }
         }
 
-        string _name;
-        string TestName
-        {
-            get { return _name ?? (_name = _context.TestName); }
-        }
+        protected string TestName { get; private set; }
 
         string _wc;
         public string Wc

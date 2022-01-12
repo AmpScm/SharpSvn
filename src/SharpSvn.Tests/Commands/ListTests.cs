@@ -328,11 +328,6 @@ namespace SharpSvn.Tests.Commands
                 string baseUri = "https://ctf.open.collab.net/svn/repos/ankhsvn/testcases/trunk/WorstCase/AllTypesSolution/";
                 string exUri = baseUri + "%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%9f%e3%83%b3%e3%82%b0%23Silverlight/";
 
-                client.Authentication.Clear();
-                client.Authentication.DefaultCredentials = new NetworkCredential("guest", "");
-                client.Authentication.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
-                client.Authentication.SslAuthorityTrustHandlers += SvnAuthentication.SubversionWindowsSslAuthorityTrustHandler;
-
                 bool found = false;
                 client.List(new SvnUriTarget(new Uri(baseUri), 11888),
                     delegate(object sender, SvnListEventArgs e)
