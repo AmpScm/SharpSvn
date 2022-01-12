@@ -2,11 +2,11 @@ name: SvnDist
 
 on:
   push:
-    branches: [ main, stable/* ]
+    workflow_dispatch:
+    #branches: [ main, stable/* ]
 
 env:
-  buildDir: '${{ github.workspace }}/build'
-  nant: '${{ github.workspace }}/build/imports/NAnt.0.92.0/tools/nant.exe'
+  nant: '${{ github.workspace }}/imports/NAnt.0.92.0/tools/nant.exe'
 
 jobs:
   build:
@@ -15,8 +15,6 @@ jobs:
     steps:
     - name: Git Checkout
       uses: actions/checkout@v2
-      with:
-        path: build
 
     - name: Setup Java
       uses: actions/setup-java@v2
@@ -28,15 +26,14 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          build/imports/downloads
+          imports/downloads
         key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}
 
     - name: Install NAnt
-      working-directory: build/imports/
+      working-directory: imports/
       run: nuget.exe install NAnt
 
     - name: Run NAnt build
-      working-directory: build
       run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=1" "-D:CCNetProject=SlikSvn" -D:svnDist=true -D:gitBuild=true buildbot-build package-svndist
 
     - name: Upload artifacts
@@ -44,5 +41,5 @@ jobs:
       with:
         name: svndist-files
         path: |
-          build/imports/svn-dist/dist*/*.zip
-          build/imports/svn-dist/dist*/*.msi
+          imports/svn-dist/dist*/*.zip
+          imports/svn-dist/dist*/*.msi
