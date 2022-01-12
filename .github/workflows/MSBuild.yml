@@ -51,44 +51,44 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: ${{env.nant}} -f:tools/buildbot.build buildbot-build
 
-#    - name: Setup version
-#      run: cmd.exe /C scripts\gh-version-setup ${{ github.run_number }}
-#
-#    - name: Run nuget
-#      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-#
-#    - name: Build-x86
-#      run: msbuild /r /v:m /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
-#
-#    - name: Build-x64
-#      run: msbuild /r /v:m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
-#
-#    - name: Build-x86-Core
-#      run: msbuild /r /v:m /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
-#
-#    - name: Build-x64-Core
-#      run: msbuild /r /v:m /p:Platform=x64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
-#
-#    - name: Build-arm64-Core
-#      run: msbuild /r /v:m /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @build\scripts\msbuild-version.rsp
-#
-#    - name: VSTest-x86
-#      run: vstest.console.exe /InIsolation /Platform:x86 src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-#
-#    - name: VSTest-x64
-#      run: vstest.console.exe /InIsolation /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-#
-#    - name: VSTest-Core-x86
-#      run: vstest.console.exe /InIsolation /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-#
-#    - name: VSTest-Core-x64
-#      run: vstest.console.exe /InIsolation /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-#
-#    - name: Create nupkg files
-#      run: cmd.exe /C build\scripts\gh-build-nuget.cmd
-#
-#    - name: Package nupkg files
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: nupkg-files
-#        path: nuspec/bin/*.nupkg
+    - name: Setup version
+      run: cmd.exe /C scripts\gh-version-setup ${{ github.run_number }}
+
+    - name: Run nuget
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build-x86
+      run: msbuild /r /v:m /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
+
+    - name: Build-x64
+      run: msbuild /r /v:m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
+
+    - name: Build-x86-Core
+      run: msbuild /r /v:m /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
+
+    - name: Build-x64-Core
+      run: msbuild /r /v:m /p:Platform=x64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
+
+    - name: Build-arm64-Core
+      run: msbuild /r /v:m /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
+
+    - name: VSTest-x86
+      run: vstest.console.exe /InIsolation /Platform:x86 src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
+    - name: VSTest-x64
+      run: vstest.console.exe /InIsolation /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
+    - name: VSTest-Core-x86
+      run: vstest.console.exe /InIsolation /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
+    - name: VSTest-Core-x64
+      run: vstest.console.exe /InIsolation /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+
+    - name: Create nupkg files
+      run: cmd.exe /C build\scripts\gh-build-nuget.cmd
+
+    - name: Package nupkg files
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg-files
+        path: nuspec/bin/*.nupkg
