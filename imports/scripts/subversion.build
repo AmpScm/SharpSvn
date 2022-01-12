@@ -203,12 +203,6 @@
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
       </fileset>
     </copy>
-    <if test="${platform!='win32'}">
-      <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
-      <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve-${platform}.exe" if="${not static}"/>
-      <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
-      <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion-${platform}.exe" />
-    </if>
     <if test="${platform=='win32'}">
       <copy todir="${release}/bin" flatten="true">
         <fileset basedir="${svnBase}/release">
@@ -249,16 +243,11 @@
         <include name="**" />
       </fileset>
     </copy>
-    <copy todir="${release}/lib-x64" if="${platform == 'x64'}">
+    <copy todir="${release}/lib-${platform}" if="${platform != 'win32'}">
       <fileset basedir="${intDir}/lib">
         <include name="**" />
       </fileset>
     </copy>
-    <echo file="${release}/copylibs.cmd">
-      @echo off
-      xcopy /y /q "..\..\imports\release\bin\*-%1.dll" %2
-
-    </echo>
     <copy todir="${release}/po" flatten="true">
       <fileset basedir="${platformRoot}\subversion\subversion">
         <include name="**/*.po" />
