@@ -1,5 +1,6 @@
 # SharpSvn
 [![latest version](https://img.shields.io/nuget/v/SharpSvn)](https://www.nuget.org/packages/SharpSvn)
+[![MSBuild-CI](https://github.com/AmpScm/SharpSvn/actions/workflows/MSBuild.yml/badge.svg)](https://github.com/AmpScm/SharpSvn/actions/workflows/MSBuild.yml)
 
 Subversion wrapped for .Net 4.0+ and .Net Core
 
