@@ -19,7 +19,14 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>SharpSvn.Tests.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  
+
+  <PropertyGroup>
+    <!-- Somehow needed for NuGet restore -->
+    <TargetFramework>net47</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">netcoreapp3.1</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <TargetFramework>net47</TargetFramework>
     <DebugSymbols>true</DebugSymbols>
