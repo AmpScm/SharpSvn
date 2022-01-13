@@ -34,19 +34,6 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Relocate is always recursive now")]
-        property bool NonRecursive
-        {
-            bool get()
-            {
-                return false;
-            }
-            void set(bool value)
-            {
-        UNUSED_ALWAYS(value);
-            }
-        }
-
         property bool IgnoreExternals
         {
             bool get()

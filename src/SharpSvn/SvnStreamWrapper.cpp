@@ -141,7 +141,7 @@ void SvnStreamWrapper::Init(bool enableRead, bool enableWrite, bool enableSeek)
         throw gcnew InvalidOperationException("Can't create svn stream");
 
     if (enableRead)
-        svn_stream_set_read(_svnStream, svnStreamRead);
+        svn_stream_set_read2(_svnStream, svnStreamRead, svnStreamRead);
     if (enableWrite)
         svn_stream_set_write(_svnStream, svnStreamWrite);
 

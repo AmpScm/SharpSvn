@@ -55,19 +55,6 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Use .CreateParents")]
-        property bool MakeParents
-        {
-            bool get()
-            {
-                return CreateParents;
-            }
-            void set(bool value)
-            {
-                CreateParents = value;
-            }
-        }
-
         /// <summary>Always copies the result to below the target (this behaviour is always used if multiple targets are provided)</summary>
         property bool AlwaysCopyAsChild
         {

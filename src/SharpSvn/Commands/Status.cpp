@@ -77,7 +77,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 
     // We allow a null statusHandler; the args object might just handle it itself
 
-    if (args->ContactRepository)
+    if (args->RetrieveRemoteStatus)
         EnsureState(SvnContextState::AuthorizationInitialized);
     else
         EnsureState(SvnContextState::ConfigLoaded);

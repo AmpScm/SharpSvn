@@ -276,15 +276,6 @@ String^ SvnTools::GetTruePath(String^ path)
     return GetTruePath(path, false);
 }
 
-String^ SvnTools::GetFullTruePath(String^ path)
-{
-    if (String::IsNullOrEmpty(path))
-        throw gcnew ArgumentNullException("path");
-
-    // Keep original behavior as default
-    return GetTruePath(path, false);
-}
-
 String^ SvnTools::GetTruePath(String^ path, bool bestEffort)
 {
     if (String::IsNullOrEmpty(path))

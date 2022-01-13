@@ -40,20 +40,6 @@ namespace SharpSvn {
     public:
         DECLARE_EVENT(SvnDiffSummaryEventArgs^, DiffSummary);
 
-    public:
-        [Obsolete("Use .DiffSummary")]
-        event EventHandler<SvnDiffSummaryEventArgs^>^ SummaryHandler
-        {
-            void add(EventHandler<SvnDiffSummaryEventArgs^>^ value)
-            {
-                DiffSummary += value;
-            }
-            void remove(EventHandler<SvnDiffSummaryEventArgs^>^ value)
-            {
-                DiffSummary -= value;
-            }
-        }
-
     protected:
         virtual void OnDiffSummary(SvnDiffSummaryEventArgs^ e)
         {

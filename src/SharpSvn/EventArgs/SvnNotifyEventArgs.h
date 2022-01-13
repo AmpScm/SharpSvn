@@ -135,16 +135,6 @@ namespace SharpSvn {
             }
         }
 
-        /// <summary>Gets a boolean indicating whether the path is a Uri</summary>
-        [Obsolete("Check .Uri and (Path == null)")]
-        property bool PathIsUri
-        {
-            bool get()
-            {
-                return (Uri != nullptr);
-            }
-        }
-
         /// <summary>Gets the commandtype of the command responsible for calling the notify</summary>
         property SvnCommandType CommandType
         {

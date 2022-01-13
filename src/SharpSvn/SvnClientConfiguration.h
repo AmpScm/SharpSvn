@@ -50,23 +50,6 @@ namespace SharpSvn {
             void set(bool value);
         }
 
-        /// <summary>This property used to get a boolean indicating whether to enable the SharpPlink handler when no
-        /// other valid handler for svn+ssh:// was registered. It is now mapped to <see cref="SshOverride" />'s disabled option</summary>
-        [System::ComponentModel::DefaultValue((System::Boolean)true)]
-        property bool EnableSharpPlink
-        {
-            [Obsolete("Returns .SshOverride != SvnSshOverride.Disabled")]
-            bool get()  { return (SshOverride != SvnSshOverride::Disabled); }
-            [Obsolete("Only sets .SshOverride to Automatic or Off")]
-            void set(bool value)
-            {
-                if (!value)
-                    SshOverride = SvnSshOverride::Disabled;
-                else if (SshOverride == SvnSshOverride::Disabled)
-                    SshOverride = SvnSshOverride::Automatic;
-            }
-        }
-
         property SvnSshOverride SshOverride
         {
             SvnSshOverride get();

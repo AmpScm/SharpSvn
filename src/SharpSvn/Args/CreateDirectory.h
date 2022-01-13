@@ -45,20 +45,6 @@ namespace SharpSvn {
                 _createParents = value;
             }
         }
-
-        [Obsolete("Naming: Use CreateParents")]
-        property bool MakeParents
-        {
-            bool get()
-            {
-                return CreateParents;
-            }
-
-            void set(bool value)
-            {
-                CreateParents = value;
-            }
-        }
     };
 
 }

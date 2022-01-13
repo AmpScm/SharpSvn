@@ -44,10 +44,6 @@ namespace SharpSvn {
         /// For not existing paths, if bestEffort is TRUE, returns a path based on existing parents. Otherwise return NULL for not existing paths</summary>
         static String^ GetTruePath(String^ path, bool bestEffort);
 
-        /// <summary>Gets the pathname exactly like it is on disk</summary>
-        [Obsolete("Please use .GetTruePath(path, false)")]
-        static String^ GetFullTruePath(String^ path);
-
         /// <summary>Gets a boolean indicating whether the path could contain a Subversion Working Copy</summary>
         /// <remarks>Assumes path is a directory</remarks>
         static bool IsManagedPath(String^ path);

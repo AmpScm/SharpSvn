@@ -38,7 +38,7 @@ namespace SharpSvn {
         SvnLockInfo^ _lock;
         initonly bool _hasWcInfo;
         SvnSchedule _wcSchedule;
-        Uri ^_copyFromUri;
+        Uri^ _copyFromUri;
         initonly __int64 _copyFromRev;
         initonly DateTime _contentTime;
         String^ _checksum;
@@ -52,9 +52,9 @@ namespace SharpSvn {
         initonly __int64 _size;
         initonly bool _conflicted;
         ICollection<SvnConflictData^>^ _conflicts;
-        String ^_wcAbspath;
-        String ^_movedFromAbspath;
-        String ^_movedToAbspath;
+        String^ _wcAbspath;
+        String^ _movedFromAbspath;
+        String^ _movedToAbspath;
 
     internal:
         SvnInfoEventArgs(String^ path, const svn_client_info2_t* info, AprPool^ pool)
@@ -267,15 +267,6 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Please use .CopyFromRevision")]
-        property __int64 CopyFromRev
-        {
-            __int64 get()
-            {
-                return CopyFromRevision;
-            }
-        }
-
         property DateTime ContentTime
         {
             DateTime get()
@@ -284,16 +275,7 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Always returns (and always returned) DateTime.MinValue")]
-        property DateTime PropertyTime
-        {
-            DateTime get()
-            {
-                return DateTime::MinValue;
-            }
-        }
-
-    /// <summary>The SHA1 checksum of the file. (Used to return a MD5 checksom in Subversion &lt;= 1.6)</summary>
+        /// <summary>The SHA1 checksum of the file. (Used to return a MD5 checksom in Subversion &lt;= 1.6)</summary>
         property String^ Checksum
         {
             String^ get()
@@ -315,7 +297,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (Conflicted && Conflicts)
-                    for each(SvnConflictData^ d in Conflicts)
+                    for each (SvnConflictData ^ d in Conflicts)
                     {
                         if (d->ConflictType == SvnConflictType::Content)
                             return d->BaseFile;
@@ -330,7 +312,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (Conflicted && Conflicts)
-                    for each(SvnConflictData^ d in Conflicts)
+                    for each (SvnConflictData ^ d in Conflicts)
                     {
                         if (d->ConflictType == SvnConflictType::Content)
                             return d->TheirFile;
@@ -345,7 +327,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (Conflicted && Conflicts)
-                    for each(SvnConflictData^ d in Conflicts)
+                    for each (SvnConflictData ^ d in Conflicts)
                     {
                         if (d->ConflictType == SvnConflictType::Content)
                             return d->MyFile;
@@ -360,7 +342,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (Conflicted && Conflicts)
-                    for each(SvnConflictData^ d in Conflicts)
+                    for each (SvnConflictData ^ d in Conflicts)
                     {
                         if (d->ConflictType == SvnConflictType::Property)
                             return d->TheirFile;
@@ -410,7 +392,7 @@ namespace SharpSvn {
             SvnConflictData^ get()
             {
                 if (Conflicted && Conflicts)
-                    for each(SvnConflictData^ d in Conflicts)
+                    for each (SvnConflictData ^ d in Conflicts)
                     {
                         if (d->ConflictType == SvnConflictType::Tree)
                             return d;
@@ -495,7 +477,7 @@ namespace SharpSvn {
                 }
 
                 if (_conflicts)
-                    for each (SvnConflictData ^cd in _conflicts)
+                    for each (SvnConflictData ^ cd in _conflicts)
                         cd->Detach(keepProperties);
 
                 if (_lock)

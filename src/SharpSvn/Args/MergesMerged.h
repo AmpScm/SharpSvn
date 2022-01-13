@@ -45,21 +45,7 @@ namespace SharpSvn {
     public:
         DECLARE_EVENT(SvnMergesMergedEventArgs^, MergesMerged);
 
-    public:
-        [Obsolete("Use .MergesMerged")]
-        event EventHandler<SvnMergesMergedEventArgs^>^ List
-        {
-            void add(EventHandler<SvnMergesMergedEventArgs^>^ value)
-            {
-                MergesMerged += value;
-            }
-            void remove(EventHandler<SvnMergesMergedEventArgs^>^ value)
-            {
-                MergesMerged -= value;
-            }
-        }
-
-    protected public:
+     protected public:
         virtual void OnMergesMerged(SvnMergesMergedEventArgs^ e)
         {
             MergesMerged(this, e);

@@ -45,20 +45,6 @@ namespace SharpSvn {
     public:
         DECLARE_EVENT(SvnBlameEventArgs^, Blame);
 
-    public:
-        [Obsolete("Use .Blame")]
-        event EventHandler<SvnBlameEventArgs^>^ BlameHandler
-        {
-            void add(EventHandler<SvnBlameEventArgs^>^ value)
-            {
-                Blame += value;
-            }
-            void remove(EventHandler<SvnBlameEventArgs^>^ value)
-            {
-                Blame -= value;
-            }
-        }
-
     protected:
         virtual void OnBlame(SvnBlameEventArgs^ e)
         {
@@ -170,19 +156,6 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _includeMergedRevisions = value;
-            }
-        }
-
-        [Obsolete("Please use .RetrieveMergeRevisions")]
-        property bool IncludeMergedRevisions
-        {
-            bool get()
-            {
-                return RetrieveMergedRevisions;
-            }
-            void set(bool value)
-            {
-                RetrieveMergedRevisions = value;
             }
         }
     };

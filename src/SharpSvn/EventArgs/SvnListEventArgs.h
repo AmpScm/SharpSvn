@@ -283,15 +283,6 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Use .Uri")]
-        property System::Uri^ EntryUri
-        {
-            System::Uri^ get()
-            {
-                return this->Uri;
-            }
-        }
-
         property System::Uri^ ExternalParent
         {
             System::Uri^ get()

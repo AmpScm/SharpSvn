@@ -112,19 +112,6 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Use .OperationalRevision")]
-        property SvnRevision^ OriginRevision
-        {
-            SvnRevision^ get()
-            {
-                return OperationalRevision;
-            }
-            void set(SvnRevision^ value)
-            {
-                OperationalRevision = value;
-            }
-        }
-
         /// <summary>Gets or sets the range specified by <see cref="Start" />-<see cref="End" /> wrapped as a <see cref="SvnRevisionRange" /></summary>
         /// <remarks>New code should either use <see cref="Start" /> and <see cref="End" /> or <see cref="Ranges" /></remarks>
         property SvnRevisionRange^ Range

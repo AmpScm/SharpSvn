@@ -271,15 +271,6 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Use .RevisionProperties")]
-        property SvnPropertyCollection^ CustomProperties
-        {
-            SvnPropertyCollection^ get()
-            {
-                return RevisionProperties;
-            }
-        }
-
         property __int64 Revision
         {
             __int64 get()

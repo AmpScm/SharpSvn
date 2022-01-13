@@ -300,15 +300,6 @@ namespace SharpSvn {
             }
         }
 
-        [Obsolete("Not used since Subversion 1.4")]
-        property DateTime PropertyChangeTime
-        {
-            DateTime get()
-            {
-                return DateTime::MinValue;
-            }
-        }
-
         property DateTime ContentChangeTime
         {
             DateTime get()
