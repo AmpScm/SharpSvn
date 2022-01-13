@@ -371,47 +371,47 @@ namespace SharpSvn.Tests.Commands
             // The new variant uses the new properties on the status object itself.
             SvnSandBox sbox = new SvnSandBox(this);
             sbox.Create(SandBoxRepository.AnkhSvnCases, false);
-            string WcPath = sbox.Wc;
-            Uri ReposUrl = sbox.RepositoryUri;
+            string wcPath = sbox.Wc;
+            Uri reposUrl = sbox.RepositoryUri;
 
             using (SvnClient client = NewSvnClient(true, false))
             {
-                client.Update(WcPath);
-                client.CreateDirectory(Path.Combine(WcPath, "statTst"));
-                string local = Path.Combine(WcPath, "statTst/LocalStatBase1");
-                string local2 = Path.Combine(WcPath, "statTst/LocalStatBase2");
-                string local3 = Path.Combine(WcPath, "statTst/LocalStatBase3");
-                string local4 = Path.Combine(WcPath, "statTst/LocalStatBase4");
-                string local5 = Path.Combine(WcPath, "statTst/LocalStatBase5");
-                string local6 = Path.Combine(WcPath, "statTst/LocalStatBase6");
+                client.Update(wcPath);
+                client.CreateDirectory(Path.Combine(wcPath, "statTst"));
+                string local = Path.Combine(wcPath, "statTst/LocalStatBase1");
+                string local2 = Path.Combine(wcPath, "statTst/LocalStatBase2");
+                string local3 = Path.Combine(wcPath, "statTst/LocalStatBase3");
+                string local4 = Path.Combine(wcPath, "statTst/LocalStatBase4");
+                string local5 = Path.Combine(wcPath, "statTst/LocalStatBase5");
+                string local6 = Path.Combine(wcPath, "statTst/LocalStatBase6");
 
                 SvnCommitResult ci, ci9;
 
                 Touch2(local);
                 client.Add(local);
-                client.Commit(WcPath, out ci);
+                client.Commit(wcPath, out ci);
 
                 client.Copy(local, local2);
-                client.Commit(WcPath);
+                client.Commit(wcPath);
 
                 client.SetProperty(local, "test-q", "value");
 
                 client.Copy(local, local3);
                 client.Copy(local, local6);
                 client.Copy(local, local5);
-                client.Commit(WcPath, out ci9);
+                client.Commit(wcPath, out ci9);
 
                 client.Copy(local, local4);
                 client.Delete(local5);
 
                 client.SetProperty(local, "test-q", "value2");
-                client.RemoteDelete(new Uri(ReposUrl, "statTst/LocalStatBase2"));
+                client.RemoteDelete(new Uri(reposUrl, "statTst/LocalStatBase2"));
                 client.AddToChangeList(local6, "MyList");
                 Touch2(local6);
 
                 Guid reposGuid;
 
-                client.TryGetRepositoryId(ReposUrl, out reposGuid);
+                client.TryGetRepositoryId(reposUrl, out reposGuid);
 
                 for (int mode = 0; mode < 4; mode++)
                 {
@@ -422,7 +422,7 @@ namespace SharpSvn.Tests.Commands
 
                     int n = 0;
 
-                    client.Status(Path.Combine(WcPath, "statTst"), a, delegate (object sender, SvnStatusEventArgs e)
+                    client.Status(Path.Combine(wcPath, "statTst"), a, delegate (object sender, SvnStatusEventArgs e)
                     {
                         n++;
                         string p = e.Path;
@@ -453,7 +453,7 @@ namespace SharpSvn.Tests.Commands
                         }
 
                         if (nn >= 0)
-                            Assert.That(Path.GetDirectoryName(e.FullPath), Is.EqualTo(Path.Combine(WcPath, "statTst")));
+                            Assert.That(Path.GetDirectoryName(e.FullPath), Is.EqualTo(Path.Combine(wcPath, "statTst")));
                         Assert.That(Path.GetFileName(e.Path), Is.EqualTo(Path.GetFileName(e.FullPath)));
 
                         switch (nn)
@@ -529,9 +529,9 @@ namespace SharpSvn.Tests.Commands
                         }
                         Assert.That(e.Switched, Is.False);
                         if (nn >= 0)
-                            Assert.That(e.Uri, Is.EqualTo(new Uri(ReposUrl, "statTst/localStatBase" + nn.ToString())));
+                            Assert.That(e.Uri, Is.EqualTo(new Uri(reposUrl, "statTst/localStatBase" + nn.ToString())));
                         else
-                            Assert.That(e.Uri, Is.EqualTo(new Uri(ReposUrl, "statTst/")));
+                            Assert.That(e.Uri, Is.EqualTo(new Uri(reposUrl, "statTst/")));
 
 
                         Assert.That(e.WorkingCopyInfo, Is.Not.Null);
@@ -546,7 +546,7 @@ namespace SharpSvn.Tests.Commands
                             Assert.That(e.WorkingCopyInfo.Checksum, Is.Not.Null);
 
                         Assert.That(e.WorkingCopyInfo.Uri, Is.EqualTo(e.Uri));
-                        Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.EqualTo(ReposUrl));
+                        Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.EqualTo(reposUrl));
                         /*if(a.ContactRepository)
                             Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(reposGuid));
                         else*/
@@ -565,7 +565,7 @@ namespace SharpSvn.Tests.Commands
                         if (nn == 4)
                         {
                             Assert.That(e.WorkingCopyInfo.IsCopy, Is.True);
-                            Assert.That(e.WorkingCopyInfo.CopiedFrom, Is.EqualTo(new Uri(ReposUrl, "statTst/localStatBase1")));
+                            Assert.That(e.WorkingCopyInfo.CopiedFrom, Is.EqualTo(new Uri(reposUrl, "statTst/localStatBase1")));
                             Assert.That(e.WorkingCopyInfo.LastChangeAuthor, Is.Not.Null);
                             Assert.That(e.WorkingCopyInfo.CopiedFromRevision, Is.EqualTo(ci.Revision + 2));
                         }
@@ -669,47 +669,47 @@ namespace SharpSvn.Tests.Commands
         {
             SvnSandBox sbox = new SvnSandBox(this);
             sbox.Create(SandBoxRepository.Empty, false);
-            string WcPath = sbox.Wc;
-            Uri ReposUrl = sbox.RepositoryUri;
+            string wcPath = sbox.Wc;
+            Uri reposUrl = sbox.RepositoryUri;
 
             using (SvnClient client = NewSvnClient(true, false))
             {
-                client.Update(WcPath);
-                client.CreateDirectory(Path.Combine(WcPath, "statTst"));
-                string local = Path.Combine(WcPath, "statTst/LocalStatBase1");
-                string local2 = Path.Combine(WcPath, "statTst/LocalStatBase2");
-                string local3 = Path.Combine(WcPath, "statTst/LocalStatBase3");
-                string local4 = Path.Combine(WcPath, "statTst/LocalStatBase4");
-                string local5 = Path.Combine(WcPath, "statTst/LocalStatBase5");
-                string local6 = Path.Combine(WcPath, "statTst/LocalStatBase6");
+                client.Update(wcPath);
+                client.CreateDirectory(Path.Combine(wcPath, "statTst"));
+                string local = Path.Combine(wcPath, "statTst/LocalStatBase1");
+                string local2 = Path.Combine(wcPath, "statTst/LocalStatBase2");
+                string local3 = Path.Combine(wcPath, "statTst/LocalStatBase3");
+                string local4 = Path.Combine(wcPath, "statTst/LocalStatBase4");
+                string local5 = Path.Combine(wcPath, "statTst/LocalStatBase5");
+                string local6 = Path.Combine(wcPath, "statTst/LocalStatBase6");
 
                 SvnCommitResult ci, ci8, ci9;
 
                 Touch2(local);
                 client.Add(local);
-                client.Commit(WcPath, out ci);
+                client.Commit(wcPath, out ci);
 
                 client.Copy(local, local2);
-                client.Commit(WcPath, out ci8);
+                client.Commit(wcPath, out ci8);
 
                 client.SetProperty(local, "test-q", "value");
 
                 client.Copy(local, local3);
                 client.Copy(local, local6);
                 client.Copy(local, local5);
-                client.Commit(WcPath, out ci9);
+                client.Commit(wcPath, out ci9);
 
                 client.Copy(local, local4);
                 client.Delete(local5);
 
                 client.SetProperty(local, "test-q", "value2");
-                client.RemoteDelete(new Uri(ReposUrl, "statTst/LocalStatBase2"));
+                client.RemoteDelete(new Uri(reposUrl, "statTst/LocalStatBase2"));
                 client.AddToChangeList(local6, "MyList");
                 Touch2(local6);
 
                 Guid reposGuid;
 
-                client.TryGetRepositoryId(ReposUrl, out reposGuid);
+                client.TryGetRepositoryId(reposUrl, out reposGuid);
 
                 for (int mode = 0; mode < 4; mode++)
                 {
@@ -720,7 +720,7 @@ namespace SharpSvn.Tests.Commands
 
                     int n = 0;
 
-                    client.Status(Path.Combine(WcPath, "statTst"), a, delegate (object sender, SvnStatusEventArgs e)
+                    client.Status(Path.Combine(wcPath, "statTst"), a, delegate (object sender, SvnStatusEventArgs e)
                     {
                         n++;
                         string p = e.Path;
@@ -751,7 +751,7 @@ namespace SharpSvn.Tests.Commands
                         }
 
                         if (nn >= 0)
-                            Assert.That(Path.GetDirectoryName(e.FullPath), Is.EqualTo(Path.Combine(WcPath, "statTst")));
+                            Assert.That(Path.GetDirectoryName(e.FullPath), Is.EqualTo(Path.Combine(wcPath, "statTst")));
                         Assert.That(Path.GetFileName(e.Path), Is.EqualTo(Path.GetFileName(e.FullPath)));
 
                         switch (nn)
@@ -827,9 +827,9 @@ namespace SharpSvn.Tests.Commands
                         }
                         Assert.That(e.Switched, Is.False);
                         if (nn >= 0)
-                            Assert.That(e.Uri, Is.EqualTo(new Uri(ReposUrl, "statTst/localStatBase" + nn.ToString())));
+                            Assert.That(e.Uri, Is.EqualTo(new Uri(reposUrl, "statTst/localStatBase" + nn.ToString())));
                         else
-                            Assert.That(e.Uri, Is.EqualTo(new Uri(ReposUrl, "statTst/")));
+                            Assert.That(e.Uri, Is.EqualTo(new Uri(reposUrl, "statTst/")));
 
 
                         Assert.That(e.WorkingCopyInfo, Is.Not.Null);
@@ -852,7 +852,7 @@ namespace SharpSvn.Tests.Commands
                         if (nn == 4)
                         {
                             Assert.That(e.LocalCopied, Is.True);
-                            Assert.That(e.WorkingCopyInfo.CopiedFrom, Is.EqualTo(new Uri(ReposUrl, "statTst/localStatBase1")));
+                            Assert.That(e.WorkingCopyInfo.CopiedFrom, Is.EqualTo(new Uri(reposUrl, "statTst/localStatBase1")));
                             Assert.That(e.LastChangeAuthor, Is.Not.Null);
                             Assert.That(e.WorkingCopyInfo.CopiedFromRevision, Is.EqualTo(ci.Revision + 2));
                         }
