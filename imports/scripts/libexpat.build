@@ -2,25 +2,7 @@
 <project basedir=".." default="build">
   <property name="libexpatDir" value="${platformRoot}\libexpat" />
 
-  <target name="libexpat-prepare" depends="checkout">
-    <OnceBlock file="build/libexpat-${expatVersion}-${platform}.merged">
-      <foreach item="File" property="patch">
-        <in>
-          <items basedir="${downloads}/../patches/libexpat">
-            <include name="*.patch" />
-          </items>
-        </in>
-        <do>
-          <Svn verbose="true">
-            <arg value="patch" />
-            <arg value="${patch}" />
-            <arg value="${libexpatDir}" />
-          </Svn>
-        </do>
-      </foreach>
-    </OnceBlock>
-  </target>
-  <target name="libexpat-build" depends="libexpat-prepare,cmake-prepare">
+  <target name="libexpat-build" depends="checkout,cmake-prepare">
     <OnceBlock file="build/libexpat-${expatVersion}-${platform}.build">
       <fileset basedir="${libexpatDir}">
         <include name="**/*.c" />
