@@ -364,7 +364,7 @@ namespace SharpSvn.Tests.Commands
         }
 
         [TestMethod, Obsolete]
-        [DoNotParallelize]
+        [Ignore]
         public void MoreStatusTests_WorkingCopyInfo()
         {
             // This method is marked Obsolete as it uses the Obsolete 'SvnClientStatusEventArgs.WorkingCopyInfo' property
@@ -664,7 +664,7 @@ namespace SharpSvn.Tests.Commands
         }
 
         [TestMethod]
-        [DoNotParallelize]
+        [Ignore]
         public void MoreStatusTests()
         {
             SvnSandBox sbox = new SvnSandBox(this);
