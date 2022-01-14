@@ -67,7 +67,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute("SharpSvn - Subversion for .Net 2.0-3.5 and 4.0")];
+[assembly:AssemblyTitleAttribute("SharpSvn - Subversion for .Net 4+ and .Net Core 3+")];
 [assembly:AssemblyDescriptionAttribute("SharpSvn, compiled statically with subversion " SVN_VER_NUMBER
     ", apr " APR_VERSION_STRING
     ", apr-util " APU_VERSION_STRING
