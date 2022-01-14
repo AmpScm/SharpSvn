@@ -1151,7 +1151,6 @@ bool SshConnection::DoPasswordAuth(AprPool^ scratchPool)
           CREDENTIALW cred;
           memset(&cred, sizeof(cred), 0);
 
-          pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
           pin_ptr<const wchar_t> pUserName = PtrToStringChars(_username);
           pin_ptr<const wchar_t> pPassword = PtrToStringChars(ee->Password);
 

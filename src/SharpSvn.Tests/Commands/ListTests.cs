@@ -175,24 +175,20 @@ namespace SharpSvn.Tests.Commands
         [TestMethod, Ignore]
         public void List_ParallelList()
         {
-            List<IAsyncResult> handlers = new List<IAsyncResult>();
+            List<Task> handlers = new List<Task>();
             for (int i = 0; i < 32; i++)
             {
                 int n = i;
-                EventHandler eh = delegate
+
+                handlers.Add(Task.Run(() =>
                 {
                     Trace.WriteLine("Starting job" + n.ToString());
                     new SvnClient().List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn"),
                         delegate { });
-                };
-
-                handlers.Add(eh.BeginInvoke(null, EventArgs.Empty, null, eh));
+                }));
             }
 
-            foreach (IAsyncResult ar in handlers)
-            {
-                ((EventHandler)ar.AsyncState).EndInvoke(ar);
-            }
+            Task.WaitAll(handlers.ToArray());
         }
 
         [TestMethod]

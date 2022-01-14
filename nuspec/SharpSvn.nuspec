@@ -35,6 +35,7 @@
     <file target="lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.dll" />
     <file target="lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" />
     <file target="lib/net40" src="../src/SharpSvn/bin/win32/release/SharpPlink-Win32.svnExe" />
+    <file target="lib/net40" src="../imports/release/bin/SharpSvn-DB44-20-win32.svnDll" />
     <!-- /legacy -->
 
     <!-- For PackageReference NuGet on .Net 4.x -->
@@ -48,6 +49,7 @@
     <file target="runtimes/win-x86/lib/net40" src="../src/SharpSvn/bin/win32/release/SharpSvn.xml" />
     <file target="runtimes/win-x86/lib/net40" src="../src/SharpSvn/bin/win32/release/SharpPlink-Win32.svnExe" />
     <file target="runtimes/win-x86/lib/net40" src="../imports/release/bin/SharpSvn-DB44-20-win32.svnDll" />
+
     <file target="runtimes/win-x64/lib/net40" src="../src/SharpSvn/bin/x64/release/SharpSvn.dll" />
     <file target="runtimes/win-x64/lib/net40" src="../src/SharpSvn/bin/x64/release/SharpSvn.pdb" />
     <file target="runtimes/win-x64/lib/net40" src="../src/SharpSvn/bin/x64/release/SharpSvn.xml" />
@@ -81,5 +83,14 @@
     <file target="runtimes/win-arm64/lib/netcoreapp" src="../src/SharpSvn/bin/arm64/releasecore/SharpSvn.xml" />
     <file target="runtimes/win-arm64/lib/netcoreapp" src="../src/SharpSvn/bin/arm64/releasecore/SharpPlink-ARM64.svnExe" />
     <file target="runtimes/win-arm64/lib/netcoreapp" src="../imports/release/bin/SharpSvn-DB44-20-ARM64.svnDll" />
+
+    <!-- Automatically copy .svnExe/.svnDll files with SharpSvn during build -->
+    <file target="build/win-x86/any" src="build/win-x86/SharpSvn.targets" />
+    <file target="build/win-x64/any" src="build/win-x64/SharpSvn.targets" />
+    <file target="build/win-arm64/any" src="build/win-arm64/SharpSvn.targets" />
+
+    <file target="buildTransitive/win-x86/any" src="build/win-x86/SharpSvn.targets" />
+    <file target="buildTransitive/win-x64/any" src="build/win-x64/SharpSvn.targets" />
+    <file target="buildTransitive/win-arm64/any" src="build/win-arm64/SharpSvn.targets" />
   </files>
 </package>

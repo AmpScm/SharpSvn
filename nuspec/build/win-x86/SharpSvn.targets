@@ -1,0 +1,31 @@
+<Svnect xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <SharpSvnExternalFiles
+       Condition=" '$(MSBuildThisFileDirectory)' != '' "
+       Include="$(MSBuildThisFileDirectory)\..\..\..\runtimes\win-x86\lib\netcoreapp\*.svnExe" />
+    <SharpSvnExternalFiles
+       Condition=" '$(MSBuildThisFileDirectory)' != '' "
+       Include="$(MSBuildThisFileDirectory)\..\..\..\runtimes\win-x86\lib\netcoreapp\*.svnDll" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ContentSharpSvnFiles)' != '' And
+                        '$(ContentSharpSvnFiles)' != 'false' And
+                        '@(SharpSvnExternalFiles)' != ''">
+    <Content Include="@(SharpSvnExternalFiles)">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="SharpSvnCopyExternalFiles" BeforeTargets="Build">
+    <Copy
+      SourceFiles="@(SharpSvnExternalFiles)"
+      DestinationFiles="@(SharpSvnExternalFiles -> '$(OutDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="SharpSvnCleanDbFiles" BeforeTargets="Clean">
+    <Delete Files="@(SharpSvnExternalFiles -> '$(OutDir)%(Filename)%(Extension)')" />
+  </Target>
+</Svnect>
