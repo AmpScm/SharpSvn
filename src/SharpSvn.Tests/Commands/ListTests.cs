@@ -183,8 +183,12 @@ namespace SharpSvn.Tests.Commands
                 handlers.Add(Task.Run(() =>
                 {
                     Trace.WriteLine("Starting job" + n.ToString());
-                    new SvnClient().List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn"),
+                    using (var cl = new SvnClient())
+                    {
+                        SetupAuth(cl);
+                        cl.List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn"),
                         delegate { });
+                    }
                 }));
             }
 

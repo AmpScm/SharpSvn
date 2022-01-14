@@ -2,7 +2,7 @@
   <metadata>
     <id>SharpSvn</id>
     <title>SharpSvn - Subversion for .Net</title>
-    <version>1.14000.12</version>
+    <version>>1.14000.12</version>
     <authors>SharpSvn</authors>
     <owners>SharpSvn</owners>
     <license type="expression">Apache-2.0</license>
@@ -12,7 +12,7 @@
     <description>SharpSvn is a binding of the Subversion Client API for .NET based on the actual Subversion code, which is included in this library.</description>
     <copyright>(C) Copyright 2006-2022 The SharpSvn Project</copyright>
     <tags>Subversion Svn SharpSvn</tags>
-    <repository type="git" url="https://github.com/AmpScm/SharpSvn.git" branch="main" />
+    <repository type="git" url="https://github.com/AmpScm/SharpSvn.git" branch="main" commit="" />
     <dependencies>
       <group targetFramework="net40">
       </group>
