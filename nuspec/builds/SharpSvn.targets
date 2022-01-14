@@ -1,0 +1,41 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(MSBuildThisFileDirectory)' != '' ">
+    <!-- Note that all these files are identical for CORE and NETFRAMEWORK, as they are just compiled once, and then used by SharpSvn -->
+    <SharpSvnPlatform Condition=" '$(SharpSvnPlatform)' == '' ">$(Platform)</SharpSvnPlatform>
+    <!-- Default -->
+    <SharpSvnRuntimeDir>$(MSBuildThisFileDirectory)\..\runtimes\win-x86\lib\netcoreapp\</SharpSvnRuntimeDir>
+    <!-- Overrides -->
+    <SharpSvnRuntimeDir Condition=" '$(SharpSvnPlatform)' == 'x86'   ">$(MSBuildThisFileDirectory)\..\runtimes\win-x86\lib\netcoreapp\</SharpSvnRuntimeDir>
+    <SharpSvnRuntimeDir Condition=" '$(SharpSvnPlatform)' == 'Win32' ">$(MSBuildThisFileDirectory)\..\runtimes\win-x86\lib\netcoreapp\</SharpSvnRuntimeDir>
+    <SharpSvnRuntimeDir Condition=" '$(SharpSvnPlatform)' == 'x64'   ">$(MSBuildThisFileDirectory)\..\runtimes\win-x64\lib\netcoreapp\</SharpSvnRuntimeDir>
+    <SharpSvnRuntimeDir Condition=" '$(SharpSvnPlatform)' == 'AMD64' ">$(MSBuildThisFileDirectory)\..\runtimes\win-x64\lib\netcoreapp\</SharpSvnRuntimeDir>
+    <SharpSvnRuntimeDir Condition=" '$(SharpSvnPlatform)' == 'ARM64' ">$(MSBuildThisFileDirectory)\..\runtimes\win-arm64\lib\netcoreapp\</SharpSvnRuntimeDir>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(SharpSvnRuntimeDir)' != '' ">
+    <SharpSvnExternalFiles Include="$(SharpSvnRuntimeDir)\*.svnExe" Condition=" '$(CopySharpSvnExternals)' != 'false' " />
+    <SharpSvnExternalFiles Include="$(SharpSvnRuntimeDir)\*.svnDll" Condition=" '$(CopySharpSvnExternals)' != 'false' " />
+    <SharpSvnExternalFiles Include="$(SharpSvnRuntimeDir)\*.xml" Condition=" '$(CopySharpSvnExternals)' != 'false' And '$(CopySharpSvnDocumentation)' != 'false'" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ContentSharpSvnExternalFiles)' != '' And
+                        '$(ContentSharpSvnExternalFiles)' != 'false' And
+                        '@(SharpSvnExternalFiles)' != ''">
+    <Content Include="@(SharpSvnExternalFiles)">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="SharpSvnCopyExternalFiles" BeforeTargets="Build">
+    <Copy
+      SourceFiles="@(SharpSvnExternalFiles)"
+      DestinationFiles="@(SharpSvnExternalFiles -> '$(OutDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="SharpSvnCleanDbFiles" BeforeTargets="Clean">
+    <Delete Files="@(SharpSvnExternalFiles -> '$(OutDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>
