@@ -8,7 +8,7 @@ on:
 
 env:
   SOLUTION_FILE_PATH: src/SharpSvn.sln
-  nant: '${{ github.workspace }}/imports/NAnt.0.92.0/tools/nant.exe'
+  nant: '${{ github.workspace }}/src/packages/NAnt.0.92.0/tools/nant.exe'
 
 jobs:
   build:
