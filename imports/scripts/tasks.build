@@ -6,9 +6,11 @@
         <include name="${nant::get-base-directory() + '/lib/common/neutral'}" asis="true" />
       </lib>
       <include name="System.dll" />
+      <include name="System.Core.dll" />
       <include name="System.Xml.dll" />
     </references>
     <imports>
+      <import namespace="System.Linq"/>
       <import namespace="System.Net"/>
       <import namespace="System.Xml"/>
       <import namespace="System.Xml.XPath"/>
@@ -543,13 +545,34 @@ public class Python : ExternalAppTask
 {
     string _appName;
 
+    public static string Python3Exe
+    {
+        get
+        {
+            string localAppData = System.Environment.GetEnvironmentVariable("LOCALAPPDATA");
+            if (string.IsNullOrEmpty(localAppData))
+                return null;
+
+            string dir = Path.Combine(localAppData, "Programs", "Python");
+            if (!Directory.Exists(dir))
+               return null;
+
+            dir = Directory.GetDirectories(dir, "Python3*").OrderByDescending(x => x).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+               return null;
+
+            return Path.Combine(dir, "python.exe");
+        }
+    }
+
     public override string ProgramFileName
     {
         get
         {
             if (_appName == null)
             {
-                return _appName = (Properties["PythonExe"] ?? base.ProgramFileName);
+                return _appName = Properties["PythonExe"] ?? Python3Exe ?? base.ProgramFileName;
             }
             else
                 return _appName;
@@ -598,7 +621,7 @@ public class SCons : ExternalAppTask
         {
             if (_appName == null)
             {
-                return _appName = Properties["PythonExe"] ?? base.ProgramFileName;
+                return _appName = Python.Python3Exe ?? Properties["PythonExe"] ?? base.ProgramFileName;
             }
             else
                 return _appName;
