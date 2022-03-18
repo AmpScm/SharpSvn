@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="serfDir" value="${platformRoot}/serf" />
   <property name="serfDebug" value="false" overwrite="false" />
-  <target name="serf-prepare" depends="checkout">
+  <target name="serf-merge" depends="checkout">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.merged" unless="${serfBuildType == 'trunk'}">
       <Svn if="${string::get-length(serfMerges) &gt; 0}">
         <arg value="merge" />
@@ -12,6 +12,8 @@
         <arg value="${serfDir}" />
       </Svn>
     </OnceBlock>
+  </target>
+  <target name="serf-patch" depends="serf-merge">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
       <foreach item="File" property="patch">
         <in>
@@ -29,7 +31,7 @@
       </foreach>
     </OnceBlock>
   </target>
-  <target name="serf-build" depends="serf-prepare, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
+  <target name="serf-build" depends="serf-patch, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.build">
       <fileset basedir="${serfDir}">
         <include name="**/*.c" />
@@ -106,7 +108,7 @@
       <arg value="--clean" />
     </SCons>
   </target>
-  <target name="serf-check" depends="serf-prepare">
+  <target name="serf-check" depends="serf-patch">
     <SCons workingdir="${serfDir}" verbose="true">
       <environment>
         <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
