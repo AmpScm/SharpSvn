@@ -20,9 +20,10 @@
     r1856397            - VS2019 build support
     r1860175-1860188    - VS2005/2008 build support fix
     r1890223,r1890668   - ARM64 support
+    r1899028            - VS2022 build support
   // -->
   <property name="subversionVersion" value="1.14.1" overwrite="false" />
-  <property name="subversionMerges" value="r1856397,r1860175-1860188,1890223,1890668" overwrite="false" />
+  <property name="subversionMerges" value="r1856397,r1860175-1860188,1890223,1890668,1899028" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
