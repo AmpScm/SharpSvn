@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  nant: '${{ github.workspace }}/imports/NAnt.0.92.0/tools/nant.exe'
+  nant: '${{ github.workspace }}/src/packages/NAnt.0.92.0/tools/nant.exe'
 
 jobs:
   build:
