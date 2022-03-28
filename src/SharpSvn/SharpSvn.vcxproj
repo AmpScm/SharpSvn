@@ -162,6 +162,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
+    <!-- HACK: Resolve a bug introduced by the changes to .NET 6, see following issue and PR:
+     https://github.com/dotnet/sdk/issues/18832 and https://github.com/dotnet/sdk/pull/19052
+     This PR switches DefaultAppHostRuntimeIdentifier back to win-x64 if TargetFrameworkVersion
+     is less than 5.0, which is wrong, since there are working libs in
+     ...\Microsoft.NETCore.App.Host.win-arm64\3.1.23\runtimes\win-arm64\native -->
+    <DefaultAppHostRuntimeIdentifier>win-arm64</DefaultAppHostRuntimeIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -202,6 +208,7 @@
     <CLRSupport>NetCore</CLRSupport>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
+    <DefaultAppHostRuntimeIdentifier>win-arm64</DefaultAppHostRuntimeIdentifier>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
