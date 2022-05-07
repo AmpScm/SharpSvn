@@ -114,8 +114,16 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
                       SVN_FS_CONFIG_COMPATIBLE_VERSION,
                       "1.8");
         break;
-        // fall through
     case SvnRepositoryCompatibility::Subversion19:
+        svn_hash_sets(fs_config,
+            SVN_FS_CONFIG_COMPATIBLE_VERSION,
+            "1.9");
+        break;
+    case SvnRepositoryCompatibility::Subversion110: // Includes 1.10-1.14
+        svn_hash_sets(fs_config,
+            SVN_FS_CONFIG_COMPATIBLE_VERSION,
+            "1.10");
+        break;
     case SvnRepositoryCompatibility::Default:
     default:
         // Use default format
