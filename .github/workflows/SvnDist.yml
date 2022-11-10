@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Git Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup Java
       uses: actions/setup-java@v2
@@ -23,7 +23,7 @@ jobs:
         java-version: '8'
 
     - name: Cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           imports/downloads
@@ -37,7 +37,7 @@ jobs:
       run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=1" "-D:CCNetProject=SlikSvn" -D:svnDist=true -D:gitBuild=true buildbot-build package-svndist
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: svndist-files
         path: |

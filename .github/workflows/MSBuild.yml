@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Git Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
@@ -30,7 +30,7 @@ jobs:
 
     - name: Cache preparations
       id: cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           imports/release
@@ -41,7 +41,7 @@ jobs:
 
     - name: Cache Import Downloads
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           imports/downloads
@@ -88,7 +88,7 @@ jobs:
       run: scripts\gh-build-nuget.cmd
 
     - name: Package nupkg files
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: nupkg-files
         path: nuspec/bin/*.nupkg
