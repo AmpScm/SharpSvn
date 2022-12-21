@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <Product Id="*" Name="Slik Subversion $(var.SvnFullVersion) ($(var.Platform))" Language="1033" Version="$(var.DistVersion)" Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Package Name="Slik Subversion $(var.SvnFullVersion) ($(var.Platform))" Language="1033" Version="$(var.DistVersion)" Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA" Compressed="no">
         <?if $(var.Platform) = x86 ?>
-        <?include Win32.wxi ?>
-        <?elseif $(var.Platform) = x64 ?>
-        <?include x64.wxi?>
-        <?elseif $(var.Platform) = ARM64 ?>
-        <?include arm64.wxi?>
-        <?else ?>
-        <Package />
-        <?endif ?>
+        <StandardDirectory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLBASE" />
+        </StandardDirectory>
+        <?else?>
+        <StandardDirectory Id="ProgramFiles64Folder">
+            <Directory Id="INSTALLBASE" />
+        </StandardDirectory>
+        <?endif?>
         <Media Id="1" Cabinet="SlikSvn.cab" EmbedCab="yes" CompressionLevel="high" />
         <Property Id="INSTALLLEVEL" Value="100" />
 
@@ -20,16 +19,16 @@
         </Upgrade>
 
         <Property Id="ShortProductName" Value="Subversion" />
-        <Property Id="ARPCONTACT">Subversion - users@subversion.collab.net</Property>
-        <Property Id="ARPURLINFOABOUT">http://subversion.apache.org/</Property>
-        <Property Id="ARPHELPLINK">http://svnbook.red-bean.com/</Property>
-        <Property Id="ARPURLUPDATEINFO">http://sliksvn.com/en/download//</Property>
-        <Property Id="ARPPRODUCTICON">ICON_Subversion</Property>
+        <Property Id="ARPCONTACT" Value="Subversion - users@subversion.collab.net" />
+        <Property Id="ARPURLINFOABOUT" Value="https://subversion.apache.org/" />
+        <Property Id="ARPHELPLINK" Value="https://svnbook.red-bean.com/" />
+        <Property Id="ARPURLUPDATEINFO" Value="https://sliksvn.com/en/download//" />
+        <Property Id="ARPPRODUCTICON" Value="ICON_Subversion" />
 
         <Icon Id="ICON_Subversion" SourceFile="$(sys.SOURCEFILEDIR)svn.ico" />
 
         <!-- Error messages -->
-        <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
+        <Property Id="VSDVERSIONMSG" Value="Unable to install because a newer version of this product is already installed." />
 
         <!-- Secure these -->
         <Property Id="PREVIOUSVERSIONINSTALLED" Secure="yes" />
@@ -43,23 +42,7 @@
 
         <WixVariable Id="WixUILicenseRtf" Value="SlikSvnLicense.rtf" />
 
-        <Directory Id="TARGETDIR" Name="SourceDir">
-            <Component Id="AddToPath" Guid="621896B6-6C44-4178-9A12-D88B43FC5AAE">
-                <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install">
-                    <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" />
-                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
-                </RegistryKey>
-                <?if "$(var.Platform)" != "x86" ?>
-                <RegistryKey Root="HKLM" Key="SOFTWARE\Wow6432Node\SlikSvn\Install">
-                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
-                </RegistryKey>
-                <?endif ?>
-                <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION]bin" Action="set" />
-            </Component>
-            <Directory Id="ProgramMenuFolder">
-                <Directory Id="SlikSvn_MENU" Name="Subversion" />
-            </Directory>
-        </Directory>
+
 
         <DirectoryRef Id="INSTALLBASE">
             <Directory Id="INSTALLLOCATION" Name="SlikSvn" FileSource="$(var.distDir)">
@@ -84,7 +67,7 @@
             </Directory>
         </DirectoryRef>
 
-        <UIRef Id="MyMondo" />
+        <!--UIRef Id="WixUI_Common" /-->
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
         <Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn, svnversion and svnmucc">
             <ComponentRef Id="AddToPath" />
@@ -93,7 +76,7 @@
             <ComponentGroupRef Id="svnmucc.exe" />
             <?if $(var.Platform) != ARM64 ?>
             <MergeRef Id="VC_CRT" />
-            <?endif ?>
+            <?endif?>
             <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
             <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
         </Feature>
@@ -107,7 +90,7 @@
             <ComponentGroupRef Id="svnsync.exe" />
             <?if $(var.Platform) != ARM64 ?>
             <MergeRef Id="VC_CRT" />
-            <?endif ?>
+            <?endif?>
             <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
             <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
         </Feature>
@@ -121,7 +104,7 @@
             <ComponentGroupRef Id="libsvnjavahl_1.dll" />
             <?if $(var.Platform) != ARM64 ?>
             <MergeRef Id="VC_CRT" />
-            <?endif ?>
+            <?endif?>
             <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
             <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
         </Feature>
@@ -130,7 +113,7 @@
             <ComponentGroupRef Id="svnserve.exe" />
             <?if $(var.Platform) != ARM64 ?>
             <MergeRef Id="VC_CRT" />
-            <?endif ?>
+            <?endif?>
             <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
             <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
         </Feature>
@@ -142,7 +125,7 @@
             <ComponentGroupRef Id="svn_populate_node_origins_index.exe" />
             <?if $(var.Platform) != ARM64 ?>
             <MergeRef Id="VC_CRT" />
-            <?endif ?>
+            <?endif?>
             <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
             <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
         </Feature>
@@ -152,14 +135,32 @@
 
         <UI>
             <InstallUISequence>
-                <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
-                <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND SVNREINSTALL="" AND NOT Installed</Custom>
+                <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts" Condition="NEWERVERSIONINSTALLED&lt;&gt;&quot;&quot; AND NOT Installed" />
+                <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION" Condition="EXACTVERSIONINSTALLED&lt;&gt;&quot;&quot; AND SVNREINSTALL=&quot;&quot; AND NOT Installed" />
             </InstallUISequence>
         </UI>
         <InstallExecuteSequence>
-            <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
-            <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND SVNREINSTALL="" AND NOT Installed</Custom>
-            <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
+            <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts" Condition="NEWERVERSIONINSTALLED&lt;&gt;&quot;&quot; AND NOT Installed" />
+            <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION" Condition="EXACTVERSIONINSTALLED&lt;&gt;&quot;&quot; AND SVNREINSTALL=&quot;&quot; AND NOT Installed" />
+            <RemoveExistingProducts After="InstallInitialize" Condition="PREVIOUSVERSIONINSTALLED&lt;&gt;&quot;&quot; OR EXACTVERSIONINSTALLED&lt;&gt;&quot;&quot;" />
         </InstallExecuteSequence>
-    </Product>
+
+        <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin\" DiskId="1">
+            <Component Id="AddToPath" Guid="621896B6-6C44-4178-9A12-D88B43FC5AAE">
+                <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install">
+                    <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" />
+                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
+                </RegistryKey>
+                <?if "$(var.Platform)" != "x86" ?>
+                <RegistryKey Root="HKLM" Key="SOFTWARE\Wow6432Node\SlikSvn\Install">
+                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
+                </RegistryKey>
+                <?endif?>
+                <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION]bin" Action="set" />
+            </Component>
+        </DirectoryRef>
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="SlikSvn_MENU" Name="Subversion" />
+        </StandardDirectory>
+    </Package>
 </Wix>
