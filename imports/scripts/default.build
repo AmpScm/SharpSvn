@@ -70,6 +70,7 @@
         <include name="${environment::get-variable('ProgramFiles')}" />
         <include name="Program Files (x86)" />
         <include name="Program Files" />
+        <include name="Program Files\Microsoft" />
       </items>
     </in>
     <do>
