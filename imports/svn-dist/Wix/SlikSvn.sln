@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31129.286
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33209.295
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SlikSvn", "SlikSvn.wixproj", "{A30BD3BB-A4E1-41B9-AC12-1993C739CB34}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "SlikSvn", "SlikSvn.wixproj", "{A30BD3BB-A4E1-41B9-AC12-1993C739CB34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

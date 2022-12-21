@@ -1,0 +1,153 @@
+[12-21-2022 14:13:40.557]: Converting project file SlikSvn.wixproj...
+[12-21-2022 14:13:42.111]: Warning: Did not find any valid version of package 'WixToolset.UI.wixext' on NuGet package source 'https://api.nuget.org/v3/index.json'. Using default version 4.0.0-rc.1.
+[12-21-2022 14:13:42.119]: Warning: Could not remove Compile items for '.wxs' from project file. The list of items did not match the set of files discovered at or beneath the project file folder.
+	Found 8 total Compile items:
+		F:\dev\SharpSvn\imports\svn-dist\Wix\../Release/Licenses/SharpSvn-Licenses.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Localization.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Relations.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs
+	Found 7 Compile items at or beneath the project folder:
+		F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Localization.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Relations.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs
+		F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs
+[12-21-2022 14:13:42.330]: Warning: Did not find any valid version of package 'WixToolset.Sdk' on NuGet package source 'https://api.nuget.org/v3/index.json'. Using default version 4.0.0-rc.1.
+[12-21-2022 14:13:42.330]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\Localization.wxs...
+[12-21-2022 14:13:42.336]: F:\dev\SharpSvn\imports\svn-dist\Wix\Localization.wxs : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.336]: F:\dev\SharpSvn\imports\svn-dist\Wix\Localization.wxs(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.336]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs...
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(19) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(19) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(19) : information WIX0065: [Converted] Custom action ids have changed in WiX v4 extensions to support platform-specific custom actions. For more information, see https://wixtoolset.org/docs/fourthree/#converting-custom-wixui-dialog-sets. (CustomActionIdsIncludePlatformSuffix)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(20) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(21) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(21) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(22) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(22) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(23) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(23) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(24) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(25) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(25) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(26) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(26) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(27) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(27) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(27) : information WIX0065: [Converted] Custom action ids have changed in WiX v4 extensions to support platform-specific custom actions. For more information, see https://wixtoolset.org/docs/fourthree/#converting-custom-wixui-dialog-sets. (CustomActionIdsIncludePlatformSuffix)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(28) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(29) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(30) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(30) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(31) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(31) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(32) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(32) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(33) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(33) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(34) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(34) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(35) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(35) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(36) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(37) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.338]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(38) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(38) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(39) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(40) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(41) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(42) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(43) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(43) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(44) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(44) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(45) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(45) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(46) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(46) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(47) : information WIX0022: [Converted] Using Publish element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.339]: F:\dev\SharpSvn\imports\svn-dist\Wix\MyMondo.wxs(47) : information WIX0026: [Converted] Adding Condition='1' on Publish elements is no longer necessary. Remove the Condition attribute. (PublishConditionOneUnnecessary)
+[12-21-2022 14:13:42.339]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs...
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(2) : information WIX0023: [Converted] Using '*' for the Product Id attribute is unnecessary. Remove the attribute to remove the redundancy. (AutoGuidUnnecessary)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(2) : information WIX0030: [Converted] The Product and Package elements have been renamed and reorganized for simplicity. (ProductAndPackageRenamed)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(2) : information WIX0035: [Converted] Breaking change: The default value for Package/@InstallerVersion has been changed to '500' regardless of build platform. If you need a lower version, set it manually in the Package element. (InstallerVersionBehaviorChange)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(21) : information WIX0022: [Converted] Using Property element text is deprecated. Use the 'Value' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(22) : information WIX0022: [Converted] Using Property element text is deprecated. Use the 'Value' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(23) : information WIX0022: [Converted] Using Property element text is deprecated. Use the 'Value' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(24) : information WIX0022: [Converted] Using Property element text is deprecated. Use the 'Value' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(25) : information WIX0022: [Converted] Using Property element text is deprecated. Use the 'Value' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(30) : information WIX0022: [Converted] Using Property element text is deprecated. Use the 'Value' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs : information WIX0058: [Converted] The TARGETDIR directory should no longer be explicitly defined. Remove the Directory element with Id attribute 'TARGETDIR'. (TargetDirDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(137) : information WIX0022: [Converted] Using Custom element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(138) : information WIX0022: [Converted] Using Custom element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(142) : information WIX0022: [Converted] Using Custom element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(143) : information WIX0022: [Converted] Using Custom element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(144) : information WIX0022: [Converted] Using RemoveExistingProducts element text is deprecated. Use the 'Condition' attribute instead. (InnerTextDeprecated)
+[12-21-2022 14:13:42.340]: F:\dev\SharpSvn\imports\svn-dist\Wix\Product.wxs(159) : information WIX0059: [Converted] Standard directories such as 'ProgramMenuFolder' should no longer be defined using the Directory element. Use the StandardDirectory element instead. (DefiningStandardDirectoryDeprecated)
+[12-21-2022 14:13:42.340]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\Relations.wxs...
+[12-21-2022 14:13:42.342]: F:\dev\SharpSvn\imports\svn-dist\Wix\Relations.wxs : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.342]: F:\dev\SharpSvn\imports\svn-dist\Wix\Relations.wxs(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.342]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs...
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(8) : information WIX0012: [Converted] The file id is being updated to 'svn.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(15) : information WIX0012: [Converted] The file id is being updated to 'svnversion.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(23) : information WIX0012: [Converted] The file id is being updated to 'svnadmin.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(30) : information WIX0012: [Converted] The file id is being updated to 'svnsync.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(37) : information WIX0012: [Converted] The file id is being updated to 'svnlook.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(44) : information WIX0012: [Converted] The file id is being updated to 'svndumpfilter.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(51) : information WIX0012: [Converted] The file id is being updated to 'svnrdump.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(59) : information WIX0012: [Converted] The file id is being updated to 'svnserve.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxs(67) : information WIX0012: [Converted] The file id is being updated to 'svnmucc.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.344]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs...
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(8) : information WIX0012: [Converted] The file id is being updated to 'svn.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(15) : information WIX0012: [Converted] The file id is being updated to 'svnversion.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(23) : information WIX0012: [Converted] The file id is being updated to 'svnadmin.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(30) : information WIX0012: [Converted] The file id is being updated to 'svnsync.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(37) : information WIX0012: [Converted] The file id is being updated to 'svnlook.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(44) : information WIX0012: [Converted] The file id is being updated to 'svndumpfilter.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(51) : information WIX0012: [Converted] The file id is being updated to 'svnrdump.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(59) : information WIX0012: [Converted] The file id is being updated to 'svnserve.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxs(67) : information WIX0012: [Converted] The file id is being updated to 'svnmucc.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.345]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs...
+[12-21-2022 14:13:42.347]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(8) : information WIX0012: [Converted] The file id is being updated to 'svn.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(15) : information WIX0012: [Converted] The file id is being updated to 'svnversion.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(23) : information WIX0012: [Converted] The file id is being updated to 'svnadmin.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(30) : information WIX0012: [Converted] The file id is being updated to 'svnsync.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(37) : information WIX0012: [Converted] The file id is being updated to 'svnlook.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(44) : information WIX0012: [Converted] The file id is being updated to 'svndumpfilter.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(51) : information WIX0012: [Converted] The file id is being updated to 'svnrdump.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(59) : information WIX0012: [Converted] The file id is being updated to 'svnserve.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxs(67) : information WIX0012: [Converted] The file id is being updated to 'svnmucc.exe' to ensure it remains the same as the v3 default (AssignAnonymousFileId)
+[12-21-2022 14:13:42.376]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxi...
+[12-21-2022 14:13:42.378]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxi : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.378]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxi(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.378]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxi : information WIX0066: [Converted] The TARGETDIR directory should no longer be explicitly referenced. Remove the DirectoryRef element with Id attribute 'TARGETDIR'. (StandardDirectoryRefDeprecated)
+[12-21-2022 14:13:42.378]: F:\dev\SharpSvn\imports\svn-dist\Wix\Win32.wxi(5) : information WIX0059: [Converted] Standard directories such as 'ProgramFilesFolder' should no longer be defined using the Directory element. Use the StandardDirectory element instead. (DefiningStandardDirectoryDeprecated)
+[12-21-2022 14:13:42.378]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxi...
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxi : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxi(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxi : information WIX0066: [Converted] The TARGETDIR directory should no longer be explicitly referenced. Remove the DirectoryRef element with Id attribute 'TARGETDIR'. (StandardDirectoryRefDeprecated)
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\X64.wxi(5) : information WIX0059: [Converted] Standard directories such as 'ProgramFiles64Folder' should no longer be defined using the Directory element. Use the StandardDirectory element instead. (DefiningStandardDirectoryDeprecated)
+[12-21-2022 14:13:42.379]: Converting file: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxi...
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxi : information WIX0005: [Converted] This file contains an XML declaration on the first line. (DeclarationPresent)
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxi(1) : information WIX0009: [Converted] The namespace 'http://schemas.microsoft.com/wix/2006/wi' is out of date. It must be 'http://wixtoolset.org/schemas/v4/wxs'. (XmlnsValueWrong)
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxi : information WIX0066: [Converted] The TARGETDIR directory should no longer be explicitly referenced. Remove the DirectoryRef element with Id attribute 'TARGETDIR'. (StandardDirectoryRefDeprecated)
+[12-21-2022 14:13:42.379]: F:\dev\SharpSvn\imports\svn-dist\Wix\ARM64.wxi(5) : information WIX0059: [Converted] Standard directories such as 'ProgramFiles64Folder' should no longer be defined using the Directory element. Use the StandardDirectory element instead. (DefiningStandardDirectoryDeprecated)
+[12-21-2022 14:13:42.380]: ---- Project SlikSvn: Converted 10 files.
+[12-21-2022 14:13:42.380]: ---- Total time: 01.823
+[12-21-2022 14:13:42.380]: ========== Import complete:  0 errors, 3 warnings
