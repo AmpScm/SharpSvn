@@ -19,6 +19,14 @@
   <property name="sconsPlatform" value="arm" if="${platform == 'ARM'}" />
 
   <target name="scons-install" depends="checkout">
+    <property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
+    <if test="${string::contains(VCINSTALLDIR, '\Preview\')}">
+      <FilterFile file="${sconsDir}\scons-local-${sconsVersion}\SCons\Tool\MSCommon\vc.py">
+        <filterchain>
+          <replacestring from='_cmd = [vswhere_path] ' to='_cmd = [vswhere_path, "-prerelease"] ' />
+        </filterchain>
+      </FilterFile>
+    </if>
   </target>
 
 </project>
