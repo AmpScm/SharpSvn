@@ -173,7 +173,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.1" />
     <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="System.CodeDom" Version="6.0.0" />
+    <PackageReference Include="System.CodeDom" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
