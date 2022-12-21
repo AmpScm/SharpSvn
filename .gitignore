@@ -4,6 +4,7 @@
 /imports/downloads/
 /imports/svn-dist/build/
 /imports/svn-dist/release/
+/imports/svn-dist/dist-*/
 /imports/NAnt.*/
 /imports/release/
 .vs/
