@@ -85,6 +85,7 @@
   <if test="${javaHome == '' and environment::variable-exists('JAVA_HOME')}">
     <property name="javaHome" value="${environment::get-variable('JAVA_HOME')}" />
   </if>
+  <property name="javaHome" value="${string::substring(javaHome, 0, string::get-length(javaHome)-1)}" if="${string::ends-with(javaHome, '\')}" />
   <echo message="Found Java support in: ${javaHome}" if="${javaHome!=''}" />
   <setenv>
     <variable name="OPENSSL_STATIC" value="1" />
