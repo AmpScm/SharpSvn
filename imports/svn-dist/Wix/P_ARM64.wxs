@@ -1,21 +1,21 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <?if $(var.Platform) = ARM64 ?>
     <Fragment>
-        <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin" DiskId="1">
+        <DirectoryRef Id="APPLICATIONFOLDER_BIN" FileSource="$(var.distDir)\bin" DiskId="1">
             <!--Merge SourceFile="..\..\msm\Microsoft_VC140_CRT_ARM64.msm" Id="VC_CRT" Language="1033"/-->
             <!-- Primary Client Applications -->
             <Component Id="svn.exe" Guid="9185318F-33B9-4E1E-B955-D916C5C7A2C2">
                 <File Id="svn.exe" Name="svn.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svn.exe">
                     <RegistryValue Value="[#svn.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svnversion.exe" Guid="222F54B6-DFA8-4A79-AFF3-AD682766AACB">
                 <File Id="svnversion.exe" Name="svnversion.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnversion.exe">
                     <RegistryValue Value="[#svnversion.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <!-- Local Repository Tools -->
@@ -23,35 +23,35 @@
                 <File Id="svnadmin.exe" Name="svnadmin.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnadmin.exe">
                     <RegistryValue Value="[#svnadmin.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svnsync.exe" Guid="CCB4D6DF-40E4-4F36-9867-993081894353">
                 <File Id="svnsync.exe" Name="svnsync.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnsync.exe">
                     <RegistryValue Value="[#svnsync.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svnlook.exe" Guid="F6D94B42-9420-46F4-88FE-D6AA3DF02C03">
                 <File Id="svnlook.exe" Name="svnlook.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnlook.exe">
                     <RegistryValue Value="[#svnlook.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svndumpfilter.exe" Guid="030E7230-609C-41A2-A72A-49F968D98CD1">
                 <File Id="svndumpfilter.exe" Name="svndumpfilter.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svndumpfilter.exe">
                     <RegistryValue Value="[#svndumpfilter.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svnrdump.exe" Guid="762C6567-F393-427A-9DE4-24D013449EB5">
                 <File Id="svnrdump.exe" Name="svnrdump.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnrdump.exe">
                     <RegistryValue Value="[#svnrdump.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <!-- SvnServe -->
@@ -59,7 +59,7 @@
                 <File Id="svnserve.exe" Name="svnserve.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnserve.exe">
                     <RegistryValue Value="[#svnserve.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <!-- Extra Tools -->
@@ -67,21 +67,21 @@
                 <File Id="svnmucc.exe" Name="svnmucc.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnmucc.exe">
                     <RegistryValue Value="[#svnmucc.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svnauthz.exe" Guid="E003FB89-9D67-46DE-BA6E-30269E78BB4E">
                 <File Id="svnauthz.exe" Name="svnauthz.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnauthz.exe">
                     <RegistryValue Value="[#svnauthz.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svnbench.exe" Guid="2904C6C1-8CD7-4B9E-8DF9-53095FFE2823">
                 <File Id="svnbench.exe" Name="svnbench.exe" KeyPath="yes" Checksum="yes" />
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnbench.exe">
                     <RegistryValue Value="[#svnbench.exe]" Type="string" />
-                    <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+                    <RegistryValue Name="Path" Value="[APPLICATIONFOLDER_BIN]" Type="string" />
                 </RegistryKey>
             </Component>
             <Component Id="svnauthz_validate.exe" Guid="F1799CC4-748F-4B22-8510-48643F3004D0">
@@ -94,7 +94,7 @@
                 <File Id="svnfsfs.exe" Name="svnfsfs.exe" KeyPath="yes" Checksum="yes" />
             </Component>
         </DirectoryRef>
-        <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin" DiskId="1">
+        <DirectoryRef Id="APPLICATIONFOLDER_BIN" FileSource="$(var.distDir)\bin" DiskId="1">
             <Component Id="DB.dll" Guid="C8505BB2-34BD-48C1-8C9C-7A74FE431CDC">
                 <File Id="DB44_20.dll" Name="SlikSvn-DB44-20-ARM64.dll" KeyPath="yes" Checksum="yes" />
             </Component>

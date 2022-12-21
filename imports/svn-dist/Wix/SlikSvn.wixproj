@@ -1,72 +1,74 @@
 <Project Sdk="WixToolset.Sdk/4.0.0-rc.1">
-  <PropertyGroup>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SvnVersion Condition="'$(SvnVersion)' == ''">1.7.4</SvnVersion>
-    <SvnSuffix Condition="'$(SvnSuffix)' == ''">0</SvnSuffix>
-    <SvnFullVersion Condition="'$(SvnFullVersion)' != ''">$(SvnVersion)</SvnFullVersion>
-    <SvnFullVersion Condition="'$(SvnFullVersion)' != '' and '$(SvnSuffix)' != '0'">$(SvnVersion)-$(SvnSuffix)</SvnFullVersion>
-    <DistVersion Condition="'$(DistVersion)' == ''">$(SvnVersion)</DistVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=$(SvnVersion);platform=Win32;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\dist-win32\</OutputPath>
-    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=$(SvnVersion);platform=x64;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
-    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\dist-x64\</OutputPath>
-    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
-    <DefineConstants>Debug;distDir=../dist-ARM64;SvnVersion=$(SvnVersion);platform=ARM64;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
-    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
-    <OutputPath>..\dist-ARM64\</OutputPath>
-    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-ARM64;platform=ARM64;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'x86'">
-    <OutputName>Slik-Subversion-$(SvnFullVersion)-win32</OutputName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'x64'">
-    <OutputName>Slik-Subversion-$(SvnFullVersion)-x64</OutputName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'ARM64'">
-    <OutputName>Slik-Subversion-$(SvnFullVersion)-ARM64</OutputName>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Localization.wxs" />
-    <Compile Include="Product.wxs" />
-    <Compile Include="Relations.wxs" />
-    <Compile Include="P_Win32.wxs" />
-    <Compile Include="P_X64.wxs" />
-    <Compile Include="P_ARM64.wxs" />
-    <Compile Include="../Release/Licenses/SharpSvn-Licenses.wxs">
-      <Link>SharpSvn-Licenses.wxs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0-rc.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SlikSvnLicense.rtf" />
-  </ItemGroup>
-  <PropertyGroup Condition="'$(DistBuild)' == 'true'">
-    <SuppressValidation>True</SuppressValidation>
-  </PropertyGroup>
+    <PropertyGroup>
+        <UpgradeCode>38BD67A1-0135-414F-82ED-3BF0F30C87AA</UpgradeCode>
+    </PropertyGroup>
+    <PropertyGroup>
+        <SvnVersion Condition="'$(SvnVersion)' == ''">1.7.4</SvnVersion>
+        <SvnSuffix Condition="'$(SvnSuffix)' == ''">0</SvnSuffix>
+        <SvnFullVersion Condition="'$(SvnFullVersion)' != ''">$(SvnVersion)</SvnFullVersion>
+        <SvnFullVersion Condition="'$(SvnFullVersion)' != '' and '$(SvnSuffix)' != '0'">$(SvnVersion)-$(SvnSuffix)</SvnFullVersion>
+        <DistVersion Condition="'$(DistVersion)' == ''">$(SvnVersion)</DistVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+        <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=$(SvnVersion);platform=Win32;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+        <SuppressIces>ICE43;ICE57;ICE61</SuppressIces>
+        <InstallerPlatform>x86</InstallerPlatform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+        <OutputPath>..\dist-win32\</OutputPath>
+        <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+        <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+        <InstallerPlatform>x86</InstallerPlatform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+        <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=$(SvnVersion);platform=x64;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+        <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+        <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+        <InstallerPlatform>x64</InstallerPlatform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+        <OutputPath>..\dist-x64\</OutputPath>
+        <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+        <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+        <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+        <InstallerPlatform>x64</InstallerPlatform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+        <DefineConstants>Debug;distDir=../dist-ARM64;SvnVersion=$(SvnVersion);platform=ARM64;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+        <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+        <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+        <InstallerPlatform>arm64</InstallerPlatform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+        <OutputPath>..\dist-ARM64\</OutputPath>
+        <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+        <DefineConstants>distDir=../dist-ARM64;platform=ARM64;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
+        <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+        <InstallerPlatform>arm64</InstallerPlatform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(DistBuild)' == 'true'">
+        <SuppressValidation>True</SuppressValidation>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Platform)' == 'x86'">
+        <OutputName>Slik-Subversion-$(SvnFullVersion)-win32</OutputName>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Platform)' == 'x64'">
+        <OutputName>Slik-Subversion-$(SvnFullVersion)-x64</OutputName>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Platform)' == 'ARM64'">
+        <OutputName>Slik-Subversion-$(SvnFullVersion)-ARM64</OutputName>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0-rc.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="SlikSvnLicense.rtf" />
+        <Compile Include="../Release/Licenses/SharpSvn-Licenses.wxs">
+            <Link>SharpSvn-Licenses.wxs</Link>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="WixToolset.UI.wixext" />
+    </ItemGroup>
 </Project>
