@@ -1,12 +1,12 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-    <Package Name="Slik Subversion $(var.SvnFullVersion) ($(var.Platform))" Language="1033" Version="$(var.DistVersion)" Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA" Compressed="no">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+    <Package Name="Slik Subversion $(var.SvnFullVersion) ($(var.Platform))" Language="1033" Version="$(var.DistVersion)" Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA" Compressed="yes">
         <?if $(var.Platform) = x86 ?>
         <StandardDirectory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLBASE" />
+            <Directory Id="APPLICATIONFOLDER" />
         </StandardDirectory>
         <?else?>
         <StandardDirectory Id="ProgramFiles64Folder">
-            <Directory Id="INSTALLBASE" />
+            <Directory Id="APPLICATIONFOLDER" />
         </StandardDirectory>
         <?endif?>
         <Media Id="1" Cabinet="SlikSvn.cab" EmbedCab="yes" CompressionLevel="high" />
@@ -22,7 +22,7 @@
         <Property Id="ARPCONTACT" Value="Subversion - users@subversion.collab.net" />
         <Property Id="ARPURLINFOABOUT" Value="https://subversion.apache.org/" />
         <Property Id="ARPHELPLINK" Value="https://svnbook.red-bean.com/" />
-        <Property Id="ARPURLUPDATEINFO" Value="https://sliksvn.com/en/download//" />
+        <Property Id="ARPURLUPDATEINFO" Value="https://sliksvn.com/en/download/" />
         <Property Id="ARPPRODUCTICON" Value="ICON_Subversion" />
 
         <Icon Id="ICON_Subversion" SourceFile="$(sys.SOURCEFILEDIR)svn.ico" />
@@ -42,10 +42,12 @@
 
         <WixVariable Id="WixUILicenseRtf" Value="SlikSvnLicense.rtf" />
 
+        <Property Id="ApplicationFolderName" Value="SlikSvn" />
+        <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+        <WixVariable Id="WixUISupportPerUser" Value="0" />
 
-
-        <DirectoryRef Id="INSTALLBASE">
-            <Directory Id="INSTALLLOCATION" Name="SlikSvn" FileSource="$(var.distDir)">
+        <DirectoryRef Id="APPLICATIONFOLDER">
+            <Directory Id="INSTALLLOCATION" FileSource="$(var.distDir)">
                 <Component Id="SvnBook" Guid="3FB6C20B-97EE-4C9F-994F-DC1D1C3A09AB">
                     <File Id="SvnBook.pdf" Name="svn-book.pdf" KeyPath="yes" />
                     <Shortcut Id="SvnBookSc" Directory="SlikSvn_MENU" Target="[#SvnBook.pdf]" Name="Version Control with Subversion" Description="Open the Subversion book in your PDF viewer" />
@@ -59,7 +61,7 @@
                     <File Id="ReleaseNotes.html" Name="ReleaseNotes.html" KeyPath="yes" />
                     <Shortcut Id="ReleaseNotesSc" Directory="SlikSvn_MENU" Target="[#ReleaseNotes.html]" Name="Release Notes" Description="Open the Subversion Release Notes" />
                 </Component>
-                <Directory Id="INSTALLLOCATION_BIN" Name="bin" />
+                <Directory Id="APPLICATIONFOLDER_BIN" Name="bin" />
                 <Directory Id="DIR_SharpSvnLicenses" Name="Licenses" />
                 <Directory Id="DIR_Share" Name="Share">
                     <Directory Id="DIR_Share_Locale" Name="Locale" />
@@ -67,8 +69,11 @@
             </Directory>
         </DirectoryRef>
 
-        <!--UIRef Id="WixUI_Common" /-->
-        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+        <UI Id="UI">
+            <ui:WixUI Id="WixUI_Advanced" />
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Condition="NOT Installed" Order="2" />
+            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2"/>
+        </UI>
         <Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn, svnversion and svnmucc">
             <ComponentRef Id="AddToPath" />
             <ComponentGroupRef Id="svn.exe" />
@@ -145,15 +150,15 @@
             <RemoveExistingProducts After="InstallInitialize" Condition="PREVIOUSVERSIONINSTALLED&lt;&gt;&quot;&quot; OR EXACTVERSIONINSTALLED&lt;&gt;&quot;&quot;" />
         </InstallExecuteSequence>
 
-        <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin\" DiskId="1">
+        <DirectoryRef Id="APPLICATIONFOLDER_BIN" FileSource="$(var.distDir)\bin\">
             <Component Id="AddToPath" Guid="621896B6-6C44-4178-9A12-D88B43FC5AAE">
                 <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install">
-                    <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" />
-                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
+                    <RegistryValue Type="string" Name="Location" Value="[APPLICATIONFOLDER_BIN]" KeyPath="yes" />
+                    <RegistryValue Type="string" Name="Bin" Value="[APPLICATIONFOLDER_BIN]" />
                 </RegistryKey>
                 <?if "$(var.Platform)" != "x86" ?>
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Wow6432Node\SlikSvn\Install">
-                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
+                    <RegistryValue Type="string" Name="Bin" Value="[APPLICATIONFOLDER_BIN]" />
                 </RegistryKey>
                 <?endif?>
                 <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION]bin" Action="set" />
