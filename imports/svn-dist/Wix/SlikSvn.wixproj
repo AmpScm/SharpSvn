@@ -64,8 +64,8 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include="SlikSvnLicense.rtf" />
-        <Compile Include="../Release/Licenses/SharpSvn-Licenses.wxs">
-            <Link>SharpSvn-Licenses.wxs</Link>
+        <Compile Include="../Release/Licenses/SharpSvn-Licenses-v4.wxs">
+            <Link>SharpSvn-Licenses-v4.wxs</Link>
         </Compile>
     </ItemGroup>
     <ItemGroup>

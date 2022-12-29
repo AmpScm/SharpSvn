@@ -297,5 +297,8 @@
     <copy
       file="${downloads}/../scripts/SharpSvn-Licenses.wxs"
       tofile="release/licenses/SharpSvn-Licenses.wxs" />
+    <copy
+      file="${downloads}/../scripts/SharpSvn-Licenses-v4.wxs"
+      tofile="release/licenses/SharpSvn-Licenses-v4.wxs" />
   </target>
 </project>
