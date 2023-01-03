@@ -42,8 +42,10 @@
 
         <!-- Always install in C:\Program Files if the architecture matches, instead of always to X86 -->
         <!-- Workaround Wix Bug: https://github.com/wixtoolset/issues/issues/2165 -->
+        <?if $(var.Platform) = x86 ?>
+        <?else?>
         <CustomAction Id="Overwrite_WixSetDefaultPerMachineFolder" Property="WixPerMachineFolder"
-                        Value="[$(var.PlatformProgramFilesFolder)][ApplicationFolderName]" Execute="immediate" />
+                        Value="[ProgramFiles64Folder][ApplicationFolderName]" Execute="immediate" />
         <InstallUISequence>
             <Custom Action="Overwrite_WixSetDefaultPerMachineFolder" After="WixSetDefaultPerMachineFolder" />
         </InstallUISequence>
@@ -51,6 +53,7 @@
             <Custom Action="Overwrite_WixSetDefaultPerMachineFolder" After="WixSetDefaultPerMachineFolder" />
         </InstallExecuteSequence>
         <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
+        <?endif?>
 
         <DirectoryRef Id="APPLICATIONFOLDER">
             <Directory Id="INSTALLLOCATION" FileSource="$(var.distDir)">
