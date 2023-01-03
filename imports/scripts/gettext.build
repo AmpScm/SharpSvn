@@ -110,7 +110,8 @@ ${intlh}
           <define name="LIBDIR" value="1" />
           <define name="WIN32" value="1" />
           <define name="_WIN32" value="1" />
-          <define name="WIN64" value="1" if="${platform == 'x64'}" />
+          <define name="_WIN32_WINNT" value="0x0601" />
+          <define name="WIN64" value="1" if="${platform != 'win32'}" />
           <define name="alloca" value="_alloca" />
         </defines>
         <includedirs>

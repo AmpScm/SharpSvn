@@ -22,8 +22,8 @@
         <define name="NDEBUG" />
         <define name="WIN32" />
         <define name="WINNT" />
-        <define name="WIN64" if="${platform=='x64'}" />
-        <define name="_WIN32_WINNT" value="0x0501" />
+        <define name="WIN64" if="${platform != 'win32'}" />
+        <define name="_WIN32_WINNT" value="0x0601" />
 
         <!-- Store temporary tables in RAM, unless requested otherwise -->
         <define name="SQLITE_TEMP_STORE" value="2" />

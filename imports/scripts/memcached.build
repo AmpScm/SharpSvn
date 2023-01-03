@@ -263,8 +263,8 @@ typedef unsigned long long uint_fast64_t;
         <define name="WIN32" />
         <define name="WINNT" />
         <define name="__WIN32__" />
-        <define name="WIN64" if="${platform=='x64'}" />
-        <define name="_WIN32_WINNT" value="0x0501" />
+        <define name="WIN64" if="${platform != 'win32'}" />
+        <define name="_WIN32_WINNT" value="0x0601" />
 
         <define name="inline" value="__inline" />
         <define name="strcasecmp" value="stricmp" />
