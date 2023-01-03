@@ -151,7 +151,7 @@
       unless="${directory::exists(sqliteDir)}">
 
       <arg value="co" />
-      <arg value="https://github.com/azadkuh/sqlite-amalgamation/tags/${sqliteVersion}/" />
+      <arg value="https://github.com/rhuijben/sqlite-amalgamation/tags/${sqliteVersion}/" />
       <arg value="${sqliteDir}" />
       <arg value="-q" />
     </Svn>
