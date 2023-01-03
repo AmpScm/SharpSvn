@@ -1,14 +1,8 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
     <Package Name="Slik Subversion $(var.SvnFullVersion) ($(var.Platform))" Language="1033" Version="$(var.DistVersion)" Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA" Compressed="yes">
-        <?if $(var.Platform) = x86 ?>
         <StandardDirectory Id="ProgramFilesFolder">
             <Directory Id="APPLICATIONFOLDER" />
         </StandardDirectory>
-        <?else?>
-        <StandardDirectory Id="ProgramFiles64Folder">
-            <Directory Id="APPLICATIONFOLDER" />
-        </StandardDirectory>
-        <?endif?>
         <Media Id="1" Cabinet="SlikSvn.cab" EmbedCab="yes" CompressionLevel="high" />
         <Property Id="INSTALLLEVEL" Value="100" />
 
@@ -61,7 +55,7 @@
                     <File Id="ReleaseNotes.html" Name="ReleaseNotes.html" KeyPath="yes" />
                     <Shortcut Id="ReleaseNotesSc" Directory="SlikSvn_MENU" Target="[#ReleaseNotes.html]" Name="Release Notes" Description="Open the Subversion Release Notes" />
                 </Component>
-                <Directory Id="APPLICATIONFOLDER_BIN" Name="bin" />
+                <Directory Id="INSTALLLOCATION_BIN" Name="bin" />
                 <Directory Id="DIR_SharpSvnLicenses" Name="Licenses" />
                 <Directory Id="DIR_Share" Name="Share">
                     <Directory Id="DIR_Share_Locale" Name="Locale" />
@@ -150,15 +144,15 @@
             <RemoveExistingProducts After="InstallInitialize" Condition="PREVIOUSVERSIONINSTALLED&lt;&gt;&quot;&quot; OR EXACTVERSIONINSTALLED&lt;&gt;&quot;&quot;" />
         </InstallExecuteSequence>
 
-        <DirectoryRef Id="APPLICATIONFOLDER_BIN" FileSource="$(var.distDir)\bin\">
+        <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin\">
             <Component Id="AddToPath" Guid="621896B6-6C44-4178-9A12-D88B43FC5AAE">
                 <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install">
-                    <RegistryValue Type="string" Name="Location" Value="[APPLICATIONFOLDER_BIN]" KeyPath="yes" />
-                    <RegistryValue Type="string" Name="Bin" Value="[APPLICATIONFOLDER_BIN]" />
+                    <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" />
+                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
                 </RegistryKey>
                 <?if "$(var.Platform)" != "x86" ?>
                 <RegistryKey Root="HKLM" Key="SOFTWARE\Wow6432Node\SlikSvn\Install">
-                    <RegistryValue Type="string" Name="Bin" Value="[APPLICATIONFOLDER_BIN]" />
+                    <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
                 </RegistryKey>
                 <?endif?>
                 <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION]bin" Action="set" />
