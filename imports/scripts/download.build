@@ -13,8 +13,6 @@
 
   <property name="sconsFilename" value="scons-local-${sconsVersion}.zip" />
 
-  <property name="refasmerFilename" value="Refasmer.net461.${refasmerVersion}.zip" />
-
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
 
@@ -75,12 +73,6 @@
       src="https://prdownloads.sourceforge.net/scons/${sconsFilename}"
       dest="${downloads + sconsFilename}"
       unless="${file::exists(downloads + sconsFilename)}" />
-
-
-    <get
-      src="https://github.com/JetBrains/Refasmer/releases/download/${refasmerVersion}/Refasmer.net461.${refasmerVersion}.zip"
-      dest="${downloads + refasmerFilename}"
-      unless="${file::exists(downloads + refasmerFilename)}" />
   </target>
 
   <target name="extract" depends="download">
@@ -141,12 +133,5 @@
       encoding="utf-8"
       unless="${directory::exists(junitDir)}"
       if="${javaHome != '' and buildJavaHL}" />
-
-    <unzip
-      zipfile="${downloads + refasmerFilename}"
-      todir="build/refasmer"
-      encoding="utf-8"
-      unless="${directory::exists('build/refasmer')}" />
-
   </target>
 </project>

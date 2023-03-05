@@ -28,7 +28,8 @@ if NOT EXIST ".\obj\." mkdir obj
 if NOT EXIST ".\bin\." mkdir bin
 
 pushd obj
-..\..\imports\build\refasmer\refasmerExe ..\..\src\SharpSvn\bin\Win32\Release\SharpSvn.dll && copy SharpSvn.dll.refasm.dll SharpSvn.dll || exit /B 1
+dotnet tool install -g JetBrains.Refasmer.CliTool
+refasmer -o SharpSvn.dll -w ..\..\src\SharpSvn\bin\Win32\Release\SharpSvn.dll || exit /B 1
 popd
 
 
