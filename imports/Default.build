@@ -34,7 +34,7 @@
   <property name="opensslVersion" value="1.1.1s" overwrite="false" />
 
   <property name="aprVersion" value="1.6.5" overwrite="false" />
-  <property name="aprUtilVersion" value="1.6.1" overwrite="false" />
+  <property name="aprUtilVersion" value="1.6.3" overwrite="false" />
   <property name="aprIconvVersion" value="1.2.2" overwrite="false" />
   <property name="dbVersion" value="4.4.20" overwrite="false" />
   <property name="expatVersion" value="2.5.0" overwrite="false" />
