@@ -17,13 +17,14 @@ Index: src/agent.c
      char mapname[23];
      HANDLE filemap;
      unsigned char *p;
-@@ -294,10 +298,14 @@
+@@ -294,11 +298,15 @@
          return _libssh2_error(agent->session, LIBSSH2_ERROR_AGENT_PROTOCOL,
                                "found no pageant");
  
 +    psa = SharpSvn_CreateSecurityAttributes(hwnd);
 +
-     sprintf(mapname, "PageantRequest%08x", (unsigned)GetCurrentThreadId());
+     snprintf(mapname, sizeof(mapname),
+             "PageantRequest%08x", (unsigned)GetCurrentThreadId());
 -    filemap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE,
 +    filemap = CreateFileMapping(INVALID_HANDLE_VALUE, psa, PAGE_READWRITE,
                                  0, PAGEANT_MAX_MSGLEN, mapname);
