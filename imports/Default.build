@@ -22,7 +22,7 @@
     r1890223,r1890668   - ARM64 support
     r1899028            - VS2022 build support
   // -->
-  <property name="subversionVersion" value="1.14.2" overwrite="false" />
+  <property name="subversionVersion" value="1.14.3" overwrite="false" />
   <property name="subversionMerges" value="r1856397,r1860175-1860188,1890223,1890668,1899028,1900882,1900890" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
@@ -31,7 +31,7 @@
   <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088,1861036" overwrite="false" />
 
   <!-- -->
-  <property name="opensslVersion" value="1.1.1u" overwrite="false" />
+  <property name="opensslVersion" value="3.0.12" overwrite="false" />
 
   <property name="aprVersion" value="1.7.4" overwrite="false" />
   <property name="aprUtilVersion" value="1.6.3" overwrite="false" />
