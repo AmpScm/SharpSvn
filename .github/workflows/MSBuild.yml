@@ -1,6 +1,7 @@
 name: MSBuild
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main, stable/* ]
   pull_request:
@@ -84,11 +85,11 @@ jobs:
     - name: VSTest-Core-x64
       run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
-    - name: Create nupkg files
-      run: scripts\gh-build-nuget.cmd
+    #- name: Create nupkg files
+     # run: scripts\gh-build-nuget.cmd
 
-    - name: Package nupkg files
-      uses: actions/upload-artifact@v3
-      with:
-        name: nupkg-files
-        path: nuspec/bin/*.nupkg
+    #- name: Package nupkg files
+     # uses: actions/upload-artifact@v3
+      #with:
+      #  name: nupkg-files
+       # path: nuspec/bin/*.nupkg
