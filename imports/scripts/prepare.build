@@ -63,8 +63,8 @@
 
       <arg value="co" />
 	  <!--OpenSSL changed naming and seperation characters with 3.0-->
-	  <arg value="https://github.com/openssl/openssl/tags/openssl-${opensslVersion}/" if="${version::parse(opensslVersion) &gt;= version::parse('3.0.0')}"/>
-	  <arg value="https://github.com/openssl/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" if="${version::parse(opensslVersion) &lt; version::parse('3.0.0')}"/>
+	  <arg value="https://github.com/openssl/openssl/tags/openssl-${opensslVersion}/" if="${opensslVersion &gt;= '3.0.'}"/>
+	  <arg value="https://github.com/openssl/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" if="${opensslVersion &lt; '3.0.'}"/>
       <arg value="${opensslDir}" />
       <arg value="-q" />
     </Svn>
