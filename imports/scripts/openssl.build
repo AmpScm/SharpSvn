@@ -45,7 +45,6 @@
         <arg value="no-shared" if="${static}" />
         <arg value="shared" if="${not static}" />
         <arg value="no-hw" if="${opensslVersion &lt; '3.0.'}"/> <!-- Not supported openSSl 3.x -->
-        <arg value="no-deprecated" if="${opensslVersion &gt;= '3.0.'}"/> <!-- Supported by openSSl 3.x -->
         <arg value="no-ssl3" />
         <arg value="no-gost" if="${static}"/>
         <arg value="no-dtls" />
