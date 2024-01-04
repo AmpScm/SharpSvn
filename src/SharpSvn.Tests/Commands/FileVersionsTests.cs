@@ -170,11 +170,12 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [TestMethod]
+        // Does not work because this repository does not exist anymore
+        //[TestMethod]
         public void FileVersions_WalkMe()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
-            SvnUriTarget me = new SvnUriTarget(new Uri("https://github.com/AmpScm/SharpSvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
+            SvnUriTarget me = new SvnUriTarget(new Uri("https://github.com/AmpScm/SharpSvn/trunk/src/SharpSvn.Tests/Commands/FileVersionsTest.cs"), 931);
             a.End = 931;
 
             int n = 0;
@@ -190,7 +191,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(n, Is.EqualTo(7));
         }
 
-        [TestMethod]
+        // Does not work because this repository does not exist anymore
+        //[TestMethod]
         public void FileVersions_WalkChange()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
