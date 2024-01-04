@@ -34,23 +34,23 @@ namespace SharpSvn.Tests
         {
             SvnClient cl = NewSvnClient(false, false);
             bool found = false;
-        SvnListArgs la = new SvnListArgs();
-        la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
+            SvnListArgs la = new SvnListArgs();
+            la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
 
-                    cl.List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk"), la, delegate(object Sender, SvnListEventArgs e)
-                    {
-                            Assert.That(e.Entry, Is.Not.Null);
-                            Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
-                            Assert.That(e.Entry.Author, Is.Not.Null);
-                            found = true;
-                    });
+            cl.List(new Uri("https://github.com/AmpScm/SharpSvn/trunk"), la, delegate(object Sender, SvnListEventArgs e)
+            {
+                    Assert.That(e.Entry, Is.Not.Null);
+                    Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
+                    Assert.That(e.Entry.Author, Is.Not.Null);
+                    found = true;
+            });
 
-                    Assert.That(found);
+            Assert.That(found);
 
-                    Collection<SvnListEventArgs> ee;
-        cl.GetList(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk"), out ee);
-                    Assert.That(ee, Is.Not.Null);
-                    Assert.That(ee[0].Entry.Author, Is.Not.Null);
+            Collection<SvnListEventArgs> ee;
+            cl.GetList(new Uri("https://github.com/AmpScm/SharpSvn/trunk"), out ee);
+            Assert.That(ee, Is.Not.Null);
+            Assert.That(ee[0].Entry.Author, Is.Not.Null);
         }
 
         [TestMethod,Ignore]

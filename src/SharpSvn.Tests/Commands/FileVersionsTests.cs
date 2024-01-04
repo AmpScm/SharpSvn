@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -174,7 +174,7 @@ namespace SharpSvn.Tests.Commands
         public void FileVersions_WalkMe()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
-            SvnUriTarget me = new SvnUriTarget(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
+            SvnUriTarget me = new SvnUriTarget(new Uri("https://github.com/AmpScm/SharpSvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
             a.End = 931;
 
             int n = 0;
@@ -194,7 +194,7 @@ namespace SharpSvn.Tests.Commands
         public void FileVersions_WalkChange()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
-            SvnUriTarget me = new SvnUriTarget(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
+            SvnUriTarget me = new SvnUriTarget(new Uri("https://github.com/AmpScm/SharpSvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
             a.Start = 927;
             a.End = 928;
             int n = 0;

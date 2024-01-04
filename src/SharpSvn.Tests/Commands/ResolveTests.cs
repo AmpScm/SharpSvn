@@ -85,7 +85,7 @@ namespace SharpSvn.Tests.Commands
         public void Resolve_RepeatedEventHookUp_SOC_411()
         {
             SvnSandBox sbox = new SvnSandBox(this);
-            Uri projectRoot = new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/scripts");
+            Uri projectRoot = new Uri("https://github.com/AmpScm/SharpSvn/trunk/scripts");
 
             using (var svnClient = NewSvnClient(false, false))
             {

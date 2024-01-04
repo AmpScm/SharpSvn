@@ -161,11 +161,11 @@ namespace SharpSvn.Tests.Commands
                 Client.Authentication.Clear();
                 Client.Authentication.DefaultCredentials = new NetworkCredential("guest", "");
 
-                client.List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk"),
+                client.List(new Uri("https://github.com/AmpScm/SharpSvn/trunk"),
                     delegate(object sender, SvnListEventArgs e)
                     {
-                        Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/")));
-                        Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/")));
+                        Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("https://github.com/AmpScm/SharpSvn/")));
+                        Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://github.com/AmpScm/SharpSvn/trunk/")));
                         Assert.That(e.BasePath, Is.EqualTo("/trunk"));
                     });
 
@@ -319,7 +319,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [TestMethod]
+        // Does not work because this repository does not exist anymore
+        //[TestMethod]
         public void List_TestHash()
         {
             using (SvnClient client = NewSvnClient(false, false))
