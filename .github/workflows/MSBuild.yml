@@ -64,6 +64,11 @@ jobs:
     - name: Build-x64
       run: msbuild.exe /r /v:m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
+    - name: Load dotnet core 3.1.x 
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '3.1.x'
+    
     - name: Build-x86-Core
       run: msbuild.exe /r /v:m /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
@@ -85,11 +90,11 @@ jobs:
     - name: VSTest-Core-x64
       run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
-    #- name: Create nupkg files
-     # run: scripts\gh-build-nuget.cmd
+    - name: Create nupkg files
+      run: scripts\gh-build-nuget.cmd
 
-    #- name: Package nupkg files
-     # uses: actions/upload-artifact@v3
-      #with:
-      #  name: nupkg-files
-       # path: nuspec/bin/*.nupkg
+    - name: Package nupkg files
+      uses: actions/upload-artifact@v3
+      with:
+        name: nupkg-files
+        path: nuspec/bin/*.nupkg
