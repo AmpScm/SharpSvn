@@ -25,10 +25,12 @@ jobs:
     - name: Setup VSTest Path
       uses: darenm/Setup-VSTest@v1.2
 
-    - name: Load dotnet core 3.1.100 
+    - name: Load dotnet core 3.1.100 and 3.1.x
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '3.1.100'
+        dotnet-version: |
+          3.1.100
+          3.1.x
 
     - name: Install NAnt
       working-directory: imports/
