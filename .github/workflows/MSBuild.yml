@@ -25,6 +25,11 @@ jobs:
     - name: Setup VSTest Path
       uses: darenm/Setup-VSTest@v1.2
 
+    - name: Load dotnet core 3.1.100 
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '3.1.100'
+
     - name: Install NAnt
       working-directory: imports/
       run: nuget.exe install NAnt
@@ -63,12 +68,7 @@ jobs:
 
     - name: Build-x64
       run: msbuild.exe /r /v:m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
-
-    - name: Load dotnet core 3.1.x 
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '3.1.x'
-    
+      
     - name: Build-x86-Core
       run: msbuild.exe /r /v:m /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
