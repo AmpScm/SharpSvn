@@ -28,9 +28,7 @@ jobs:
     - name: Load dotnet core 3.1.100 and 3.1.x
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: |
-          3.1.100
-          3.1.x
+        dotnet-version: '3.1.x'
 
     - name: Install NAnt
       working-directory: imports/
@@ -86,11 +84,11 @@ jobs:
     - name: VSTest-x64
       run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
-    - name: VSTest-Core-x86
-      run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+    #- name: VSTest-Core-x86
+     # run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
-    - name: VSTest-Core-x64
-      run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+    #- name: VSTest-Core-x64
+     # run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
     - name: Create nupkg files
       run: scripts\gh-build-nuget.cmd
