@@ -49,25 +49,27 @@
       </foreach>
     </OnceBlock>
 
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(zlibDir)}">
 
-      <arg value="co" />
-      <arg value="https://github.com/madler/zlib/tags/v${zlibVersion}/" />
+      <arg value="clone" />
+	  <arg value="--branch=v${zlibVersion}" />
+	  <arg value="--depth=1" />
+      <arg value="https://github.com/madler/zlib.git" />
       <arg value="${zlibDir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
 
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(opensslDir)}">
 
-      <arg value="co" />
+      <arg value="clone" />
 	  <!--OpenSSL changed naming and seperation characters with 3.0-->
-	  <arg value="https://github.com/openssl/openssl/tags/openssl-${opensslVersion}/" if="${opensslVersion &gt;= '3.0.'}"/>
-	  <arg value="https://github.com/openssl/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" if="${opensslVersion &lt; '3.0.'}"/>
+	  <arg value="--branch=openssl-${opensslVersion}" if="${opensslVersion &gt;= '3.0.'}"/>
+	  <arg value="--branch=OpenSSL_${string::replace(opensslVersion,'.','_')}" if="${opensslVersion &lt; '3.0.'}"/>
+	  <arg value="--depth=1" />
+	  <arg value="https://github.com/openssl/openssl.git" />
       <arg value="${opensslDir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
 
     <Svn
       if="${buildHttpd}"
@@ -90,15 +92,16 @@
       <arg value="-q" />
     </Svn>
 
-    <Svn
+    <exec program="git" verbose="true"
       if="${buildHttpd}"
       unless="${directory::exists(nghttp2Dir)}">
 
-      <arg value="co" />
-      <arg value="https://github.com/tatsuhiro-t/nghttp2/tags/v${nghttp2Version}/" />
+      <arg value="clone" />
+	  <arg value="--branch=v${nghttp2Version}" />
+	  <arg value="--depth=1" />
+      <arg value="https://github.com/tatsuhiro-t/nghttp2.git" />
       <arg value="${nghttp2Dir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
 
     <Svn
       if="${buildHttpd}"
@@ -129,14 +132,23 @@
       <arg value="-q" />
     </Svn>
 
-    <Svn
-      unless="${directory::exists(libexpatDir)}">
+	<get src="https://github.com/libexpat/libexpat/archive/refs/tags/R_${string::replace(expatVersion,'.','_')}.zip" dest="${downloads + 'libexpat_R_' + string::replace(expatVersion,'.','_')}.zip" unless="${file::exists(downloads + 'libexpat_R_' + string::replace(expatVersion,'.','_')+'.zip')}"/>
+	
+	<unzip zipfile="${downloads + 'libexpat_R_' + string::replace(expatVersion,'.','_')}.zip"
+	  todir="build"
+      encoding="utf-8"
+      unless="${directory::exists('build/libexpat-R_' + string::replace(expatVersion,'.','_'))}" />
+	<copy todir="${libexpatDir}">
+		<fileset basedir="${'build/libexpat-R_' + string::replace(expatVersion,'.','_')}/expat" />
+	</copy>
+    <!-- <Svn -->
+      <!-- unless="${directory::exists(libexpatDir)}"> -->
 
-      <arg value="co" />
-      <arg value="https://github.com/libexpat/libexpat/tags/R_${string::replace(expatVersion,'.','_')}/expat/" />
-      <arg value="${libexpatDir}" />
-      <arg value="-q" />
-    </Svn>
+      <!-- <arg value="co" /> -->
+      <!-- <arg value="https://github.com/libexpat/libexpat/tags/R_${string::replace(expatVersion,'.','_')}/expat/" /> -->
+      <!-- <arg value="${libexpatDir}" /> -->
+      <!-- <arg value="-q" /> -->
+    <!-- </Svn> -->
 
     <Svn
       unless="${directory::exists(serfDir)}">
@@ -149,42 +161,42 @@
       <arg value="-q" />
     </Svn>
 
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(sqliteDir)}">
-
-      <arg value="co" />
-      <arg value="https://github.com/rhuijben/sqlite-amalgamation/tags/${sqliteVersion}/" />
+      <arg value="clone" />
+	  <arg value="--depth=1" />
+	  <arg value="--branch=${sqliteVersion}" />
+      <arg value="https://github.com/rhuijben/sqlite-amalgamation.git" />
       <arg value="${sqliteDir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
 
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(saslDir)}">
-
-      <arg value="co" />
-      <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
+      <arg value="clone" />
+	  <arg value="--depth=1" />
+	  <arg value="--branch=cyrus-sasl-${saslVersion}" />
+      <arg value="https://github.com/rhuijben/cyrus-sasl.git" />
       <arg value="${saslDir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
 
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
-
-      <arg value="co" />
-      <arg value="https://github.com/libssh2/libssh2/trunk/"                         if="${libssh2BuildType == 'trunk'}" />
-      <arg value="https://github.com/libssh2/libssh2/tags/libssh2-${libssh2Version}" if="${libssh2BuildType == 'tag'}" />
+      <arg value="clone" />
+	  <arg value="--depth=1" />
+	  <arg value="" if="${libssh2BuildType == 'trunk'}"/>
+	  <arg value="--branch=libssh2-${libssh2Version}" if="${libssh2BuildType == 'tag'}"/>
+      <arg value="https://github.com/libssh2/libssh2.git" />
       <arg value="${libssh2Dir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
 
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(libeventDir)}" if="${buildLibevent}">
-
-      <arg value="co" />
-      <arg value="https://github.com/libevent/libevent/tags/release-${libeventVersion}"/>
+      <arg value="clone" />
+	  <arg value="--depth=1" />
+	  <arg value="--branch=release-${libeventVersion}" />
+      <arg value="https://github.com/libevent/libevent.git"/>
       <arg value="${libeventDir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
 
     <Svn
       unless="${directory::exists(pthreadwin32Dir)}" if="${buildPthreadwin32}">
@@ -196,24 +208,24 @@
       <arg value="-q" />
     </Svn>
 
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(memcachedDir)}" if="${buildMemcached}">
-
-      <arg value="co" />
-      <arg value="https://github.com/memcached/memcached/branches/engine-pu" if="${memcachedBuildType == 'trunk'}" />/>
-      <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}" if="${memcachedBuildType == 'tag'}" />/>
+      <arg value="clone" />
+	  <arg value="--depth=1" />
+	  <arg value="--branch=engine-pu" if="${memcachedBuildType == 'trunk'}"/>
+	  <arg value="--branch=${memcachedVersion}" if="${memcachedBuildType == 'tag'}"/>
+      <arg value="https://github.com/memcached/memcached.git"  />/>
       <arg value="${memcachedDir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
     
-    <Svn
+    <exec program="git" verbose="true"
       unless="${directory::exists(py3cDir)}">
-
-      <arg value="co" />
-      <arg value="https://github.com/encukou/py3c/tags/v${py3cVersion}/" />
+      <arg value="clone" />
+	  <arg value="--depth=1" />
+	  <arg value="--branch=v${py3cVersion}" />
+      <arg value="https://github.com/encukou/py3c.git" />
       <arg value="${py3cDir}" />
-      <arg value="-q" />
-    </Svn>
+    </exec>
   </target>
 
   <filterchain id="license-filter">
