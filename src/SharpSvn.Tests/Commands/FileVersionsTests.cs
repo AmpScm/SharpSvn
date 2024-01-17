@@ -170,13 +170,12 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        // Does not work because this repository does not exist anymore
-        //[TestMethod]
+        [TestMethod]
         public void FileVersions_WalkMe()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
-            SvnUriTarget me = new SvnUriTarget(new Uri("https://github.com/AmpScm/SharpSvn/trunk/src/SharpSvn.Tests/Commands/FileVersionsTest.cs"), 931);
-            a.End = 931;
+            SvnUriTarget me = new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/win-tests.py"), 874950);
+            a.End = 874950;
 
             int n = 0;
 
@@ -188,17 +187,16 @@ namespace SharpSvn.Tests.Commands
                     n++;
                 });
 
-            Assert.That(n, Is.EqualTo(7));
+            Assert.That(n, Is.EqualTo(93));
         }
 
-        // Does not work because this repository does not exist anymore
-        //[TestMethod]
+        [TestMethod]
         public void FileVersions_WalkChange()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
-            SvnUriTarget me = new SvnUriTarget(new Uri("https://github.com/AmpScm/SharpSvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
-            a.Start = 927;
-            a.End = 928;
+            SvnUriTarget me = new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/win-tests.py"), 874950);
+            a.Start =873511;
+            a.End = 873512;
             int n = 0;
 
             Client.FileVersions(me, a,

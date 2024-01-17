@@ -161,12 +161,12 @@ namespace SharpSvn.Tests.Commands
                 Client.Authentication.Clear();
                 Client.Authentication.DefaultCredentials = new NetworkCredential("guest", "");
 
-                client.List(new Uri("https://github.com/AmpScm/SharpSvn/trunk"),
+                client.List(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/"),
                     delegate(object sender, SvnListEventArgs e)
                     {
-                        Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("https://github.com/AmpScm/SharpSvn/")));
-                        Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://github.com/AmpScm/SharpSvn/trunk/")));
-                        Assert.That(e.BasePath, Is.EqualTo("/trunk"));
+                        Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/")));
+                        Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/")));
+                        Assert.That(e.BasePath, Is.EqualTo("/subversion/trunk"));
                     });
 
             }
