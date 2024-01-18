@@ -45,12 +45,24 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: ${{env.nant}} -f:tools/buildbot.build buildbot-build
 
+      - name: Save dependecy artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release
+
   build-x86:
     needs: dependencies
     runs-on: windows-2022
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
@@ -64,12 +76,36 @@ jobs:
       - name: Build-x86
         run: msbuild.exe /r /v:m /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-x86-artifacts
+          path: |
+            src/**/bin/win32/Release
+            src/**/bin/Release/
+            src/**/bin/x86/Release/
+
   test-x86:
     needs: build-x86
     runs-on: windows-2022
     steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
       - name: Setup VSTest Path
         uses: darenm/Setup-VSTest@v1.2
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
+      - name: Restore build-x86 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-x86-artifacts
+          path: src/
 
       - name: VSTest-x86
         run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
@@ -80,6 +116,12 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
@@ -93,12 +135,35 @@ jobs:
       - name: Build-x64
         run: msbuild.exe /r /v:m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-x64-artifacts
+          path: |
+            src/**/bin/Release/
+            src/**/bin/x64/Release/
+
   test-x64:
     needs: build-x64
     runs-on: windows-2022
     steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
       - name: Setup VSTest Path
         uses: darenm/Setup-VSTest@v1.2
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
+      - name: Restore build-x64 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-x64-artifacts
+          path: src/
 
       - name: VSTest-x64
         run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
@@ -109,6 +174,12 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
@@ -129,12 +200,44 @@ jobs:
       - name: Build-x86-Core
         run: msbuild.exe /r /v:m /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-x86-core-artifacts
+          path: |
+            src/**/bin/win32/ReleaseCore/
+            src/**/bin/ReleaseCore/
+            src/**/bin/Release/
+            src/**/bin/x86/ReleaseCore/
+
   test-x86-core:
     needs: build-x86-core
     runs-on: windows-2022
     steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Load dotnet core 3.1.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '3.1.x'
+        env:
+          DOTNET_MULTILEVEL_LOOKUP: false
+
       - name: Setup VSTest Path
         uses: darenm/Setup-VSTest@v1.2
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
+      - name: Restore build-x86-core artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-x86-core-artifacts
+          path: src/
 
       - name: VSTest-Core-x86
         run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
@@ -147,6 +250,12 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
@@ -167,12 +276,43 @@ jobs:
       - name: Build-x64-Core
         run: msbuild.exe /r /v:m /p:Platform=x64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-x64-core-artifacts
+          path: |
+            src/**/bin/ReleaseCore/
+            src/**/bin/Release/
+            src/**/bin/x64/ReleaseCore/
+
   test-x64-core:
     needs: build-x64-core
     runs-on: windows-2022
     steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Load dotnet core 3.1.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '3.1.x'
+        env:
+          DOTNET_MULTILEVEL_LOOKUP: false
+
       - name: Setup VSTest Path
         uses: darenm/Setup-VSTest@v1.2
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
+      - name: Restore build-x64-core artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-x64-core-artifacts
+          path: src/
 
       - name: VSTest-Core-x64
         run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
@@ -185,7 +325,20 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
-        
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
+      - name: Load dotnet core 3.1.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '3.1.x'
+        env:
+          DOTNET_MULTILEVEL_LOOKUP: false
+
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
 
@@ -202,6 +355,12 @@ jobs:
     needs: [test-x86, test-x64, test-x86-core, test-x64-core, build-arm64-core]
     runs-on: windows-2022
     steps:
+      - name: Restore build-x64-core artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-*-artifacts
+          path: src/
+
       - name: Create nupkg files
         run: scripts\gh-build-nuget.cmd
 
