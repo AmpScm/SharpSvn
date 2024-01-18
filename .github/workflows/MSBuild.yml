@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - name: Git Checkout
@@ -29,10 +29,15 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '3.1.x'
+      env:
+        DOTNET_MULTILEVEL_LOOKUP: false
 
     - name: Install NAnt
       working-directory: imports/
       run: nuget.exe install NAnt
+      
+    - name: Check installed .NET
+      run: dotnet --list-sdks
 
     - name: Cache preparations
       id: cache
@@ -84,11 +89,15 @@ jobs:
     - name: VSTest-x64
       run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
 
-    #- name: VSTest-Core-x86
-     # run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+    - name: VSTest-Core-x86
+      run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+      env:
+        DOTNET_MULTILEVEL_LOOKUP: false
 
-    #- name: VSTest-Core-x64
-     # run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+    - name: VSTest-Core-x64
+      run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+      env:
+        DOTNET_MULTILEVEL_LOOKUP: false
 
     - name: Create nupkg files
       run: scripts\gh-build-nuget.cmd
