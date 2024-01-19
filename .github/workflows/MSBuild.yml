@@ -1,7 +1,6 @@
 name: MSBuildV2
 
 on:
-  workflow_dispatch:
   push:
     branches: [ main, stable/* ]
   pull_request:
@@ -185,11 +184,6 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
 
-      - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '3.1.x'
-
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
@@ -240,11 +234,6 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
-
-      - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '3.1.x'
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v4
@@ -310,11 +299,6 @@ jobs:
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
-
-      - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '3.1.x'
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
