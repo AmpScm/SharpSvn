@@ -184,12 +184,10 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
 
-      - name: Load dotnet core 3.1.100 and 3.1.x
+      - name: Load dotnet core 3.1.x
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '3.1.x'
-        env:
-          DOTNET_MULTILEVEL_LOOKUP: false
 
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
@@ -216,13 +214,6 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
-
-      - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '3.1.x'
-        env:
-          DOTNET_MULTILEVEL_LOOKUP: false
 
       - name: Setup VSTest Path
         uses: darenm/Setup-VSTest@v1.2
@@ -251,6 +242,11 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v4
 
+      - name: Load dotnet core 3.1.x
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '3.1.x'
+
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v4
         with:
@@ -259,13 +255,6 @@ jobs:
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
-
-      - name: Load dotnet core 3.1.100 and 3.1.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '3.1.x'
-        env:
-          DOTNET_MULTILEVEL_LOOKUP: false
 
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
@@ -291,13 +280,6 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v4
-
-      - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '3.1.x'
-        env:
-          DOTNET_MULTILEVEL_LOOKUP: false
 
       - name: Setup VSTest Path
         uses: darenm/Setup-VSTest@v1.2

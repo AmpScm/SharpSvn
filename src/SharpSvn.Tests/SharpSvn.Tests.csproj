@@ -23,8 +23,8 @@
   <PropertyGroup>
     <!-- Somehow needed for NuGet restore -->
     <TargetFramework>net47</TargetFramework>
-    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">netcoreapp3.1</TargetFramework>
-    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">netcoreapp3.1</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">net6.0</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">net6.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
@@ -39,7 +39,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|x64'">
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\DebugCore\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -61,7 +61,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x64'">
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputPath>bin\x64\ReleaseCore\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
@@ -83,7 +83,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|x86'">
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\DebugCore\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -105,7 +105,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|x86'">
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputPath>bin\x86\ReleaseCore\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
