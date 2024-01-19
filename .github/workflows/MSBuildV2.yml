@@ -49,7 +49,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dependencies-${{runner.os}}
-          path: imports/release
+          path: |
+            imports/release
 
   build-x86:
     needs: dependencies
@@ -232,8 +233,6 @@ jobs:
 
       - name: VSTest-Core-x86
         run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-        env:
-          DOTNET_MULTILEVEL_LOOKUP: false
 
   build-x64-core:
     needs: dependencies
@@ -298,8 +297,6 @@ jobs:
 
       - name: VSTest-Core-x64
         run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
-        env:
-          DOTNET_MULTILEVEL_LOOKUP: false
 
   build-arm64-core:
     needs: dependencies
@@ -318,8 +315,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '3.1.x'
-        env:
-          DOTNET_MULTILEVEL_LOOKUP: false
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
@@ -333,15 +328,40 @@ jobs:
       - name: Build-arm64-Core
         run: msbuild.exe /r /v:m /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-arm64-core-artifacts
+          path: |
+            src/**/bin/ReleaseCore/
+            src/**/bin/Release/
+            src/**/bin/ARM64/ReleaseCore/
+
   create-nuget:
     needs: [test-x86, test-x64, test-x86-core, test-x64-core, build-arm64-core]
     runs-on: windows-2022
     steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
       - name: Restore build-x64-core artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: build-*-artifacts
           path: src/
+          merge-multiple: true
+          
+      - name: list files
+        run: ls -R src/
+
+      - name: Setup version
+        run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
       - name: Create nupkg files
         run: scripts\gh-build-nuget.cmd
