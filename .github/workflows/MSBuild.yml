@@ -360,9 +360,6 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
 
-      - name: list files
-        run: ls -R src/
-
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
