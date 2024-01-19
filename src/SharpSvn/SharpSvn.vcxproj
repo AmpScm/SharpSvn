@@ -95,7 +95,7 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
@@ -116,7 +116,7 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -137,7 +137,7 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
@@ -159,7 +159,7 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
     <!-- HACK: Resolve a bug introduced by the changes to .NET 6, see following issue and PR:
@@ -186,7 +186,7 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
@@ -206,7 +206,7 @@
     <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>NetCore</CLRSupport>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <SharpSvnUpdateVersionResource>false</SharpSvnUpdateVersionResource>
     <DefaultAppHostRuntimeIdentifier>win-arm64</DefaultAppHostRuntimeIdentifier>
   </PropertyGroup>
