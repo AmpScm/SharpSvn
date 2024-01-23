@@ -13,7 +13,7 @@
 
   <target name="openssl-prepare" depends="checkout">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.patched">
-      <foreach item="File" property="patch">
+      <foreach item="File" property="patch" if="${opensslVersion &lt; '3.0.'}">
         <in>
           <items basedir="${downloads}/../patches/openssl">
             <include name="*.patch" />
@@ -44,7 +44,7 @@
         <arg value="no-dso" if="${static}" />
         <arg value="no-shared" if="${static}" />
         <arg value="shared" if="${not static}" />
-        <arg value="no-hw" />
+        <arg value="no-hw" if="${opensslVersion &lt; '3.0.'}"/> <!-- Not supported openSSl 3.x -->
         <arg value="no-ssl3" />
         <arg value="no-gost" if="${static}"/>
         <arg value="no-dtls" />

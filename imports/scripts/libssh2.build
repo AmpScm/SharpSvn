@@ -6,7 +6,7 @@
 
   <target name="libssh2-prepare" depends="checkout" if="${buildLibssh2}">
     <OnceBlock file="build/libssh2_${platform}.patched">
-      <foreach item="File" property="patch" if="${applyPatches}">
+      <foreach item="File" property="patch" if="${applyPatches and opensslVersion &lt; '3.0.'}">
         <in>
           <items basedir="${downloads}/../patches/libssh2">
             <include name="*.patch" />
@@ -47,6 +47,10 @@
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         <prop name="BUILD_SHARED_LIBS" value="OFF" if="${static}" />
         <prop name="BUILD_STATIC_LIBS" value="OFF" unless="${static}" />
+        <prop name="CRYPTO_BACKEND" value="OpenSSL" />
+        <prop name="OPENSSL_CRYPTO_LIBRARY:FILEPATH" value="${release}/lib/libcrypto.lib" />
+        <prop name="OPENSSL_SSL_LIBRARY:FILEPATH" value="${release}/lib/libssl.lib" />
+        <prop name="OPENSSL_INCLUDE_DIR" value="${release}/include/" />
       </CMake>
     </OnceBlock>
     <MSBuild src="${libssh2Dir}/libssh2.sln">

@@ -69,7 +69,7 @@ namespace SharpSvn.Tests.Commands
 
                 SvnGetCapabilitiesArgs ca = new SvnGetCapabilitiesArgs();
                 ca.RetrieveAllCapabilities = true;
-                Assert.That(client.GetCapabilities(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn"), ca, out caps));
+                Assert.That(client.GetCapabilities(new Uri("https://svn.apache.org/repos/asf/subversion/trunk"), ca, out caps));
 
                 Assert.That(caps.Contains(SvnCapability.MergeInfo));
                 Assert.That(caps.Count, Is.GreaterThanOrEqualTo(5));

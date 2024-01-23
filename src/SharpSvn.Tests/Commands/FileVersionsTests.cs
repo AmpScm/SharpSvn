@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -174,8 +174,8 @@ namespace SharpSvn.Tests.Commands
         public void FileVersions_WalkMe()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
-            SvnUriTarget me = new SvnUriTarget(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
-            a.End = 931;
+            SvnUriTarget me = new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/win-tests.py"), 874950);
+            a.End = 874950;
 
             int n = 0;
 
@@ -187,16 +187,16 @@ namespace SharpSvn.Tests.Commands
                     n++;
                 });
 
-            Assert.That(n, Is.EqualTo(7));
+            Assert.That(n, Is.EqualTo(93));
         }
 
         [TestMethod]
         public void FileVersions_WalkChange()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
-            SvnUriTarget me = new SvnUriTarget(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
-            a.Start = 927;
-            a.End = 928;
+            SvnUriTarget me = new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/win-tests.py"), 874950);
+            a.Start =873511;
+            a.End = 873512;
             int n = 0;
 
             Client.FileVersions(me, a,

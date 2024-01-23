@@ -16,11 +16,11 @@
           </items>
         </in>
         <do>
-          <Svn>
-            <arg value="patch" />
+          <exec program="git" verbose="true">
+            <arg value="apply" />
+			<arg value="--directory=${saslDir}" />
             <arg value="${patch}" />
-            <arg value="${saslDir}" />
-          </Svn>
+          </exec>
         </do>
       </foreach>
       <FilterFile file="${saslDir}/win32/include/config.h">
