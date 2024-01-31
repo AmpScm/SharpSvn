@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install NAnt
         working-directory: imports/
@@ -23,7 +23,7 @@ jobs:
 
       - name: Cache preparations
         id: cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             imports/release
@@ -34,7 +34,7 @@ jobs:
   
       - name: Cache Import Downloads
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             imports/downloads
@@ -185,7 +185,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '3.1.x'
 
@@ -241,7 +241,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '3.1.x'
 
@@ -311,7 +311,7 @@ jobs:
           path: imports/release/
 
       - name: Load dotnet core 3.1.x
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '3.1.x'
 
