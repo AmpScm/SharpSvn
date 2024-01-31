@@ -127,6 +127,6 @@
         todir="${gettextToolsDir}"
         encoding="utf-8" />
     </if>
-    <copy file="${downloads + junitFilename}" tofile="${junitJar}" unless="${file::exists(junitJar)}"/>
+    <copy file="${downloads + junitFilename}" tofile="${junitJar}" unless="${file::exists(junitJar)}" if="${javaHome != '' and buildJavaHL}" />/>
   </target>
 </project>
