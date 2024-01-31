@@ -354,7 +354,7 @@ jobs:
         run: scripts\gh-build-nuget.cmd
 
       - name: Package nupkg files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nupkg-files
           path: nuspec/bin/*.nupkg
