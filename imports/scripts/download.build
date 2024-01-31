@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 
-  <property name="junitFilename" value="junit${junitVersion}.zip" />
+  <property name="junitFilename" value="junit-${junitVersion}.jar" />
   <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
-  <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
+  <property name="junitJar" value="${buildRoot}\junit-${junitVersion}.jar" />
 
   <property name="cmakeFilename" value="cmake-${cmakeVersion}-windows-i386.zip" />
   <property name="cmakeDir" value="build/cmake-${cmakeVersion}-windows-i386" />
@@ -64,7 +64,7 @@
     </if>
 
     <get
-      src="https://prdownloads.sourceforge.net/junit/junit/${junitVersion}/${junitFilename}"
+      src="https://repo1.maven.org/maven2/junit/junit/${junitVersion}/${junitFilename}"
       dest="${downloads + junitFilename}"
       unless="${file::exists(downloads + junitFilename)}"
       if="${javaHome != '' and buildJavaHL}" />
@@ -127,11 +127,6 @@
         todir="${gettextToolsDir}"
         encoding="utf-8" />
     </if>
-    <unzip
-      zipfile="${downloads + junitFilename}"
-      todir="build"
-      encoding="utf-8"
-      unless="${directory::exists(junitDir)}"
-      if="${javaHome != '' and buildJavaHL}" />
+    <copy file="${downloads + junitFilename}" tofile="${junitJar}" unless="${file::exists(junitJar)}"/>
   </target>
 </project>
