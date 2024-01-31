@@ -92,9 +92,6 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v4
 
-      - name: Setup VSTest Path
-        uses: darenm/Setup-VSTest@v1.2
-
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v4
         with:
@@ -107,8 +104,8 @@ jobs:
           name: build-x86-artifacts
           path: src/
 
-      - name: VSTest-x86
-        run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+      - name: Dotnet-test-x86
+        run: dotnet vstest /Platform:x86 src/SharpSvn.Tests/bin/x86/Release/SharpSvn.Tests.dll --TestCaseFilter:"TestCategory!=NeedsNetwork"
 
   build-x64:
     needs: dependencies
@@ -150,9 +147,6 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v4
 
-      - name: Setup VSTest Path
-        uses: darenm/Setup-VSTest@v1.2
-
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v4
         with:
@@ -165,8 +159,8 @@ jobs:
           name: build-x64-artifacts
           path: src/
 
-      - name: VSTest-x64
-        run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+      - name: Dotnet-test-x64
+        run: dotnet vstest /Platform:x64 src/SharpSvn.Tests/bin/x64/Release/SharpSvn.Tests.dll --TestCaseFilter:"TestCategory!=NeedsNetwork"
 
   build-x86-core:
     needs: dependencies
@@ -215,9 +209,6 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v4
 
-      - name: Setup VSTest Path
-        uses: darenm/Setup-VSTest@v1.2
-
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v4
         with:
@@ -230,8 +221,8 @@ jobs:
           name: build-x86-core-artifacts
           path: src/
 
-      - name: VSTest-Core-x86
-        run: vstest.console.exe /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+      - name: Dotnet-test-Core-x86
+        run: dotnet vstest /Platform:x86 src/SharpSvn.Tests/bin/x86/ReleaseCore/SharpSvn.Tests.dll --TestCaseFilter:"TestCategory!=NeedsNetwork"
 
   build-x64-core:
     needs: dependencies
@@ -279,9 +270,6 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v4
 
-      - name: Setup VSTest Path
-        uses: darenm/Setup-VSTest@v1.2
-
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v4
         with:
@@ -294,8 +282,8 @@ jobs:
           name: build-x64-core-artifacts
           path: src/
 
-      - name: VSTest-Core-x64
-        run: vstest.console.exe /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll "--testcasefilter:TestCategory!=NeedsNetwork"
+      - name: Dotnet-test-Core-x64
+        run: dotnet vstest /Platform:x64 src/SharpSvn.Tests/bin/x64/ReleaseCore/SharpSvn.Tests.dll --TestCaseFilter:"TestCategory!=NeedsNetwork"
 
   build-arm64-core:
     needs: dependencies
