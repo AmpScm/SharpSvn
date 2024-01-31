@@ -1,4 +1,4 @@
-<Project Sdk="WixToolset.Sdk/4.0.0-rc.1">
+<Project Sdk="WixToolset.Sdk/4.0.3">
     <PropertyGroup>
         <UpgradeCode>38BD67A1-0135-414F-82ED-3BF0F30C87AA</UpgradeCode>
     </PropertyGroup>
@@ -60,15 +60,12 @@
         <OutputName>Slik-Subversion-$(SvnFullVersion)-ARM64</OutputName>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0-rc.1" />
+        <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="SlikSvnLicense.rtf" />
         <Compile Include="../Release/Licenses/SharpSvn-Licenses-v4.wxs">
             <Link>SharpSvn-Licenses-v4.wxs</Link>
         </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="WixToolset.UI.wixext" />
     </ItemGroup>
 </Project>

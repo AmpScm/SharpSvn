@@ -105,7 +105,7 @@
                 <File Id="libaprutil_1.dll" Name="SlikSvn-libaprutil-1.dll" KeyPath="yes" Checksum="yes" />
             </Component>
             <Component Id="libcrypto.dll" Guid="B9E59868-28DD-4FA4-A8DB-9110F53DE69F">
-                <File Id="libcrypto.dll" Name="SlikSvn-libcrypto-1_1-ARM64.dll" KeyPath="yes" Checksum="yes" />
+                <File Id="libcrypto.dll" Name="SlikSvn-libcrypto-3-ARM64.dll" KeyPath="yes" Checksum="yes" />
             </Component>
             <Directory Id="INSTALLLOCATION_BIN_engines" Name="engines" FileSource="$(var.distDir)\bin\engines\">
                 <Component Id="Capi.dll" Guid="CE19BB13-0872-4A8A-B510-018248E5D8C7">
@@ -116,7 +116,7 @@
                 <File Id="libsasl21.dll" Name="SlikSvn-libsasl21.dll" KeyPath="yes" Checksum="yes" />
             </Component>
             <Component Id="libssl.dll" Guid="14534E6A-7BB7-407A-9E3B-2C73463EC2CE">
-                <File Id="libssl.dll" Name="SlikSvn-libssl-1_1-ARM64.dll" KeyPath="yes" Checksum="yes" />
+                <File Id="libssl.dll" Name="SlikSvn-libssl-3-ARM64.dll" KeyPath="yes" Checksum="yes" />
             </Component>
             <Component Id="libintl.dll" Guid="E63D5D3A-09B2-4A0F-A4A4-10919DC6A4D2">
                 <File Id="libintl.dll" Name="SlikSvn-libintl.dll" KeyPath="yes" Checksum="yes" />
