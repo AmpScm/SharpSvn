@@ -6,11 +6,11 @@
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "credui.lib")
 
-#include "PuttySrc/Windows/winstuff.h"
+#include "PuttySrc/Windows/platform.h"
 #define console_verify_ssh_host_key putty_verify_ssh_host_key
 #define console_get_userpass_input putty_console_get_userpass_input
 #define cleanup_exit putty_cleanup_exit
-#include "PuttySrc/Windows/wincons.c"
+#include "PuttySrc/Windows/console.c"
 #include "PuttySrc/console.c"
 #undef console_verify_ssh_host_key
 #undef console_get_userpass_input

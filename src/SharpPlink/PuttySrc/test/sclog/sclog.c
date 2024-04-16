@@ -214,6 +214,14 @@ static void wrap_malloc_pre(void *wrapctx, void **user_data)
     *user_data = drwrap_get_arg(wrapctx, 0);
     dr_fprintf(outfile, "malloc %"PRIuMAX"\n", (uintmax_t)*user_data);
 }
+static void wrap_aligned_alloc_pre(void *wrapctx, void **user_data)
+{
+    logging_paused++;
+    size_t align = (size_t) drwrap_get_arg(wrapctx, 0);
+    *user_data = drwrap_get_arg(wrapctx, 1);
+    dr_fprintf(outfile, "aligned_alloc align=%zu size=%"PRIuMAX"\n",
+               align, (uintmax_t)*user_data);
+}
 static void wrap_free_pre(void *wrapctx, void **user_data)
 {
     logging_paused++;
@@ -239,39 +247,7 @@ static void wrap_alloc_post(void *wrapctx, void *user_data)
 }
 
 /*
- * We wrap the C library function memset, because I've noticed that at
- * least one optimised implementation of it diverges control flow
- * internally based on what appears to be the _alignment_ of the input
- * pointer - and that alignment check can vary depending on the
- * addresses of allocated blocks. So I can't guarantee no divergence
- * of control flow inside memset if malloc doesn't return the same
- * values, and instead I just have to trust that memset isn't reading
- * the contents of the block and basing control flow decisions on that.
- */
-static void wrap_memset_pre(void *wrapctx, void **user_data)
-{
-    uint was_already_paused = logging_paused++;
-
-    if (outfile == INVALID_FILE || was_already_paused)
-        return;
-
-    const void *addr = drwrap_get_arg(wrapctx, 0);
-    size_t size = (size_t)drwrap_get_arg(wrapctx, 2);
-
-    struct allocation *alloc = find_allocation(addr);
-    if (!alloc) {
-        dr_fprintf(outfile, "memset %"PRIuMAX" @ %"PRIxMAX"\n",
-                   (uintmax_t)size, (uintmax_t)addr);
-    } else {
-        dr_fprintf(outfile, "memset %"PRIuMAX" @ allocations[%"PRIuPTR"]"
-                   " + %"PRIxMAX"\n", (uintmax_t)size, alloc->index,
-                   (uintmax_t)(addr - alloc->start));
-    }
-}
-
-/*
- * Common post-wrapper function for memset and free, whose entire
- * function is to unpause the logging.
+ * Common post-wrapper function to unpause the logging.
  */
 static void unpause_post(void *wrapctx, void *user_data)
 {
@@ -447,20 +423,20 @@ static dr_emit_flags_t instrument_instr(
          */
         opnd_t shiftcount = instr_get_src(instr, 0);
         if (!opnd_is_immed(shiftcount)) {
-          reg_id_t r0;
-          drreg_status_t st;
-          st = drreg_reserve_register(drcontext, bb, instr, NULL, &r0);
-          DR_ASSERT(st == DRREG_SUCCESS);
-          opnd_t op_r0 = opnd_create_reg(r0);
-          instr_t *movzx = INSTR_CREATE_movzx(drcontext, op_r0, shiftcount);
-          instr_set_translation(movzx, instr_get_app_pc(instr));
-          instrlist_preinsert(bb, instr, movzx);
-          instr_format_location(instr, &loc);
-          dr_insert_clean_call(
-              drcontext, bb, instr, (void *)log_var_shift, false,
-              2, op_r0, OPND_CREATE_INTPTR(loc));
-          st = drreg_unreserve_register(drcontext, bb, instr, r0);
-          DR_ASSERT(st == DRREG_SUCCESS);
+            reg_id_t r0;
+            drreg_status_t st;
+            st = drreg_reserve_register(drcontext, bb, instr, NULL, &r0);
+            DR_ASSERT(st == DRREG_SUCCESS);
+            opnd_t op_r0 = opnd_create_reg(r0);
+            instr_t *movzx = INSTR_CREATE_movzx(drcontext, op_r0, shiftcount);
+            instr_set_translation(movzx, instr_get_app_pc(instr));
+            instrlist_preinsert(bb, instr, movzx);
+            instr_format_location(instr, &loc);
+            dr_insert_clean_call(
+                drcontext, bb, instr, (void *)log_var_shift, false,
+                2, op_r0, OPND_CREATE_INTPTR(loc));
+            st = drreg_unreserve_register(drcontext, bb, instr, r0);
+            DR_ASSERT(st == DRREG_SUCCESS);
         }
         break;
       }
@@ -554,7 +530,7 @@ static void load_module(
 #define TRY_WRAP(fn, pre, post) do                              \
     {                                                           \
         static bool done_this_one = false;                      \
-        try_wrap_fn(module, fn, pre, post, &done_this_one);    \
+        try_wrap_fn(module, fn, pre, post, &done_this_one);     \
     } while (0)
 
     if (loaded) {
@@ -562,9 +538,9 @@ static void load_module(
         TRY_WRAP("dry_run_real", NULL, wrap_dryrun);
         if (libc) {
             TRY_WRAP("malloc", wrap_malloc_pre, wrap_alloc_post);
+            TRY_WRAP("aligned_alloc", wrap_aligned_alloc_pre, wrap_alloc_post);
             TRY_WRAP("realloc", wrap_realloc_pre, wrap_alloc_post);
             TRY_WRAP("free", wrap_free_pre, unpause_post);
-            TRY_WRAP("memset", wrap_memset_pre, unpause_post);
 
             /*
              * More strangely named versions of standard C library
@@ -583,8 +559,6 @@ static void load_module(
             TRY_WRAP("__libc_malloc", wrap_malloc_pre, wrap_alloc_post);
             TRY_WRAP("__GI___libc_realloc", wrap_realloc_pre, wrap_alloc_post);
             TRY_WRAP("__GI___libc_free", wrap_free_pre, unpause_post);
-            TRY_WRAP("__memset_sse2_unaligned", wrap_memset_pre, unpause_post);
-            TRY_WRAP("__memset_sse2", wrap_memset_pre, unpause_post);
             TRY_WRAP("cfree", wrap_free_pre, unpause_post);
         }
     }
