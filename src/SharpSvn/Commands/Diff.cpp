@@ -14,6 +14,7 @@
 
 #include "stdafx.h"
 
+#include "SvnStreamWrapper.h"
 #include "Args/Diff.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
@@ -56,11 +57,8 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
     AprPool pool(%_pool);
     ArgsStore store(this, args, %pool);
 
-    AprStreamFile out(result, %pool);
-    AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
-
-    svn_stream_t *outstream = svn_stream_from_aprfile2(out.CreateHandle(), TRUE, pool.Handle);
-    svn_stream_t *errstream = svn_stream_from_aprfile2(err.CreateHandle(), TRUE, pool.Handle);
+    SvnStreamWrapper out(result, false, true, %pool);
+    SvnStreamWrapper err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), false, true, %pool);
 
     ICollection<String^>^ diffArgs = args->DiffArguments;
 
@@ -85,8 +83,8 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
         args->UseGitFormat,
         args->PrettyPrintMergeInfo,
         pool.AllocString(args->HeaderEncoding),
-        outstream,
-        errstream,
+        out.Handle,
+        err.Handle,
         CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
         CtxHandle,
         pool.Handle);
@@ -121,11 +119,8 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
     AprPool pool(%_pool);
     ArgsStore store(this, args, %pool);
 
-    AprStreamFile out(result, %pool);
-    AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
-
-    svn_stream_t *outstream = svn_stream_from_aprfile2(out.CreateHandle(), TRUE, pool.Handle);
-    svn_stream_t *errstream = svn_stream_from_aprfile2(err.CreateHandle(), TRUE, pool.Handle);
+    SvnStreamWrapper out(result, false, true, %pool);
+    SvnStreamWrapper err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), false, true, %pool);
 
     svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
     svn_opt_revision_t fromRev = range->StartRevision->ToSvnRevision();
@@ -154,8 +149,8 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
         args->UseGitFormat,
         args->PrettyPrintMergeInfo,
         pool.AllocString(args->HeaderEncoding),
-        outstream,
-        errstream,
+        out.Handle,
+        err.Handle,
         CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
         CtxHandle,
         pool.Handle);
