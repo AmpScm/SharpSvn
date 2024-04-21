@@ -1083,6 +1083,10 @@ namespace SharpSvn {
         /// <summary>Retrieves the differences between two revisions or paths (<c>svn diff</c>)</summary>
         bool Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ args, Stream^ result);
 
+    private:
+        bool InternalDiff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, svn_stream_t* outstream, svn_stream_t* errstream, AprPool^ pool);
+        bool InternalDiff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ args, svn_stream_t* outstream, svn_stream_t* errstream, AprPool^ pool);
+
 #pragma endregion
 
     public:

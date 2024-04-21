@@ -55,23 +55,50 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 
     EnsureState(SvnContextState::AuthorizationInitialized);
     AprPool pool(%_pool);
-    ArgsStore store(this, args, %pool);
 
-    SvnStreamWrapper out(result, false, true, %pool);
-    SvnStreamWrapper err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, false, true, %pool);
+    svn_config_t* cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
 
+    const char* diff_cmd;
+    svn_config_get(cfg, &diff_cmd, SVN_CONFIG_SECTION_HELPERS, SVN_CONFIG_OPTION_DIFF_CMD, nullptr);
+
+    // Create an instance of AprStreamFile if the diff_cmd is specified or
+    // SvnStreamWrapper if diff_cmd is null. External diff tool (specified via
+    // diff_cmd) supports only file stream, while libsvn_diff supports both
+    // (file stream and SvnStream).
+    //
+    // Reference: /apache/subversion/trunk/subversion/libsvn_client/diff.c(1010)
+    if (diff_cmd) {
+        AprStreamFile out(result, %pool);
+        AprStreamFile err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, %pool);
+
+        svn_stream_t *outstream = svn_stream_from_aprfile2(out.CreateHandle(), TRUE, pool.Handle);
+        svn_stream_t* errstream = svn_stream_from_aprfile2(err.CreateHandle(), TRUE, pool.Handle);
+
+        return InternalDiff(from, to, args, outstream, errstream, %pool);
+    }
+    else {
+        SvnStreamWrapper out(result, false, true, %pool);
+        SvnStreamWrapper err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, false, true, %pool);
+
+        return InternalDiff(from, to, args, out.Handle, err.Handle, %pool);
+    }
+}
+
+bool SvnClient::InternalDiff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, svn_stream_t *outstream, svn_stream_t *errstream, AprPool^ pool) {
     ICollection<String^>^ diffArgs = args->DiffArguments;
+
+    ArgsStore store(this, args, pool);
 
     if (!diffArgs)
         diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
     svn_error_t *r = svn_client_diff7(
-        AllocArray(diffArgs, %pool),
-        from->AllocAsString(%pool),
-        from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
-        to->AllocAsString(%pool),
-        to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
-        args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
+        AllocArray(diffArgs, pool),
+        from->AllocAsString(pool),
+        from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool),
+        to->AllocAsString(pool),
+        to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool),
+        args->RelativeToPath ? pool->AllocDirent(args->RelativeToPath) : nullptr,
         (svn_depth_t)args->Depth,
         args->IgnoreAncestry,
         args->NoAdded,
@@ -82,12 +109,12 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
         args->PropertiesOnly,
         args->UseGitFormat,
         args->PrettyPrintMergeInfo,
-        pool.AllocString(args->HeaderEncoding),
-        out.Handle,
-        err.Handle,
-        CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+        pool->AllocString(args->HeaderEncoding),
+        outstream,
+        errstream,
+        CreateChangeListsList(args->ChangeLists, pool), // Intersect ChangeLists
         CtxHandle,
-        pool.Handle);
+        pool->Handle);
 
     return args->HandleResult(this, r, from);
 }
@@ -117,27 +144,54 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 
     EnsureState(SvnContextState::AuthorizationInitialized);
     AprPool pool(%_pool);
-    ArgsStore store(this, args, %pool);
 
-    SvnStreamWrapper out(result, false, true, %pool);
-    SvnStreamWrapper err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, false, true, %pool);
+    svn_config_t* cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
+
+    const char* diff_cmd;
+    svn_config_get(cfg, &diff_cmd, SVN_CONFIG_SECTION_HELPERS, SVN_CONFIG_OPTION_DIFF_CMD, nullptr);
+
+    // Create an instance of AprStreamFile if the diff_cmd is specified, or
+    // SvnStreamWrapper if diff_cmd is null. The external diff tool (specified
+    // via diff_cmd) supports only file streams, while libsvn_diff supports
+    // both (file stream and SvnStream).
+    //
+    // Reference: /apache/subversion/trunk/subversion/libsvn_client/diff.c(1010)
+    if (diff_cmd) {
+        AprStreamFile out(result, %pool);
+        AprStreamFile err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, %pool);
+
+        svn_stream_t* outstream = svn_stream_from_aprfile2(out.CreateHandle(), TRUE, pool.Handle);
+        svn_stream_t* errstream = svn_stream_from_aprfile2(err.CreateHandle(), TRUE, pool.Handle);
+
+        return InternalDiff(source, range, args, outstream, errstream, %pool);
+    }
+    else {
+        SvnStreamWrapper out(result, false, true, %pool);
+        SvnStreamWrapper err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, false, true, %pool);
+
+        return InternalDiff(source, range, args, out.Handle, err.Handle, %pool);
+    }
+}
+
+bool SvnClient::InternalDiff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ args, svn_stream_t* outstream, svn_stream_t* errstream, AprPool^ pool) {
+    ICollection<String^>^ diffArgs = args->DiffArguments;
 
     svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
     svn_opt_revision_t fromRev = range->StartRevision->ToSvnRevision();
     svn_opt_revision_t toRev = range->EndRevision->ToSvnRevision();
 
-    ICollection<String^>^ diffArgs = args->DiffArguments;
+    ArgsStore store(this, args, pool);
 
     if (!diffArgs)
         diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-    svn_error_t *r = svn_client_diff_peg7(
-        AllocArray(diffArgs, %pool),
-        source->AllocAsString(%pool),
+    svn_error_t* r = svn_client_diff_peg7(
+        AllocArray(diffArgs, pool),
+        source->AllocAsString(pool),
         &pegRev,
         &fromRev,
         &toRev,
-        args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
+        args->RelativeToPath ? pool->AllocDirent(args->RelativeToPath) : nullptr,
         (svn_depth_t)args->Depth,
         args->IgnoreAncestry,
         args->NoAdded,
@@ -148,12 +202,12 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
         args->PropertiesOnly,
         args->UseGitFormat,
         args->PrettyPrintMergeInfo,
-        pool.AllocString(args->HeaderEncoding),
-        out.Handle,
-        err.Handle,
-        CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+        pool->AllocString(args->HeaderEncoding),
+        outstream,
+        errstream,
+        CreateChangeListsList(args->ChangeLists, pool), // Intersect ChangeLists
         CtxHandle,
-        pool.Handle);
+        pool->Handle);
 
     return args->HandleResult(this, r, source);
 }
