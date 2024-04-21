@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Errors2Enum
 {
-    class Program
+    class Errors2Enum
     {
         static void Main(string[] args)
         {
