@@ -78,7 +78,7 @@ namespace Errors2Enum
             }
 
 
-            string verHeader = "/* " + typeof(Program).Assembly.FullName + " */";
+            string verHeader = "/* " + typeof(Errors2Enum).Assembly.FullName + " */";
 
             if (File.Exists(to)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(winerror)
@@ -86,7 +86,7 @@ namespace Errors2Enum
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(aprerrno)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(serfh)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(libssh2h)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(new Uri(typeof(Program).Assembly.CodeBase).LocalPath))
+                && File.GetLastWriteTime(to) > File.GetLastWriteTime(new Uri(typeof(Errors2Enum).Assembly.CodeBase).LocalPath))
             {
                 using (StreamReader sr = File.OpenText(to))
                 {
