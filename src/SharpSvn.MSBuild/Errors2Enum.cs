@@ -83,6 +83,8 @@ namespace Errors2Enum
             using (StreamReader libssh2 = File.OpenText(libssh2h))
             using (StreamReader syserrs = File.OpenText(errno))
             {
+                Log.LogMessage("Generating errors enum...");
+
                 r.WriteLine(verHeader);
                 r.WriteLine("/* GENERATED CODE - Don't edit this file */");
                 r.WriteLine("#pragma once");
