@@ -31,4 +31,9 @@
                  OutputFilePath="$(ErrorsEnumFilePath)" />
   </Target>
 
+  <Target Name="CleanErrorEnums"
+          BeforeTargets="CoreClean">
+    <Delete Files="$(ErrorsEnumFilePath)" />
+  </Target>
+
 </Project>
