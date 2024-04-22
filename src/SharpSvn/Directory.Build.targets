@@ -1,14 +1,6 @@
 <Project>
+
   <Import Project="$(SolutionDir)SharpSvn.MSBuild\Errors2Enum.tasks" />
-
-  <!--<Target Name="GenerateLocalizationResources"
-          BeforeTargets="ClCompile">
-
-    <MakeDir Directories="$(SvnTextDir)" />
-    <GenerateLocalizationResources Prefix="SvnText"
-                                   OutputDirectory="$(SvnTextDir)"
-                                   InputFiles="@(SvnPoFiles)" />
-  </Target>-->
 
   <Target Name="GenerateErrorEnums"
           BeforeTargets="ClCompile">
@@ -21,5 +13,4 @@
                  OutputFilePath="$(ProjectDir)\SvnWindowsError.h" />
   </Target>
 
-  <!-- <Import Project="..\MSBuild\GenerateErrorEnums.tasks" /> -->
 </Project>
