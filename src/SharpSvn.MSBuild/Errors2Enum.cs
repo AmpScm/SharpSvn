@@ -38,14 +38,11 @@ namespace Errors2Enum
             string libssh2h = LibSsh2HeaderPath;
             string to = OutputFilePath;
 
-            if (!File.Exists(WinErrorHeaderPath))
+            if (!File.Exists(winerror))
             {
-                if (!File.Exists(winerror))
-                {
-                    Console.Error.WriteLine("'{0}' does not exist", winerror);
-                    Environment.ExitCode = 1;
-                    return false;
-                }
+                Console.Error.WriteLine("'{0}' does not exist", winerror);
+                Environment.ExitCode = 1;
+                return false;
             }
 
             if (!File.Exists(errno))
