@@ -40,35 +40,35 @@ namespace Errors2Enum
 
             if (!File.Exists(winerror))
             {
-                Console.Error.WriteLine("'{0}' does not exist", winerror);
+                Log.LogError("'{0}' does not exist", winerror);
                 Environment.ExitCode = 1;
                 return false;
             }
 
             if (!File.Exists(errno))
             {
-                Console.Error.WriteLine("'{0}' does not exist", errno);
+                Log.LogError("'{0}' does not exist", errno);
                 Environment.ExitCode = 1;
                 return false;
             }
 
             if (!File.Exists(aprerrno))
             {
-                Console.Error.WriteLine("'{0}' does not exist", aprerrno);
+                Log.LogError("'{0}' does not exist", aprerrno);
                 Environment.ExitCode = 1;
                 return false;
             }
 
             if (!File.Exists(serfh))
             {
-                Console.Error.WriteLine("'{0}' does not exist", aprerrno);
+                Log.LogError("'{0}' does not exist", aprerrno);
                 Environment.ExitCode = 1;
                 return false;
             }
 
             if (!Directory.Exists(Path.GetDirectoryName(to)))
             {
-                Console.Error.WriteLine("Parent directory of '{0}' does not exist", to);
+                Log.LogError("Parent directory of '{0}' does not exist", to);
                 Environment.ExitCode = 1;
                 return false;
             }
