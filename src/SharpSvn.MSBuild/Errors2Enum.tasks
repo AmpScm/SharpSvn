@@ -3,9 +3,8 @@
              TaskFactory="CodeTaskFactory"
              AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
     <ParameterGroup>
-      <VCPath />
-      <SDKPath />
-      <UniversalSDKDir />
+      <WinErrorHeaderPath />
+      <ErrnoHeaderPath />
       <AprErrnoHeaderPath />
       <SerfHeaderPath />
       <LibSsh2HeaderPath />

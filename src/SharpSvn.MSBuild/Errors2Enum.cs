@@ -12,13 +12,10 @@ namespace Errors2Enum
     public class Errors2Enum : Task
     {
         [Required]
-        public string VCPath { get; set; }
+        public string WinErrorHeaderPath { get; set; }
 
         [Required]
-        public string SDKPath { get; set; }
-
-        [Required]
-        public string UniversalSDKDir { get; set; }
+        public string ErrnoHeaderPath { get; set; }
 
         [Required]
         public string AprErrnoHeaderPath { get; set; }
@@ -34,26 +31,14 @@ namespace Errors2Enum
 
         public override bool Execute()
         {
+            string winerror = WinErrorHeaderPath;
+            string errno = ErrnoHeaderPath;
+            string aprerrno = AprErrnoHeaderPath;
+            string serfh = SerfHeaderPath;
+            string libssh2h = LibSsh2HeaderPath;
+            string to = OutputFilePath;
 
-            string vcPath = Path.GetFullPath(VCPath);
-            string sdkPath = Path.GetFullPath(SDKPath);
-            string usdkPath = Path.GetFullPath(UniversalSDKDir.Split(';').First());
-            string winerror = Path.Combine(sdkPath, "include\\winerror.h");
-            string errno = Path.Combine(vcPath, "include\\errno.h");
-            string altErrNo = Path.Combine(usdkPath, "errno.h");
-            if (!File.Exists(errno) && File.Exists(altErrNo))
-                errno = altErrNo;
-            string aprerrno = Path.GetFullPath(AprErrnoHeaderPath);
-            string serfh = Path.GetFullPath(SerfHeaderPath);
-            string libssh2h = Path.GetFullPath(LibSsh2HeaderPath);
-            string to = Path.GetFullPath(OutputFilePath);
-
-            if (!File.Exists(winerror))
-                winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
-            if (!File.Exists(winerror))
-                winerror = Path.Combine(usdkPath, "..", "shared", "winerror.h");
-
-            if (!File.Exists(winerror))
+            if (!File.Exists(WinErrorHeaderPath))
             {
                 if (!File.Exists(winerror))
                 {
@@ -114,7 +99,7 @@ namespace Errors2Enum
             using (StreamReader header = File.OpenText(winerror))
             using (StreamReader aprheader = File.OpenText(aprerrno))
             using (StreamReader serfheader = File.OpenText(serfh))
-            using (StreamReader libssh2 = File.OpenText(LibSsh2HeaderPath))
+            using (StreamReader libssh2 = File.OpenText(libssh2h))
             using (StreamReader syserrs = File.OpenText(errno))
             {
                 r.WriteLine(verHeader);
