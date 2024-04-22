@@ -185,7 +185,7 @@ bool SvnClient::InternalDiff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiff
     if (!diffArgs)
         diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-    svn_error_t* r = svn_client_diff_peg7(
+    svn_error_t *r = svn_client_diff_peg7(
         AllocArray(diffArgs, pool),
         source->AllocAsString(pool),
         &pegRev,
