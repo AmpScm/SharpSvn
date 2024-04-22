@@ -76,23 +76,7 @@ namespace Errors2Enum
 
             string verHeader = "/* " + typeof(Errors2Enum).Assembly.FullName + " */";
 
-            if (File.Exists(to)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(winerror)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(errno)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(aprerrno)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(serfh)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(LibSsh2HeaderPath)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(new Uri(typeof(Errors2Enum).Assembly.CodeBase).LocalPath))
-            {
-                using (StreamReader sr = File.OpenText(to))
-                {
-                    if (sr.ReadLine() == verHeader)
-                        return true; // Nothing to do.
-                }
-            }
-
-            string to_tmp = to + ".tmp";
-            using (StreamWriter r = File.CreateText(to_tmp))
+            using (StreamWriter r = File.CreateText(to))
             using (StreamReader header = File.OpenText(winerror))
             using (StreamReader aprheader = File.OpenText(aprerrno))
             using (StreamReader serfheader = File.OpenText(serfh))
@@ -132,53 +116,6 @@ namespace Errors2Enum
                 r.WriteLine("} /* SharpSvn */");
                 r.WriteLine();
             }
-
-            if (File.Exists(to))
-            {
-                bool same = false;
-
-                using(StreamReader orig = File.OpenText(to))
-                using(StreamReader nw = File.OpenText(to_tmp))
-                {
-                    string id_orig = orig.ReadLine();
-                    string id_new = nw.ReadLine();
-
-                    if (string.IsNullOrEmpty(id_new) == string.IsNullOrEmpty(id_orig))
-                    {
-                        string l1, l2;
-
-                        while(true)
-                        {
-                            l1 = orig.ReadLine();
-                            l2 = nw.ReadLine();
-
-                            if (l1 != l2)
-                            {
-                                same = false;
-                                break;
-                            }
-
-                            if (l1 == null)
-                            {
-                                same = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (same)
-                {
-                    // No different definitions. Don't touch the file as that would trigger
-                    // a recompilation of the precompiled header.
-                    File.Delete(to_tmp);
-                    return true;
-                }
-                else
-                    File.Delete(to);
-            }
-
-            File.Move(to_tmp, to);
 
             return true;
         }

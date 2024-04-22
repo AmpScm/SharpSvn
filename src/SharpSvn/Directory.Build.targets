@@ -11,8 +11,17 @@
     <ErrorsEnumFilePath>$(ProjectDir)\SvnWindowsError.h</ErrorsEnumFilePath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <GenerateErrorEnumsInputs Include="$(WinErrorHeaderPath)" />
+    <GenerateErrorEnumsInputs Include="$(ErrnoHeaderPath)" />
+    <GenerateErrorEnumsInputs Include="$(AprErrnoHeaderPath)" />
+    <GenerateErrorEnumsInputs Include="$(SerfHeaderPath)" />
+  </ItemGroup>
+
   <Target Name="GenerateErrorEnums"
-          BeforeTargets="ClCompile">
+          BeforeTargets="ClCompile"
+          Inputs="@(GenerateErrorEnumsInputs)"
+          Outputs="$(ErrorsEnumFilePath)">
 
     <Errors2Enum WinErrorHeaderPath="$(WinErrorHeaderPath)"
                  ErrnoHeaderPath="$(ErrnoHeaderPath)"
