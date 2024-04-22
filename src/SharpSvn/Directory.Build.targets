@@ -1,0 +1,26 @@
+<Project>
+  <Import Project="$(SolutionDir)SharpSvn.MSBuild\Errors2Enum.tasks" />
+
+  <!--<Target Name="GenerateLocalizationResources"
+          BeforeTargets="ClCompile">
+
+    <MakeDir Directories="$(SvnTextDir)" />
+    <GenerateLocalizationResources Prefix="SvnText"
+                                   OutputDirectory="$(SvnTextDir)"
+                                   InputFiles="@(SvnPoFiles)" />
+  </Target>-->
+
+  <Target Name="GenerateErrorEnums"
+          BeforeTargets="ClCompile">
+
+    <Errors2Enum VCPath="$(VCInstallDir)."
+                        SDKPath="$(WindowsSdkDir)"
+                        UniversalSDKDir="$(UniversalCRT_IncludePath)"
+                        AprErrnoHeaderPath="$(SolutionDir)..\imports\release\include\apr_errno.h"
+                        SerfHeaderPath="$(SolutionDir)..\imports\release\include\serf-1\serf.h"
+                        LibSsh2HeaderPath="$(SolutionDir)..\imports\release\include\libssh2\libssh2.h"
+                        OutputFilePath="$(ProjectDir)\SvnWindowsError.h" />
+  </Target>
+
+  <!-- <Import Project="..\MSBuild\GenerateErrorEnums.tasks" /> -->
+</Project>

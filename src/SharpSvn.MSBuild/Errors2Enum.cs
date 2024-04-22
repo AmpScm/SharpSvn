@@ -3,36 +3,50 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 namespace Errors2Enum
 {
-    class Errors2Enum
+    public class Errors2Enum : Task
     {
-        static void Main(string[] args)
-        {
-            if (args.Length != 7)
-            {
-                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <UniversalSDKDir> <apr_errno.h> <serf.h> <libssh2.h> <outputfile>");
-                foreach (string s in args)
-                {
-                    Console.Error.WriteLine("'" + s + "'");
-                }
-                Environment.ExitCode = 1;
-                return;
-            }
+        [Required]
+        public string VCPath { get; set; }
 
-            string vcPath = Path.GetFullPath(args[0]);
-            string sdkPath = Path.GetFullPath(args[1]);
-            string usdkPath = string.IsNullOrEmpty(args[2].Trim()) ? "C:\\" : Path.GetFullPath(args[2].Split(new char[] { ';' }, 2)[0]);
+        [Required]
+        public string SDKPath { get; set; }
+
+        [Required]
+        public string UniversalSDKDir { get; set; }
+
+        [Required]
+        public string AprErrnoHeaderPath { get; set; }
+
+        [Required]
+        public string SerfHeaderPath { get; set; }
+
+        [Required]
+        public string LibSsh2HeaderPath { get; set; }
+
+        [Required]
+        public string OutputFilePath { get; set; }
+
+        public override bool Execute()
+        {
+
+            string vcPath = Path.GetFullPath(VCPath);
+            string sdkPath = Path.GetFullPath(SDKPath);
+            string usdkPath = Path.GetFullPath(UniversalSDKDir.Split(';').First());
             string winerror = Path.Combine(sdkPath, "include\\winerror.h");
             string errno = Path.Combine(vcPath, "include\\errno.h");
             string altErrNo = Path.Combine(usdkPath, "errno.h");
             if (!File.Exists(errno) && File.Exists(altErrNo))
                 errno = altErrNo;
-            string aprerrno = Path.GetFullPath(args[3]);
-            string serfh = Path.GetFullPath(args[4]);
-            string libssh2h = Path.GetFullPath(args[5]);
-            string to = Path.GetFullPath(args[6]);
+            string aprerrno = Path.GetFullPath(AprErrnoHeaderPath);
+            string serfh = Path.GetFullPath(SerfHeaderPath);
+            string libssh2h = Path.GetFullPath(LibSsh2HeaderPath);
+            string to = Path.GetFullPath(OutputFilePath);
 
             if (!File.Exists(winerror))
                 winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
@@ -45,7 +59,7 @@ namespace Errors2Enum
                 {
                     Console.Error.WriteLine("'{0}' does not exist", winerror);
                     Environment.ExitCode = 1;
-                    return;
+                    return false;
                 }
             }
 
@@ -53,28 +67,28 @@ namespace Errors2Enum
             {
                 Console.Error.WriteLine("'{0}' does not exist", errno);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
             if (!File.Exists(aprerrno))
             {
                 Console.Error.WriteLine("'{0}' does not exist", aprerrno);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
             if (!File.Exists(serfh))
             {
                 Console.Error.WriteLine("'{0}' does not exist", aprerrno);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
             if (!Directory.Exists(Path.GetDirectoryName(to)))
             {
                 Console.Error.WriteLine("Parent directory of '{0}' does not exist", to);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
 
@@ -85,13 +99,13 @@ namespace Errors2Enum
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(errno)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(aprerrno)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(serfh)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(libssh2h)
+                && File.GetLastWriteTime(to) > File.GetLastWriteTime(LibSsh2HeaderPath)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(new Uri(typeof(Errors2Enum).Assembly.CodeBase).LocalPath))
             {
                 using (StreamReader sr = File.OpenText(to))
                 {
                     if (sr.ReadLine() == verHeader)
-                        return; // Nothing to do.
+                        return true; // Nothing to do.
                 }
             }
 
@@ -100,7 +114,7 @@ namespace Errors2Enum
             using (StreamReader header = File.OpenText(winerror))
             using (StreamReader aprheader = File.OpenText(aprerrno))
             using (StreamReader serfheader = File.OpenText(serfh))
-            using (StreamReader libssh2 = File.OpenText(libssh2h))
+            using (StreamReader libssh2 = File.OpenText(LibSsh2HeaderPath))
             using (StreamReader syserrs = File.OpenText(errno))
             {
                 r.WriteLine(verHeader);
@@ -176,13 +190,15 @@ namespace Errors2Enum
                     // No different definitions. Don't touch the file as that would trigger
                     // a recompilation of the precompiled header.
                     File.Delete(to_tmp);
-                    return;
+                    return true;
                 }
                 else
                     File.Delete(to);
             }
 
             File.Move(to_tmp, to);
+
+            return true;
         }
 
         private static void WriteWinEnumBody(StreamReader header, StreamWriter r)
