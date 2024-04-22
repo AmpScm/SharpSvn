@@ -66,7 +66,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
     // diff_cmd) supports only file stream, while libsvn_diff supports both
     // (file stream and SvnStream).
     //
-    // Reference: /apache/subversion/trunk/subversion/libsvn_client/diff.c(1010)
+    // Reference: https://github.com/apache/subversion/blob/1.14.3/subversion/libsvn_client/diff.c#L1010
     if (diff_cmd) {
         AprStreamFile out(result, %pool);
         AprStreamFile err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, %pool);
@@ -155,7 +155,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
     // via diff_cmd) supports only file streams, while libsvn_diff supports
     // both (file stream and SvnStream).
     //
-    // Reference: /apache/subversion/trunk/subversion/libsvn_client/diff.c(1010)
+    // Reference: https://github.com/apache/subversion/blob/1.14.3/subversion/libsvn_client/diff.c#L1010
     if (diff_cmd) {
         AprStreamFile out(result, %pool);
         AprStreamFile err(args->ErrorStream ? args->ErrorStream : System::IO::Stream::Null, %pool);
