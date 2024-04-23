@@ -357,6 +357,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -395,6 +396,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -432,6 +434,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -469,6 +472,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -505,6 +509,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -542,6 +547,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -577,6 +583,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -615,6 +622,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -652,6 +660,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -689,6 +698,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -725,6 +735,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
@@ -762,6 +773,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreLinkEvent>
       <Message>Copying libraries</Message>
