@@ -357,4 +357,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nupkg-files
-          path: nuspec/bin/*.nupkg
+          path: |
+            nuspec/bin/*.nupkg
+            nuspec/bin/*.snupkg
