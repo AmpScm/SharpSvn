@@ -23,6 +23,7 @@
     <releaseNotes>
     </releaseNotes>
     <copyright>Copyright (c) 2006-2018</copyright>
+	<readme>docs\README.md</readme>
     <tags>msbuild assemblyinfo versioninfo</tags>
     <developmentDependency>true</developmentDependency>
   </metadata>
@@ -31,5 +32,8 @@
     <file target="build" src="..\src\SharpSvn.AnnotateAssembly-nuspec\SharpSvn.AnnotateAssembly.targets" />
     <file target="build" src="..\src\SharpSvn.MSBuild\bin\Release\SharpSvn.MSBuild.dll" />
     <file target="build\projects" src="..\src\SharpSvn.AnnotateAssembly-nuspec\projects\AnnotateAssembly.*.targets" />
+	
+	<!-- Add Readme file -->
+	<file src="../README.md" target="docs\"/>
   </files>
 </package>

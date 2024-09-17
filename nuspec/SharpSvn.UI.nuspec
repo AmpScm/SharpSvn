@@ -8,6 +8,7 @@
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/ampscm/SharpSvn</projectUrl>
     <description>Default UI implementation for users of SharpSvn</description>
+	<readme>docs\README.md</readme>
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" commit="" />
     <tags>Subversion Svn SharpSvn</tags>
     <dependencies>
@@ -26,5 +27,8 @@
     <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.dll" />
     <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.xml" />
     <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.pdb" />
+	
+	<!-- Add Readme file -->
+	<file src="../README.md" target="docs\"/>
   </files>
 </package>
