@@ -7,10 +7,10 @@
     <owners>SharpSvn</owners>
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/AmpScm/SharpSvn/</projectUrl>
-    <iconUrl>https://subversion.apache.org/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>SharpSvn is a binding of the Subversion Client API for .NET based on the actual Subversion code, which is included in this library.</description>
     <copyright>(C) Copyright 2006-2022 The SharpSvn Project</copyright>
+	<readme>docs\README.md</readme>
     <tags>Subversion Svn SharpSvn</tags>
     <repository type="git" url="https://github.com/AmpScm/SharpSvn.git" branch="main" commit="" />
     <dependencies>
@@ -87,5 +87,8 @@
     <!-- Automatically copy .svnExe/.svnDll files with SharpSvn during build -->
     <file target="build" src="builds/SharpSvn.targets" />
     <file target="buildTransitive" src="builds/SharpSvn.targets" />
+	
+	<!-- Add Readme file -->
+	<file src="../README.md" target="docs\"/>
   </files>
 </package>

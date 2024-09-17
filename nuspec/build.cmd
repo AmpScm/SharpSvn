@@ -45,8 +45,8 @@ IF NOT "%GIT_SHA%" == "" CALL :xmlpoke SharpSvn.AnnotateAssembly.nuspec "//nu:re
 CALL :xmlpoke SharpSvn.ShortMSDeployWebContentPath.nuspec //nu:metadata/nu:version %SHARPSVN_VER% || EXIT /B 1
 IF NOT "%GIT_SHA%" == "" CALL :xmlpoke SharpSvn.ShortMSDeployWebContentPath.nuspec "//nu:repository[@type='git']/@commit" %GIT_SHA% || EXIT /B 1
 
-nuget pack -Symbols SharpSvn.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
-nuget pack -Symbols SharpSvn.UI.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack -Symbols -SymbolPackageFormat snupkg SharpSvn.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
+nuget pack -Symbols -SymbolPackageFormat snupkg SharpSvn.UI.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
 nuget pack SharpSvn.AnnotateAssembly.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
 nuget pack SharpSvn.ShortMSDeployWebContentPath.nuspec -version %SHARPSVN_VER% -OutputDirectory bin || exit /B 1
 echo "--done--"

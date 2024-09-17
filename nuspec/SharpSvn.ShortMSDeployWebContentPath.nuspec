@@ -18,10 +18,14 @@
     </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2018-2021</copyright>
+	<readme>docs\README.md</readme>
     <tags>msbuild aspnet webproject</tags>
   </metadata>
   <files>
     <file target="build" src="..\src\SharpSvn.ShortMSDeployWebContentPath-nuspec\SharpSvn.ShortMSDeployWebContentPath.props" />
     <file target="build" src="..\src\SharpSvn.ShortMSDeployWebContentPath-nuspec\SharpSvn.ShortMSDeployWebContentPath.targets" />
+	
+	<!-- Add Readme file -->
+	<file src="../README.md" target="docs\"/>
   </files>
 </package>

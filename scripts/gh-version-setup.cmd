@@ -40,6 +40,10 @@ echo Prepare building SharpProj %SVN_VER_MAJOR%.%SHARPSVN_MINOR%.%1
 ) >> %CACHE%
 
 (
+  REM For Versions
+  echo /p:FileVersion=%SHARPSVN_MAJOR%.%SHARPSVN_MINOR%.%SHARPSVN_PATCH%
+  echo /p:AssemblyVersion=%SHARPSVN_MAJOR%.%SHARPSVN_MINOR%.%SHARPSVN_PATCH%
+  
   REM For SDK Projects
   echo /p:Version=%SHARPSVN_MAJOR%.%SHARPSVN_MINOR%.%SHARPSVN_PATCH%
   echo /p:Company="SharpSvn Project, powered by AmpScm, QQn & GitHub"
