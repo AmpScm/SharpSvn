@@ -171,7 +171,7 @@
   <ItemGroup>
     <PackageReference Include="MSTest" Version="3.2.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="System.CodeDom" Version="7.0.0" />
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
