@@ -57,7 +57,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.2" />
   </ItemGroup>
 
   <ItemGroup>
