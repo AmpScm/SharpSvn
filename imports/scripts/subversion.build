@@ -22,6 +22,14 @@
         </do>
       </foreach>
 
+      <if test="${not applyPatches}">
+        <Svn>
+            <arg value="patch" />
+            <arg value="${downloads}/../patches/subversion/vs2022.patch" />
+            <arg value="${svnBase}" />
+          </Svn>
+      </if>
+
       <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn and applyMerges}">
         /* Appended by sharpsvn/imports/scripts/build-subversion.build */
         apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
