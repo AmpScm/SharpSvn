@@ -70,6 +70,13 @@ jobs:
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
+      - name: Load dotnet 6.x
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: |
+             6.x
+             4.8.x
+
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
 
@@ -126,6 +133,13 @@ jobs:
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
+      - name: Load dotnet 6.x
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: |
+             6.x
+             4.8.x
+
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
 
@@ -178,13 +192,15 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
 
+      - name: Setup version
+        run: scripts\gh-version-setup.cmd ${{ github.run_number }}
+
       - name: Load dotnet 6.x
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6.x'
-
-      - name: Setup version
-        run: scripts\gh-version-setup.cmd ${{ github.run_number }}
+          dotnet-version: |
+             6.x
+             4.8.x
 
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
@@ -231,11 +247,6 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v4
 
-      - name: Load dotnet 6.x
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '6.x'
-
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v4
         with:
@@ -247,6 +258,13 @@ jobs:
 
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
+
+      - name: Load dotnet 6.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+             6.x
+             4.8.x
 
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
@@ -298,16 +316,18 @@ jobs:
           name: dependencies-${{runner.os}}
           path: imports/release/
 
-      - name: Load dotnet 6.x
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '6.x'
-
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup version
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
+
+      - name: Load dotnet 6.x
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: |
+             6.x
+             4.8.x
 
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
