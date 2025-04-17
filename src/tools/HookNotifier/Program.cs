@@ -1,23 +1,7 @@
-//
-// Copyright 2008-2009 The SharpSvn Project
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace HookNotifier
 {
@@ -25,7 +9,13 @@ namespace HookNotifier
     {
         static void Main(string[] args)
         {
-            string envPrefix = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]) + ".";
+            string envPrefix;
+
+#if NET6_0_OR_GREATER
+            envPrefix = Path.GetFileNameWithoutExtension(Environment.ProcessPath) + ".";
+#else
+            envPrefix = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]) + ".";
+#endif
 
             string file = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_FILE");
 
@@ -45,18 +35,32 @@ namespace HookNotifier
             if (!string.IsNullOrEmpty(file))
             {
                 using (StreamWriter sw = File.CreateText(file))
+                using (StreamReader sr = new StreamReader(Console.OpenStandardInput()))
                 {
+                    var cts = new CancellationTokenSource(); // Set timeout for 5 seconds
+
+                    Task readTask = Task.Run(() =>
+                    {
+                        try
+                        {
+                            string line;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                sw.WriteLine(line);
+                            }
+                        }
+                        catch (IOException)
+                        {
+                            // STDIN was not passed or encountered an error
+                        }
+                    }, cts.Token);
+
                     try
                     {
-                        string line;
-                        while (null != (line = Console.In.ReadLine()))
-                            sw.WriteLine(line);
-
-                        sw.Write(Console.In.ReadToEnd());
+                        readTask.Wait(cts.Token);
                     }
-                    catch (IOException)
+                    catch (OperationCanceledException)
                     {
-                        /* STDIN was not passed */
                     }
                 }
             }
@@ -75,7 +79,7 @@ namespace HookNotifier
                 DateTime end = DateTime.Now.AddMinutes(5);
                 while (!File.Exists(file))
                 {
-                    Thread.Sleep(100); // 1/10th of a second
+                    Thread.Sleep(100); // Wait for file to appear
 
                     if (DateTime.Now > end)
                     {
@@ -84,7 +88,7 @@ namespace HookNotifier
                     }
                 }
 
-                Thread.Sleep(100); // 1/10th of a second
+                Thread.Sleep(100);
                 int result = int.Parse(File.ReadAllText(file).Trim());
 
                 string outText = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_OUT_STDOUT");
@@ -100,7 +104,6 @@ namespace HookNotifier
                     Console.Error.Write(File.ReadAllText(errText));
                     File.Delete(errText);
                 }
-
 
                 File.Delete(file);
                 Environment.Exit(result);

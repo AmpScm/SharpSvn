@@ -220,7 +220,18 @@ namespace SharpSvn.Tests.LookCommands
                 File.Delete(file);
             });
 
-            File.Copy(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
+            var hookNotifierDir = Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration);
+            File.Copy(Path.Combine(hookNotifierDir, "HookNotifier.exe"), file);
+
+            foreach (var additionalFile in Directory.GetFiles(hookNotifierDir, "HookNotifier.*"))
+            {
+                if (additionalFile.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                string dest = Path.Combine(Path.GetDirectoryName(file), Path.GetFileName(additionalFile));
+                File.Copy(additionalFile, dest, true);
+                tfc.AddFile(dest, false);
+            }
 
             return stopper;
         }

@@ -128,6 +128,7 @@ namespace SharpSvn.Tests.LookCommands
 
                     Assert.That(cr, Is.Not.Null);
                     Assert.AreNotEqual(null, cr.PostCommitError);
+                    Console.WriteLine(cr.PostCommitError);
                     Assert.That(cr.PostCommitError.Contains(Environment.NewLine));
                     Assert.That(cr.PostCommitError.Substring(
                                                     cr.PostCommitError.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase)
