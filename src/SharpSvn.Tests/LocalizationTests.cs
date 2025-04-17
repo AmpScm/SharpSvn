@@ -16,6 +16,7 @@
 using System;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = NUnit.Framework.Assert;
@@ -59,6 +60,12 @@ namespace SharpSvn.Tests
         [TestMethod]
         public void Localization_GermanError()
         {
+#if NET
+            if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+            {
+                Assert.Inconclusive("Localization tests is not supported on ARM64 yet");
+            }
+#endif
             Exception exDefault = GetNotFoundError();
             Exception exGerman;
             Exception exSpanish;
