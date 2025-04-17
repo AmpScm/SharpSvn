@@ -21,8 +21,10 @@ namespace SharpSvn {
         using namespace System;
         using System::Collections::Generic::ICollection;
 
+#if !defined(SHARPSVN_NETCORE)
         [SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true)]
         [SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
+#endif
         ref class AprPool sealed : public SvnHandleBase, public System::IDisposable
         {
             ref class AprPoolTag sealed : public IDisposable

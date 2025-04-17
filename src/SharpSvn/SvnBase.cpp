@@ -626,7 +626,11 @@ String^ SvnBase::UriToString(Uri^ value)
         UriComponents::UserInfo |
         UriComponents::Path, UriFormat::UriEscaped);
     else
+#if !defined(SHARPSVN_NETCORE)
         return Uri::EscapeUriString(value->ToString()); // Escape back to valid uri form
+#else
+        return Uri::EscapeDataString(value->ToString()); // Escape back to valid uri form
+#endif
 }
 
 String^ SvnBase::UriToCanonicalString(Uri^ value)

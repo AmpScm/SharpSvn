@@ -311,6 +311,7 @@ namespace SharpSvn {
         }
 
     public:
+#if !defined(SHARPSVN_NETCORE)
         [System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
         virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
         {
@@ -322,6 +323,7 @@ namespace SharpSvn {
             info->AddValue("_file", File);
             info->AddValue("_line", Line);
         }
+#endif
     };
 
     [Serializable]

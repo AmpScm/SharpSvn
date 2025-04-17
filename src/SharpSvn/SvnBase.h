@@ -162,7 +162,9 @@ namespace SharpSvn {
         static void GenerateInvalidCharMap();
         };
 
+#if !defined(SHARPSVN_NETCORE)
         [SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
+#endif
         private ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
         {
         private:
