@@ -366,7 +366,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
@@ -405,7 +405,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX86</TargetMachine>
@@ -443,7 +443,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
@@ -481,7 +481,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX64</TargetMachine>
@@ -518,7 +518,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-ARM64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
@@ -556,7 +556,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Debug\Errors2Enum.exe "$(VCInstallDir)." "$(
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-ARM64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineARM64</TargetMachine>
@@ -592,7 +592,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
@@ -631,7 +631,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
@@ -669,7 +669,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
@@ -707,7 +707,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
@@ -744,7 +744,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-ARM64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineARM64</TargetMachine>
@@ -782,7 +782,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-ARM64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;shell32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineARM64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
