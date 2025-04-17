@@ -262,7 +262,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
     if (!Uri::TryCreate(components, UriKind::Absolute, root))
         throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
 
-    String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
+    String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(gcnew array<wchar_t>{System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar}));
 
     if (root->IsFile)
     {
