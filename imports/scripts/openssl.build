@@ -102,7 +102,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
       </FilterFile>
       <FilterFile file="${opensslDir}/util/mkdef.pl">
         <filterchain>
-          <LineRegexReplace re='^\s*LIBRARY\s+[\$a-zA-Z]' to='; $0' />
+          <LineRegexReplace re='^\s*LIBRARY\s+[\$a-zA-Z"]' to='; $0' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
