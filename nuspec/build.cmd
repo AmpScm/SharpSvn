@@ -29,7 +29,7 @@ if NOT EXIST ".\bin\." mkdir bin
 
 pushd obj
 dotnet tool install -g JetBrains.Refasmer.CliTool
-refasmer -o SharpSvn.dll -w ..\..\src\SharpSvn\bin\Win32\Release\SharpSvn.dll || exit /B 1
+refasmer --omit-non-api-members=true -o SharpSvn.dll -w ..\..\src\SharpSvn\bin\Win32\Release\SharpSvn.dll || exit /B 1
 popd
 
 
