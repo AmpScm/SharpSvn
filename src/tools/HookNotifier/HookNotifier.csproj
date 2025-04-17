@@ -4,17 +4,10 @@
     <Platforms>AnyCPU</Platforms>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>Exe</OutputType>
-
-    <!-- To create result like net48 on net 6.0+ -->
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <PropertyGroup>
-    <!-- Somehow needed for NuGet restore -->
-    <TargetFramework>net48</TargetFramework>
-    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">net6.0</TargetFramework>
-    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">net6.0</TargetFramework>
+    <TargetFrameworks>net48;net6.0</TargetFrameworks>
   </PropertyGroup>
 
 </Project>
