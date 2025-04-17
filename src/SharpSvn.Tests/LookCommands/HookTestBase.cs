@@ -14,15 +14,13 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using SharpSvn.Tests.Commands;
-using System.Threading;
-using System.IO;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests.LookCommands
 {
@@ -222,7 +220,11 @@ namespace SharpSvn.Tests.LookCommands
                 File.Delete(file);
             });
 
-            File.Copy(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
+            foreach (var f in Directory.GetFiles(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration), "*", SearchOption.TopDirectoryOnly))
+            {
+                string dest = Path.Combine(ProjectBase, "..\\tools\\hooknotifier", Path.GetFileName(f));
+                File.Copy(f, dest, true);
+            }
 
             return stopper;
         }
