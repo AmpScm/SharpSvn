@@ -15,17 +15,14 @@
 
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
-
+using SharpSvn.TestBuilder;
 using SharpSvn.Tests.Commands.Utils;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
-using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -87,12 +84,12 @@ namespace SharpSvn.Tests.Commands
         {
             SvnClient client = new SvnClient();
 
-            client.Conflict += delegate(object sender, SvnConflictEventArgs e)
+            client.Conflict += delegate (object sender, SvnConflictEventArgs e)
             {
                 Assert.That(true, Is.EqualTo(expectConflict), "Conflict expected");
             };
 
-            client.Committing += delegate(object sender, SvnCommittingEventArgs e)
+            client.Committing += delegate (object sender, SvnCommittingEventArgs e)
             {
                 Assert.That(true, Is.EqualTo(expectCommit), "Commit expected");
                 if (e.LogMessage == null)
@@ -134,8 +131,11 @@ namespace SharpSvn.Tests.Commands
         {
             get
             {
+#if NET
+                string assemblyDir = Path.GetDirectoryName(typeof(TestBase).Assembly.Location);
+#else
                 string assemblyDir = Path.GetDirectoryName(new Uri(typeof(TestBase).Assembly.CodeBase).LocalPath);
-
+#endif
                 return Path.GetFullPath(Path.Combine(assemblyDir, "..\\..\\.."));
             }
         }
@@ -289,7 +289,11 @@ namespace SharpSvn.Tests.Commands
 
             _checkedBDB = true;
 
+#if NET
+            string dir = Path.GetDirectoryName(typeof(TestBase).Assembly.Location);
+#else
             string dir = Path.GetDirectoryName(new Uri(typeof(TestBase).Assembly.CodeBase).LocalPath);
+#endif
 
             string bdbX86 = "SharpSvn-DB44-20-win32.svnDll";
             string bdbX64 = "SharpSvn-DB44-20-x64.svnDll";
