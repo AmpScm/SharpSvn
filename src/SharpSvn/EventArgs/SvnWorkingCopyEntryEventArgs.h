@@ -261,7 +261,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (!_conflictOld && _entry && _entry->conflict_old)
-                    _conflictOld = SvnBase::Utf8_PtrToString(_entry->conflict_old)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                    _conflictOld = SvnBase::Utf8_PtrToString(_entry->conflict_old)->Replace(L'/', System::IO::Path::DirectorySeparatorChar);
 
                 return _conflictOld;
             }
@@ -272,7 +272,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (!_conflictNew && _entry && _entry->conflict_new)
-                    _conflictNew = SvnBase::Utf8_PtrToString(_entry->conflict_new)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                    _conflictNew = SvnBase::Utf8_PtrToString(_entry->conflict_new)->Replace(L'/', System::IO::Path::DirectorySeparatorChar);
 
                 return _conflictNew;
             }
@@ -283,7 +283,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (!_conflictWork && _entry && _entry->conflict_wrk)
-                    _conflictWork = SvnBase::Utf8_PtrToString(_entry->conflict_wrk)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                    _conflictWork = SvnBase::Utf8_PtrToString(_entry->conflict_wrk)->Replace(L'/', System::IO::Path::DirectorySeparatorChar);
 
                 return _conflictWork;
             }
@@ -294,7 +294,7 @@ namespace SharpSvn {
             String^ get()
             {
                 if (!_prejfile && _entry && _entry->prejfile)
-                    _prejfile = SvnBase::Utf8_PtrToString(_entry->prejfile)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                    _prejfile = SvnBase::Utf8_PtrToString(_entry->prejfile)->Replace(L'/', System::IO::Path::DirectorySeparatorChar);
 
                 return _prejfile;
             }

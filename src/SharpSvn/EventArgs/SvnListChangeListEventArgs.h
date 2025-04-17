@@ -30,7 +30,7 @@ namespace SharpSvn {
             if (!path)
                 throw gcnew ArgumentNullException("path");
 
-            _path = SvnBase::Utf8_PtrToString(path)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+            _path = SvnBase::Utf8_PtrToString(path)->Replace(L'/', System::IO::Path::DirectorySeparatorChar);
             _pChangeList = changelist;
         }
 

@@ -200,13 +200,16 @@ svn_auth_provider_object_t *SvnUserNameEventArgs::Wrapper::GetProviderPtr(AprPoo
 
 void SvnUserNameEventArgs::AuthSetup(svn_auth_baton_t *auth_baton, AprPool^ pool)
 {
-
+    UNUSED_ALWAYS(auth_baton);
+    UNUSED_ALWAYS(pool);
 }
 
 void SvnUserNameEventArgs::Done(svn_auth_baton_t *auth_baton, AprPool^ pool)
 {
-
+    UNUSED_ALWAYS(auth_baton);
+    UNUSED_ALWAYS(pool);
 }
+
 bool SvnUserNameEventArgs::Apply(void *credentials)
 {
     svn_auth_cred_username_t *cred = (svn_auth_cred_username_t *)credentials;
@@ -286,13 +289,16 @@ svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPt
 
 void SvnUserNamePasswordEventArgs::AuthSetup(svn_auth_baton_t *auth_baton, AprPool^ pool)
 {
-
+    UNUSED_ALWAYS(auth_baton);
+    UNUSED_ALWAYS(pool);
 }
 
 void SvnUserNamePasswordEventArgs::Done(svn_auth_baton_t *auth_baton, AprPool^ pool)
 {
-
+    UNUSED_ALWAYS(auth_baton);
+    UNUSED_ALWAYS(pool);
 }
+
 bool SvnUserNamePasswordEventArgs::Apply(void *credentials)
 {
     svn_auth_cred_simple_t *cred = (svn_auth_cred_simple_t *)credentials;

@@ -239,7 +239,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
                     break;
                 }
 
-                int nAt = components->IndexOf('@', nStart);
+                int nAt = components->IndexOf(L'@', nStart);
 
                 if (nAt < 0)
                     nAt = nStart + 2;

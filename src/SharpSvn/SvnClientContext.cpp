@@ -1003,7 +1003,7 @@ HWND __cdecl sharpsvn_get_ui_parent()
         SvnBeforeEngineDialogEventArgs ^ea = gcnew SvnBeforeEngineDialogEventArgs();
 
         ctx->Authentication->InvokeOnBeforeEngineDialog(ea);
-        return (HWND)(__int32)ea->Handle;
+        return (HWND)(__int64)ea->Handle;
     }
     catch(...)
     {

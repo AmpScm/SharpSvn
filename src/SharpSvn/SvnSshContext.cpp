@@ -1040,6 +1040,8 @@ void SshConnection::PerformKeyboardInteractive(String ^name, String ^instruction
                                                int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
                                                LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses)
 {
+    UNUSED_ALWAYS(name);
+    UNUSED_ALWAYS(instructions);
     struct ssh_keybint_t &kbi = *_kbi;
 
     if (kbi.current && num_prompts >= 1 && !prompts[0].echo)
