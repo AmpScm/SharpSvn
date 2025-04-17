@@ -19,8 +19,8 @@
   <PropertyGroup>
     <!-- Somehow needed for NuGet restore -->
     <TargetFramework>net462</TargetFramework>
-    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">net6</TargetFramework>
-    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">net6</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">net6-windows</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">net6-windows</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -38,12 +38,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseCore|AnyCPU'">
-    <TargetFramework>net6</TargetFramework>
+    <TargetFramework>net6-windows</TargetFramework>
     <Optimize>True</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugCore|AnyCPU'">
-    <TargetFramework>net6</TargetFramework>
+    <TargetFramework>net6-windows</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
