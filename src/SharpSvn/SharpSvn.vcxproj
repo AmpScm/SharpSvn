@@ -983,8 +983,7 @@ $(SolutionDir)tools\Errors2Enum\bin\Release\Errors2Enum.exe "$(VCInstallDir)." "
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup Condition="'$(Platform)' != 'ARM64'">
-    <!-- Currently disabled for ARM64 as the generated resources crash the prcess -->
+  <ItemGroup>
     <EmbeddedResource Include="SvnText\SvnText.de.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
