@@ -12,7 +12,7 @@
     <repository type="git" url="https://github.com/ampscm/SharpSvn.git" branch="main" commit="" />
     <tags>Subversion Svn SharpSvn</tags>
     <dependencies>
-      <group targetFramework="net45">
+      <group targetFramework="net48">
         <dependency id="SharpSvn" version="[1.14000.12]" />
       </group>
       <group targetFramework="netcoreapp">
@@ -21,9 +21,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file target="lib/net45" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.dll" />
-    <file target="lib/net45" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.xml" />
-    <file target="lib/net45" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.pdb" />
+    <file target="lib/net48" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.dll" />
+    <file target="lib/net48" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.xml" />
+    <file target="lib/net48" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.pdb" />
     <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.dll" />
     <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.xml" />
     <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.pdb" />

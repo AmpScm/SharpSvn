@@ -1,4 +1,4 @@
-name: MSBuildV2
+name: MSBuild
 
 on:
   push:
@@ -324,8 +324,30 @@ jobs:
             src/**/bin/Release/
             src/**/bin/ARM64/ReleaseCore/
 
+  test-arm64-core:
+    needs: build-arm64-core
+    runs-on: windows-11-arm
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
+      - name: Restore build-arm64-core artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-arm64-core-artifacts
+          path: src/
+
+      - name: Dotnet-test-Core-arm64
+        run: dotnet vstest /Platform:ARM64 src/SharpSvn.Tests/bin/ARM64/ReleaseCore/SharpSvn.Tests.dll --TestCaseFilter:"TestCategory!=NeedsNetwork"
+
   create-nuget:
-    needs: [test-x86, test-x64, test-x86-core, test-x64-core, build-arm64-core]
+    needs: [test-x86, test-x64, test-x86-core, test-x64-core, test-arm64-core]
     runs-on: windows-2022
     steps:
       - name: Git Checkout
