@@ -14,17 +14,15 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using SharpSvn.TestBuilder;
+using SharpSvn.Tests.Commands;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
-using SharpSvn.TestBuilder;
-using System.IO;
-
-using System.Runtime.InteropServices;
-using NUnit.Framework;
-using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests
 {
@@ -253,7 +251,7 @@ namespace SharpSvn.Tests
                 // This case triggers on the GitHub bot
                 curDir = SvnTools.GetNormalizedFullPath(curDir);
             }
-            Assert.That(SvnTools.GetNormalizedDirectoryName(drive), Is.EqualTo(drive.ToUpperInvariant()+Path.GetDirectoryName(curDir).Substring(2))); // CWD on current drive
+            Assert.That(SvnTools.GetNormalizedDirectoryName(drive), Is.EqualTo(drive.ToUpperInvariant() + Path.GetDirectoryName(curDir).Substring(2))); // CWD on current drive
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("c:\\a"), Is.EqualTo("C:\\"));
@@ -285,8 +283,9 @@ namespace SharpSvn.Tests
             Assert.That(!SvnTools.IsNormalizedFullPath(share + "\\"));
             Assert.That(!SvnTools.IsNormalizedFullPath(shaUC + "\\"));
 
-            Assert.That(SvnTools.GetTruePath(share + "\\A\\B", true), Is.EqualTo(share + "\\A\\B"));
-            Assert.That(SvnTools.GetTruePath(share + "\\A", true), Is.EqualTo(share + "\\A"));
+            Assert.That(File.Exists("C:\\AQZ"), Is.EqualTo(false), "Testdir doesn't exist");
+            Assert.That(SvnTools.GetTruePath(share + "\\AQZ\\B", true), Is.EqualTo(share + "\\AQZ\\B"));
+            Assert.That(SvnTools.GetTruePath(share + "\\AQZ", true), Is.EqualTo(share + "\\AQZ"));
             Assert.That(SvnTools.GetTruePath(share, true), Is.EqualTo(share));
             Assert.That(SvnTools.GetTruePath(share + "\\", true), Is.EqualTo(share));
 
@@ -609,7 +608,7 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.IsAbsolutePath(testPath));
 
-            Assert.That(SvnTools.GetNormalizedFullPath(testPath), Is.EqualTo(testPath),"Fetch normalized");
+            Assert.That(SvnTools.GetNormalizedFullPath(testPath), Is.EqualTo(testPath), "Fetch normalized");
             Assert.That(new SvnPathTarget(testPath).TargetName, Is.EqualTo(testPath), "PathTarget");
 
             Assert.That(SvnTools.GetTruePath(testPath, true), Is.EqualTo(testPath), "Fetch truepath");

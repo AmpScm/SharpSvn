@@ -24,9 +24,9 @@
     <file target="lib/net48" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.dll" />
     <file target="lib/net48" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.xml" />
     <file target="lib/net48" src="..\src\SharpSvn.UI\bin\release\SharpSvn.UI.pdb" />
-    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.dll" />
-    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.xml" />
-    <file target="lib/netcoreapp" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.pdb" />
+    <file target="lib/net6.0" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.dll" />
+    <file target="lib/net6.0" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.xml" />
+    <file target="lib/net6.0" src="..\src\SharpSvn.UI\bin\releasecore\SharpSvn.UI.pdb" />
 	
 	<!-- Add Readme file -->
 	<file src="../README.md" target="docs\"/>
