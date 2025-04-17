@@ -2,7 +2,6 @@
   <PropertyGroup>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <TargetFrameworks>net48;net6.0</TargetFrameworks>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>Exe</OutputType>
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -10,6 +9,14 @@
     <!-- This is currently needed, because the project is referenced from SharpSvn.Testst. Otherwise msbuild /restore fails -->
     <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Somehow needed for NuGet restore -->
+    <TargetFramework>net48</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'DebugCore'">net6.0-windows</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)' == 'ReleaseCore'">net6.0-windows</TargetFramework>
   </PropertyGroup>
 
 </Project>

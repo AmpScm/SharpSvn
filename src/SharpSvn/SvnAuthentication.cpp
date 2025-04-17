@@ -606,12 +606,12 @@ void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
         " - Hostname: {0}\n"
         " - Valid: from {1} until {2}\n"
         " - Issuer: {3}\n"
-        " - Fingerprint: {4}\n",
+        " - Fingerprint: {4}\n", gcnew array<Object^>{
         e->CommonName,
         e->ValidFrom,
         e->ValidUntil,
         e->Issuer,
-        e->Fingerprint);
+        e->Fingerprint });
 
     try
     {
