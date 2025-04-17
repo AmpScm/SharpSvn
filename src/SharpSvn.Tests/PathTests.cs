@@ -289,7 +289,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetTruePath(share, true), Is.EqualTo(share));
             Assert.That(SvnTools.GetTruePath(share + "\\", true), Is.EqualTo(share));
 
-            Assert.That(SvnTools.GetTruePath("C:\\A", true), Is.EqualTo("C:\\A"));
+            Assert.That(SvnTools.GetTruePath("C:\\AQZ", true), Is.EqualTo("C:\\AQZ"));
 
             Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\dir"), Is.EqualTo(@"C:\"));
             Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\dir"), Is.EqualTo(@"C:\"));
