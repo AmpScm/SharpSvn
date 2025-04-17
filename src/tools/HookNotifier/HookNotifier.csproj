@@ -4,10 +4,8 @@
     <Platforms>AnyCPU</Platforms>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>Exe</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
 
-    <!-- This is currently needed, because the project is referenced from SharpSvn.Testst. Otherwise msbuild /restore fails -->
-    <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
+    <!-- To create result like net48 on net 6.0+ -->
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <SelfContained>true</SelfContained>
   </PropertyGroup>

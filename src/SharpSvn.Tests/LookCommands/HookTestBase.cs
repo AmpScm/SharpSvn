@@ -220,11 +220,7 @@ namespace SharpSvn.Tests.LookCommands
                 File.Delete(file);
             });
 
-            foreach (var f in Directory.GetFiles(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration), "*", SearchOption.TopDirectoryOnly))
-            {
-                string dest = Path.Combine(ProjectBase, "..\\tools\\hooknotifier", Path.GetFileName(f));
-                File.Copy(f, dest, true);
-            }
+            File.Copy(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
 
             return stopper;
         }

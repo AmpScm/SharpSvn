@@ -14,14 +14,11 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharpSvn.TestBuilder;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
-using SharpSvn.TestBuilder;
-using SharpSvn.Tests.Commands;
-using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.LookCommands
 {
@@ -130,6 +127,7 @@ namespace SharpSvn.Tests.LookCommands
                     cl.RemoteCreateDirectory(new Uri(uri, "a/b/c/d/e/f"), da, out cr);
 
                     Assert.That(cr, Is.Not.Null);
+                    Assert.AreNotEqual(null, cr.PostCommitError);
                     Assert.That(cr.PostCommitError.Contains(Environment.NewLine));
                     Assert.That(cr.PostCommitError.Substring(
                                                     cr.PostCommitError.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase)

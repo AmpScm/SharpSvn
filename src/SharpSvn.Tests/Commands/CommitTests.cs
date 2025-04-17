@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,14 +18,11 @@ using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharpSvn.Security;
+using SharpSvn.TestBuilder;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
-using SharpSvn.TestBuilder;
-
-using SharpSvn;
-using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -208,7 +205,7 @@ namespace SharpSvn.Tests.Commands
             string WcPath = sbox.Wc;
 
             string filepath = Path.Combine(WcPath, "Form.cs");
-            this.Client.Committing += delegate(object sender, SvnCommittingEventArgs e)
+            this.Client.Committing += delegate (object sender, SvnCommittingEventArgs e)
             {
                 Assert.That(e.Items.Count, Is.EqualTo(1), "Wrong number of commit items");
                 Assert.That(e.Items[0].Path, Is.EqualTo(filepath), "Wrong path");
@@ -237,7 +234,7 @@ namespace SharpSvn.Tests.Commands
             File.WriteAllText(path2, "MOO2");
             Client.Add(path2);
 
-            this.Client.Committing += delegate(object sender, SvnCommittingEventArgs e)
+            this.Client.Committing += delegate (object sender, SvnCommittingEventArgs e)
             {
                 e.LogMessage = null;
                 e.Cancel = true;
@@ -296,7 +293,7 @@ namespace SharpSvn.Tests.Commands
                 client.Configuration.LogMessageRequired = false;
 
                 client.Authentication.UserNameHandlers +=
-                    delegate(object sender, SvnUserNameEventArgs e)
+                    delegate (object sender, SvnUserNameEventArgs e)
                     {
                         e.UserName = user;
                     };
