@@ -2,7 +2,7 @@
     <?if $(var.Platform) = x64 ?>
     <Fragment>
         <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin" DiskId="1">
-            <Merge SourceFile="..\..\msm\Microsoft_VC142_CRT_x64.msm" Id="VC_CRT" Language="1033" />
+            <Merge SourceFile="..\..\msm\Microsoft_VC143_CRT_x64.msm" Id="VC_CRT" Language="1033" />
             <!-- Primary Client Applications -->
             <Component Id="svn.exe" Guid="18AA5EE7-8E33-4958-8D75-5F82C87EFAAE">
                 <File Id="svn.exe" Name="svn.exe" KeyPath="yes" Checksum="yes" />
