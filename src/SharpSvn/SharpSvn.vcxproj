@@ -74,7 +74,7 @@
     </SccProvider>
     <Keyword>ManagedCProj</Keyword>
     <SharpSvnUpdateVersionResource>true</SharpSvnUpdateVersionResource>
-    <TargetFrameworkVersion>v4.8.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <WindowsTargetPlatformMinVersion>10.0.10240.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

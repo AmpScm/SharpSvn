@@ -75,7 +75,6 @@ jobs:
         with:
             dotnet-version: |
              6.x
-             4.8.x
 
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
@@ -138,7 +137,6 @@ jobs:
         with:
             dotnet-version: |
              6.x
-             4.8.x
 
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
@@ -200,7 +198,6 @@ jobs:
         with:
           dotnet-version: |
              6.x
-             4.8.x
 
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
@@ -264,7 +261,6 @@ jobs:
         with:
           dotnet-version: |
              6.x
-             4.8.x
 
       - name: Run nuget
         run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
