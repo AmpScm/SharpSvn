@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,13 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
-using SharpSvn.TestBuilder;
-using SharpSvn;
-using System.Threading;
-using System.Globalization;
-using System.Reflection;
 
 namespace SharpSvn.Tests
 {
@@ -53,7 +50,7 @@ namespace SharpSvn.Tests
 
 
             Assert.That(client.Info("c:/does/not/ever/exist/on/windows", a,
-                delegate(object sender, SvnInfoEventArgs e)
+                delegate (object sender, SvnInfoEventArgs e)
                 {
                 }), Is.False, "Should fail");
 
@@ -63,6 +60,12 @@ namespace SharpSvn.Tests
         [TestMethod]
         public void Localization_GermanError()
         {
+#if NET
+            if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+            {
+                Assert.Inconclusive("Localization tests is not supported on ARM64 yet");
+            }
+#endif
             Exception exDefault = GetNotFoundError();
             Exception exGerman;
             Exception exSpanish;
