@@ -1,0 +1,92 @@
+/*
+ * Implementation of Filename for Windows.
+ */
+
+#include <wchar.h>
+
+#include "putty.h"
+
+Filename *filename_from_str(const char *str)
+{
+    Filename *fn = snew(Filename);
+    fn->cpath = dupstr(str);
+    fn->wpath = dup_mb_to_wc(DEFAULT_CODEPAGE, 0, fn->cpath);
+    fn->utf8path = encode_wide_string_as_utf8(fn->wpath);
+    return fn;
+}
+
+Filename *filename_from_wstr(const wchar_t *str)
+{
+    Filename *fn = snew(Filename);
+    fn->wpath = dupwcs(str);
+    fn->cpath = dup_wc_to_mb(DEFAULT_CODEPAGE, 0, fn->wpath, "?");
+    fn->utf8path = encode_wide_string_as_utf8(fn->wpath);
+    return fn;
+}
+
+Filename *filename_from_utf8(const char *ustr)
+{
+    Filename *fn = snew(Filename);
+    fn->utf8path = dupstr(ustr);
+    fn->wpath = decode_utf8_to_wide_string(fn->utf8path);
+    fn->cpath = dup_wc_to_mb(DEFAULT_CODEPAGE, 0, fn->wpath, "?");
+    return fn;
+}
+
+Filename *filename_copy(const Filename *fn)
+{
+    Filename *newfn = snew(Filename);
+    newfn->cpath = dupstr(fn->cpath);
+    newfn->wpath = dupwcs(fn->wpath);
+    newfn->utf8path = dupstr(fn->utf8path);
+    return newfn;
+}
+
+const char *filename_to_str(const Filename *fn)
+{
+    return fn->cpath;                  /* FIXME */
+}
+
+bool filename_equal(const Filename *f1, const Filename *f2)
+{
+    /* wpath is primary: two filenames refer to the same file if they
+     * have the same wpath */
+    return !wcscmp(f1->wpath, f2->wpath);
+}
+
+bool filename_is_null(const Filename *fn)
+{
+    return !*fn->wpath;
+}
+
+void filename_free(Filename *fn)
+{
+    sfree(fn->wpath);
+    sfree(fn->cpath);
+    sfree(fn->utf8path);
+    sfree(fn);
+}
+
+void filename_serialise(BinarySink *bs, const Filename *f)
+{
+    put_asciz(bs, f->utf8path);
+}
+Filename *filename_deserialise(BinarySource *src)
+{
+    const char *utf8 = get_asciz(src);
+    return filename_from_utf8(utf8);
+}
+
+char filename_char_sanitise(char c)
+{
+    if (strchr("<>:\"/\\|?*", c))
+        return '.';
+    return c;
+}
+
+FILE *f_open(const Filename *fn, const char *mode, bool isprivate)
+{
+    wchar_t *wmode = dup_mb_to_wc(DEFAULT_CODEPAGE, 0, mode);
+    return _wfopen(fn->wpath, wmode);
+    sfree(wmode);
+}
