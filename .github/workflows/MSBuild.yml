@@ -71,7 +71,7 @@ jobs:
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
       - name: Load dotnet 6.x
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
             dotnet-version: |
              6.x
@@ -133,7 +133,7 @@ jobs:
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
       - name: Load dotnet 6.x
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
             dotnet-version: |
              6.x
@@ -194,7 +194,7 @@ jobs:
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
       - name: Load dotnet 6.x
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
              6.x
@@ -257,7 +257,7 @@ jobs:
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
       - name: Load dotnet 6.x
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
              6.x
@@ -319,7 +319,7 @@ jobs:
         run: scripts\gh-version-setup.cmd ${{ github.run_number }}
 
       - name: Load dotnet 6.x
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
             dotnet-version: |
              6.x
