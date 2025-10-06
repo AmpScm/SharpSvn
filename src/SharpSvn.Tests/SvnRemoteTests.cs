@@ -14,15 +14,11 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharpSvn.Tests.Commands;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
-using SharpSvn.TestBuilder;
-
-using System.Collections.ObjectModel;
-using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests
 {
@@ -37,12 +33,12 @@ namespace SharpSvn.Tests
             SvnListArgs la = new SvnListArgs();
             la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
 
-            cl.List(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/"), la, delegate(object Sender, SvnListEventArgs e)
+            cl.List(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/"), la, delegate (object Sender, SvnListEventArgs e)
             {
-                    Assert.That(e.Entry, Is.Not.Null);
-                    Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
-                    Assert.That(e.Entry.Author, Is.Not.Null);
-                    found = true;
+                Assert.That(e.Entry, Is.Not.Null);
+                Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
+                Assert.That(e.Entry.Author, Is.Not.Null);
+                found = true;
             });
 
             Assert.That(found);
@@ -50,10 +46,10 @@ namespace SharpSvn.Tests
             Collection<SvnListEventArgs> ee;
             cl.GetList(new Uri("https://svn.apache.org/repos/asf/subversion/trunk/"), out ee);
             Assert.That(ee, Is.Not.Null);
-            Assert.That(ee[0].Entry.Author, Is.Not.Null);
+            Assert.That(ee[0].Entry.Author, Is.Null); // no author without RetrieveEntries
         }
 
-        [TestMethod,Ignore]
+        [TestMethod, Ignore]
         public void TestSsh()
         {
             SvnClient cl = new SvnClient();
@@ -61,17 +57,17 @@ namespace SharpSvn.Tests
 
             //cl.KeepSession = true;
 
-            cl.Authentication.SshServerTrustHandlers += delegate(object sender, Security.SvnSshServerTrustEventArgs e)
+            cl.Authentication.SshServerTrustHandlers += delegate (object sender, Security.SvnSshServerTrustEventArgs e)
                     {
                         e.AcceptedFailures = e.Failures;
                     };
 
-            cl.Authentication.UserNameHandlers += delegate(object sender, Security.SvnUserNameEventArgs e)
+            cl.Authentication.UserNameHandlers += delegate (object sender, Security.SvnUserNameEventArgs e)
                     {
                         e.UserName = "bert";
                         e.Save = true;
                     };
-            cl.List(new Uri("svn+libssh2://vip/home/svn/repos/ankh-test"), delegate(object Sender, SvnListEventArgs e)
+            cl.List(new Uri("svn+libssh2://vip/home/svn/repos/ankh-test"), delegate (object Sender, SvnListEventArgs e)
             {
                 Assert.That(e.Entry, Is.Not.Null);
                 Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
@@ -83,7 +79,7 @@ namespace SharpSvn.Tests
 
             found = false;
 
-            cl.List(new Uri("svn+libssh2://bert@vip/home/svn/repos/ankh-test"), delegate(object Sender, SvnListEventArgs e)
+            cl.List(new Uri("svn+libssh2://bert@vip/home/svn/repos/ankh-test"), delegate (object Sender, SvnListEventArgs e)
             {
                 Assert.That(e.Entry, Is.Not.Null);
                 Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
@@ -107,7 +103,7 @@ namespace SharpSvn.Tests
             try
             {
                 cl.Info(new Uri("svn+builtin-ssh://github.com:80"),
-                    delegate(object Sender, SvnInfoEventArgs e)
+                    delegate (object Sender, SvnInfoEventArgs e)
                     { });
             }
             catch (SvnRepositoryIOException e)
