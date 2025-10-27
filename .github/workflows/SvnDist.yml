@@ -37,7 +37,7 @@ jobs:
       run: ${{env.nant}} -f:tools/buildbot.build "-D:CCNetNumericLabel=${{github.run_number}}" "-D:CCNetProject=SlikSvn" -D:svnDist=true -D:gitBuild=true buildbot-build package-svndist
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: svndist-files
         path: |
