@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
@@ -99,13 +99,13 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
 
       - name: Restore build-x86 artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-x86-artifacts
           path: src/
@@ -121,7 +121,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
@@ -160,13 +160,13 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
 
       - name: Restore build-x64 artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-x64-artifacts
           path: src/
@@ -182,7 +182,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
@@ -223,13 +223,13 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
 
       - name: Restore build-x86-core artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-x86-core-artifacts
           path: src/
@@ -245,7 +245,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
@@ -285,13 +285,13 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
 
       - name: Restore build-x64-core artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-x64-core-artifacts
           path: src/
@@ -307,7 +307,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
@@ -347,13 +347,13 @@ jobs:
 #        uses: actions/checkout@v5
 #
 #      - name: Restore dependency artifacts
-#        uses: actions/download-artifact@v5
+#        uses: actions/download-artifact@v6
 #        with:
 #          name: dependencies-${{runner.os}}
 #          path: imports/release/
 #
 #      - name: Restore build-arm64-core artifacts
-#        uses: actions/download-artifact@v5
+#        uses: actions/download-artifact@v6
 #        with:
 #          name: build-arm64-core-artifacts
 #          path: src/
@@ -369,13 +369,13 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Restore dependency artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: dependencies-${{runner.os}}
           path: imports/release/
 
       - name: Restore build-* artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: build-*-artifacts
           path: src/
