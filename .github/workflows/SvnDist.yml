@@ -27,10 +27,9 @@ jobs:
     # Install SVN client as it was removed in windows-latest
     # https://github.com/actions/runner-images/issues/12677
     - name: Install Svn
-      shell: bash
       run: |
         choco install svn
-        echo "C:\Program Files (x86)\Subversion\bin" >> "$GITHUB_PATH"
+        echo "C:\Program Files (x86)\Subversion\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
         echo "$GITHUB_PATH"
         svn --version
 
