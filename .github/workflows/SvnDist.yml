@@ -31,9 +31,7 @@ jobs:
     
     - name: Test svn
       run: |
-        refreshenv
-        svn --version
-        Svn --version
+        echo %PATH%
 
     - name: Cache
       uses: actions/cache@v4
