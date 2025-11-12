@@ -6,11 +6,11 @@ on:
   workflow_dispatch:
 
 env:
-  nant: '${{ github.workspace }}/src/packages/NAnt.0.92.0/tools/nant.exe'
+  nant: '${{github.workspace}}/src/packages/NAnt.0.92.0/tools/nant.exe'
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - name: Git Checkout
@@ -27,7 +27,7 @@ jobs:
       with:
         path: |
           imports/downloads
-        key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}
+        key: ${{runner.os}}-dist-${{hashFiles('build/imports/*.build')}}
 
     - name: Install NAnt
       working-directory: imports/
