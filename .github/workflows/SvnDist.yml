@@ -25,9 +25,14 @@ jobs:
         java-version: '8'
     # Install SVN client as it was removed in windows-latest
     # https://github.com/actions/runner-images/issues/12677
-    - name: Install TortoiseSVN
+    - name: Install svn
       run: |
         choco install svn
+    
+    - name: Test svn
+      run: |
+        svn --version
+        Svn --version
 
     - name: Cache
       uses: actions/cache@v4
