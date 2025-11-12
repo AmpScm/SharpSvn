@@ -27,7 +27,7 @@ jobs:
     # https://github.com/actions/runner-images/issues/12677
     - name: Install TortoiseSVN
       run: |
-        winget install TortoiseSVN.TortoiseSVN
+        winget install --silent --accept-source-agreements TortoiseSVN.TortoiseSVN
 
     - name: Cache
       uses: actions/cache@v4
