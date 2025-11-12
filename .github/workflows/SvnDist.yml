@@ -25,13 +25,13 @@ jobs:
         java-version: '8'
     # Install SVN client as it was removed in windows-latest
     # https://github.com/actions/runner-images/issues/12677
-    - name: Install svn
+    - name: Install Svn
       run: |
         choco install svn
     
     - name: Test svn
       run: |
-        echo %PATH%
+        echo $GITHUB_PATH
 
     - name: Cache
       uses: actions/cache@v4
