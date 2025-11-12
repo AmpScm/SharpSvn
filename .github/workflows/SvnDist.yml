@@ -29,13 +29,14 @@ jobs:
       run: |
         choco install svn
         echo "C:\Program Files (x86)\Subversion\bin" >> "$GITHUB_PATH"
+        echo "$GITHUB_PATH"
 
     - name: Cache
       uses: actions/cache@v4
       with:
         path: |
           imports/downloads
-        key: "${{runner.os}}-dist-${{hashFiles('build/imports/*.build')}}"
+        key: "${{runner.os}}_dist_${{hashFiles('build/imports/*.build')}}"
 
     - name: Install NAnt
       working-directory: imports/
