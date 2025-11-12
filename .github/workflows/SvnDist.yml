@@ -31,8 +31,10 @@ jobs:
         choco install svn
         echo "C:\Program Files (x86)\Subversion\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
         echo "$GITHUB_PATH"
-        svn --version
 
+    - name: Test svn
+      run: svn --version
+      
     - name: Cache
       uses: actions/cache@v4
       with:
