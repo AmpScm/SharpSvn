@@ -3,12 +3,15 @@ name: MSBuild
 on:
   push:
     branches: [ main, stable/* ]
+    tags:
+      - "SlikSVN-*"
   pull_request:
     branches: [ main, stable/* ]
 
 env:
   SOLUTION_FILE_PATH: src/SharpSvn.sln
   nant: '${{ github.workspace }}/src/packages/NAnt.0.92.0/tools/nant.exe'
+  VERSION: ${{github.run_number}}
 
 jobs:
   dependencies:
@@ -38,7 +41,7 @@ jobs:
         with:
           path: |
             imports/downloads
-          key: ${{runner.os}}-Import-Downloads-${{ hashFiles('imports/*.build') }}
+          key: ${{runner.os}}-Import-Downloads-${{hashFiles('imports/*.build')}}
       
       - name: Run NAnt preparations
         if: steps.cache.outputs.cache-hit != 'true'
@@ -68,7 +71,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup version
-        run: scripts\gh-version-setup.cmd ${{ github.run_number }}
+        run: scripts\gh-version-setup.cmd ${{env.VERSION}}
 
       - name: Load dotnet 6.x
         uses: actions/setup-dotnet@v5
@@ -130,7 +133,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup version
-        run: scripts\gh-version-setup.cmd ${{github.run_number}}
+        run: scripts\gh-version-setup.cmd ${{env.VERSION}}
 
       - name: Load dotnet 6.x
         uses: actions/setup-dotnet@v5
@@ -191,7 +194,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup version
-        run: scripts\gh-version-setup.cmd ${{github.run_number}}
+        run: scripts\gh-version-setup.cmd ${{env.VERSION}}
 
       - name: Load dotnet 6.x
         uses: actions/setup-dotnet@v5
@@ -254,7 +257,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup version
-        run: scripts\gh-version-setup.cmd ${{ github.run_number }}
+        run: scripts\gh-version-setup.cmd ${{env.VERSION}}
 
       - name: Load dotnet 6.x
         uses: actions/setup-dotnet@v5
@@ -316,7 +319,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup version
-        run: scripts\gh-version-setup.cmd ${{github.run_number}}
+        run: scripts\gh-version-setup.cmd ${{env.VERSION}}
 
       - name: Load dotnet 6.x
         uses: actions/setup-dotnet@v5
@@ -385,7 +388,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup version
-        run: scripts\gh-version-setup.cmd ${{ github.run_number }}
+        run: scripts\gh-version-setup.cmd ${{env.VERSION}}
 
       - name: Create nupkg files
         run: scripts\gh-build-nuget.cmd
