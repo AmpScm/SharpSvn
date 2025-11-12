@@ -33,7 +33,7 @@ jobs:
             imports/build/refasmer
             !imports/release/bin-*
             !imports/release/bin/*.pdb
-          key: ${{runner.os}}_MSBuild_${{hashFiles('imports/*.build')}}_${{hashFiles('imports/scripts/*.build')}}
+          key: ${{runner.os}}-MSBuild-${{hashFiles('imports/*.build')}}-${{hashFiles('imports/scripts/*.build')}}
   
       - name: Cache Import Downloads
         if: steps.cache.outputs.cache-hit != 'true'
@@ -41,7 +41,7 @@ jobs:
         with:
           path: |
             imports/downloads
-          key: ${{runner.os}}_Import_Downloads_${{hashFiles('imports/*.build')}}
+          key: ${{runner.os}}-Import-Downloads-${{hashFiles('imports/*.build')}}
       
       - name: Run NAnt preparations
         if: steps.cache.outputs.cache-hit != 'true'

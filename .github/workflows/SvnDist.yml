@@ -23,6 +23,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '8'
+
     # Install SVN client as it was removed in windows-latest
     # https://github.com/actions/runner-images/issues/12677
     - name: Install Svn
@@ -30,13 +31,14 @@ jobs:
         choco install svn
         echo "C:\Program Files (x86)\Subversion\bin" >> "$GITHUB_PATH"
         echo "$GITHUB_PATH"
+        svn --version
 
     - name: Cache
       uses: actions/cache@v4
       with:
         path: |
           imports/downloads
-        key: "${{runner.os}}_dist_${{hashFiles('build/imports/*.build')}}"
+        key: "${{runner.os}}-dist-${{hashFiles('imports/svn-dist/*.build')}}"
 
     - name: Install NAnt
       working-directory: imports/
