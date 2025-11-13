@@ -9,7 +9,7 @@
   <property name="static" value="false" />
   <property name="downloads" value="../downloads/" />
   <property name="dllPrefix" value="SlikSvn-" />
-  <!-- <property name="intl" value="gettext" /> -->
+  <property name="intl" value="gettext" />
   <property name="svnBuildName" value="SlikSvn" />
   <property name="svnAddSharpSvn" value="false" />
   <property name="applyMerges" value="false" />

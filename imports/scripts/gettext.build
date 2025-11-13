@@ -15,7 +15,6 @@
         <filterchain>
           <replacestring from="#undef USE_WIN32_THREADS" to="#define USE_WIN32_THREADS 1" />
           <replacestring from="#undef USE_WINDOWS_THREADS" to="#define USE_WINDOWS_THREADS 1" />
-          <replacestring from="#undef HAVE_STDBOOL_H" to="#define HAVE_STDBOOL_H 1" />
           <replacestring from="#undef HAVE_ALLOCAH" to="#define HAVE_ALLOCAH 1 //" />
           <replacestring from="#undef HAVE_ALLOCA" to="#define HAVE_ALLOCA 1 //" />
           <replacestring from="#undef HAVE_GETCWD" to="#define HAVE_GETCWD 1" />
