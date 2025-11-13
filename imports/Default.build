@@ -42,7 +42,7 @@
   <property name="nasmVersion" value="2.16.03" overwrite="false" />
   <property name="pcreVersion" value="10.45" overwrite="false" />
   <property name="httpdVersion" value="2.4.63" overwrite="false" />
-  <property name="gettextVersion" value="0.25.1" overwrite="false" />
+  <property name="gettextVersion" value="0.18.3.2" overwrite="false" />
   <property name="sqliteVersion" value="3.50.2" overwrite="false" />
   <property name="libssh2Version" value="1.11.1" overwrite="false" />
   <property name="nghttp2Version" value="1.66.0" overwrite="false" />

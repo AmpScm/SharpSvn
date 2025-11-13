@@ -1,12 +1,14 @@
 name: SvnDist
 
 on:
-  #push:
+  push:
+    tags:
+      - "SlikSVN-*"
   #  branches: [ main, stable/* ]
   workflow_dispatch:
 
 env:
-  nant: '${{ github.workspace }}/src/packages/NAnt.0.92.0/tools/nant.exe'
+  nant: '${{github.workspace}}/src/packages/NAnt.0.92.0/tools/nant.exe'
 
 jobs:
   build:
@@ -22,12 +24,19 @@ jobs:
         distribution: 'adopt'
         java-version: '8'
 
+    # Install SVN client as it was removed in windows-latest
+    # https://github.com/actions/runner-images/issues/12677
+    - name: Install Svn
+      run: |
+        choco install svn
+        echo "C:\Program Files (x86)\Subversion\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+
     - name: Cache
       uses: actions/cache@v4
       with:
         path: |
           imports/downloads
-        key: ${{runner.os}}-dist-${{ hashFiles('build/imports/*.build') }}
+        key: "${{runner.os}}-dist-${{hashFiles('imports/svn-dist/*.build')}}"
 
     - name: Install NAnt
       working-directory: imports/
