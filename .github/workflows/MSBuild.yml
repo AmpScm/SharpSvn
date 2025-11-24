@@ -18,7 +18,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install NAnt
         working-directory: imports/
@@ -59,7 +59,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -99,7 +99,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -121,7 +121,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -160,7 +160,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -182,7 +182,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -223,7 +223,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -245,7 +245,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -285,7 +285,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -307,7 +307,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
@@ -347,7 +347,7 @@ jobs:
 #    runs-on: windows-11-arm
 #    steps:
 #      - name: Git Checkout
-#        uses: actions/checkout@v5
+#        uses: actions/checkout@v6
 #
 #      - name: Restore dependency artifacts
 #        uses: actions/download-artifact@v6
@@ -369,7 +369,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v6
