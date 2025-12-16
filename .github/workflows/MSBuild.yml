@@ -26,7 +26,7 @@ jobs:
 
       - name: Cache preparations
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             imports/release
@@ -37,7 +37,7 @@ jobs:
   
       - name: Cache Import Downloads
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             imports/downloads
