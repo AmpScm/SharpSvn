@@ -69,6 +69,17 @@
                          to='[if-any depends.delayload]${dllPrefix}[depends.delayload];[end]' />
         </filterchain>
       </FilterFile>
+      <!-- EXPAT inserted a new space between # and define-->
+      <FilterFile file="${svnBase}\build\generator\gen_win_dependencies.py" >
+        <filterchain>
+          <replacestring from="vermatch = re.search(r'^\s*#define\s+XML_MAJOR_VERSION\s+(\d+)', txt, re.M)"
+                         to="vermatch = re.search(r'^\s*#\s*define\s+XML_MAJOR_VERSION\s+(\d+)', txt, re.M)" />
+          <replacestring from="vermatch = re.search(r'^\s*#define\s+XML_MINOR_VERSION\s+(\d+)', txt, re.M)"
+                         to="vermatch = re.search(r'^\s*#\s*define\s+XML_MINOR_VERSION\s+(\d+)', txt, re.M)" />
+          <replacestring from="vermatch = re.search(r'^\s*#define\s+XML_MICRO_VERSION\s+(\d+)', txt, re.M)"
+                         to="vermatch = re.search(r'^\s*#\s*define\s+XML_MICRO_VERSION\s+(\d+)', txt, re.M)" />
+        </filterchain>
+      </FilterFile>
     </OnceBlock>
   </target>
 
