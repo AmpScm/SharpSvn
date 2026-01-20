@@ -49,7 +49,7 @@
   <property name="py3cVersion" value="1.4" overwrite="false" />
 
   <!-- Building only -->
-  <property name="cmakeVersion" value="3.31.8" overwrite="false" />
+  <property name="cmakeVersion" value="3.31.10" overwrite="false" />
   <property name="sconsVersion" value="4.9.1" overwrite="false" />
 
   <!-- For testcase -->
