@@ -7,7 +7,7 @@
 #define APPNAME "PuTTYgen"
 #define APPDESC "PuTTY SSH key generation utility"
 
-#include "winhelp.rc2"
+#include "help.rc2"
 #include "puttygen-rc.h"
 
 200 ICON "puttygen.ico"
@@ -80,6 +80,16 @@ BEGIN
     EDITTEXT IDC_ARGON2_PARALLEL, 124, 62, 60, 12
     DEFPUSHBUTTON "O&K", IDOK, 70, 80, 40, 14
     PUSHBUTTON "&Cancel", IDCANCEL, 134, 80, 40, 14
+END
+
+/* Accelerators used: clw */
+216 DIALOG DISCARDABLE 140, 40, 450, 300
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "PuTTYgen: certificate information"
+FONT 8, "MS Shell Dlg"
+CLASS "PuTTYgenCertInfo"
+BEGIN
+    DEFPUSHBUTTON "&Close", IDOK, 201, 130, 48, 14
 END
 
 #include "version.rc2"
