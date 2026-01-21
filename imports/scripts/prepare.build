@@ -252,6 +252,10 @@
       tofile="build/${platform}/subversion/subversion/libsvn_subr/lz4/lz4.c"
       overwrite="true"
       if="${buildSubversion}">
+      <filterchain>
+        <replacestring from="#include &quot;lz4.h&quot;"
+                         to="#include &quot;lz4internal.h&quot;" />
+      </filterchain>
     </copy>
   </target>
 
