@@ -235,6 +235,21 @@
       <arg value="https://github.com/lz4/lz4.git" />
       <arg value="${lz4Dir}" />
     </exec>
+    <copy
+      file="${lz4Dir}/lib/LICENSE"
+      tofile="build/${platform}/subversion/libsvn_subr/lz4/LICENSE"
+      if="${buildSubversion}">
+    </copy>
+    <copy
+      file="${lz4Dir}/lib/lz4.h"
+      tofile="build/${platform}/subversion/libsvn_subr/lz4/lz4internal.h"
+      if="${buildSubversion}">
+    </copy>
+    <copy
+      file="${lz4Dir}/lib/lz4.c"
+      tofile="build/${platform}/subversion/libsvn_subr/lz4/lz4.c"
+      if="${buildSubversion}">
+    </copy>
   </target>
 
   <filterchain id="license-filter">

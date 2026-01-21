@@ -128,7 +128,6 @@
         <arg value="--with-serf=${intDir}" />        
         <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
         <arg value="--with-sqlite=${intDir}" />
-        <arg value="--with-lz4=${lz4Dir}" />
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
         <arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
         <arg value="--with-libintl=${intDir}" if="${intl != 'none'}" />
