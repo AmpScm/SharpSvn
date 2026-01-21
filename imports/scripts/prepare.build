@@ -2,6 +2,7 @@
 <project basedir=".." default="build">
 
   <property name="py3cDir" value="build/py3c-${py3cVersion}" />
+  <property name="lz4Dir" value="build/lz4-${lz4Version}"/>
 
   <target name="checkout" depends="initialize-layout">
     <Svn
@@ -214,7 +215,7 @@
 	  <arg value="--depth=1" />
 	  <arg value="--branch=engine-pu" if="${memcachedBuildType == 'trunk'}"/>
 	  <arg value="--branch=${memcachedVersion}" if="${memcachedBuildType == 'tag'}"/>
-      <arg value="https://github.com/memcached/memcached.git"  />/>
+      <arg value="https://github.com/memcached/memcached.git"  />
       <arg value="${memcachedDir}" />
     </exec>
     
