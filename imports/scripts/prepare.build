@@ -226,6 +226,14 @@
       <arg value="https://github.com/encukou/py3c.git" />
       <arg value="${py3cDir}" />
     </exec>
+
+    <exec program="git" verbose="true" unless="${directory::exists(lz4Dir)}">
+      <arg value="clone"/>
+      <arg value="--depth=1"/>
+      <arg value="--branch=v${lz4Version}"/>
+      <arg value="https://github.com/lz4/lz4.git" />
+      <arg value="${lz4Dir}" />
+    </exec>
   </target>
 
   <filterchain id="license-filter">

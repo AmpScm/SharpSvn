@@ -47,6 +47,7 @@
   <property name="libssh2Version" value="1.11.1" overwrite="false" />
   <property name="nghttp2Version" value="1.66.0" overwrite="false" />
   <property name="py3cVersion" value="1.4" overwrite="false" />
+  <property name="lz4Version" value="1.10.0" overwrite="false" />
 
   <!-- Building only -->
   <property name="cmakeVersion" value="3.31.10" overwrite="false" />
