@@ -2,6 +2,7 @@
 <project basedir=".." default="build">
 
   <property name="py3cDir" value="build/py3c-${py3cVersion}" />
+  <property name="lz4Dir" value="build/lz4-${lz4Version}"/>
 
   <target name="checkout" depends="initialize-layout">
     <Svn
@@ -214,7 +215,7 @@
 	  <arg value="--depth=1" />
 	  <arg value="--branch=engine-pu" if="${memcachedBuildType == 'trunk'}"/>
 	  <arg value="--branch=${memcachedVersion}" if="${memcachedBuildType == 'tag'}"/>
-      <arg value="https://github.com/memcached/memcached.git"  />/>
+      <arg value="https://github.com/memcached/memcached.git"  />
       <arg value="${memcachedDir}" />
     </exec>
     
@@ -226,6 +227,36 @@
       <arg value="https://github.com/encukou/py3c.git" />
       <arg value="${py3cDir}" />
     </exec>
+
+    <exec program="git" verbose="true" unless="${directory::exists(lz4Dir)}">
+      <arg value="clone"/>
+      <arg value="--depth=1"/>
+      <arg value="--branch=v${lz4Version}"/>
+      <arg value="https://github.com/lz4/lz4.git" />
+      <arg value="${lz4Dir}" />
+    </exec>
+    <copy
+      file="${lz4Dir}/lib/LICENSE"
+      tofile="build/${platform}/subversion/subversion/libsvn_subr/lz4/LICENSE"
+      overwrite="true"
+      if="${buildSubversion}">
+    </copy>
+    <copy
+      file="${lz4Dir}/lib/lz4.h"
+      tofile="build/${platform}/subversion/subversion/libsvn_subr/lz4/lz4internal.h"
+      overwrite="true"
+      if="${buildSubversion}">
+    </copy>
+    <copy
+      file="${lz4Dir}/lib/lz4.c"
+      tofile="build/${platform}/subversion/subversion/libsvn_subr/lz4/lz4.c"
+      overwrite="true"
+      if="${buildSubversion}">
+      <filterchain>
+        <replacestring from="#include &quot;lz4.h&quot;"
+                         to="#include &quot;lz4internal.h&quot;" />
+      </filterchain>
+    </copy>
   </target>
 
   <filterchain id="license-filter">
