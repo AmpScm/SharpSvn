@@ -176,7 +176,7 @@
       <arg value="clone" />
 	  <arg value="--depth=1" />
 	  <arg value="--branch=cyrus-sasl-${saslVersion}" />
-      <arg value="https://github.com/rhuijben/cyrus-sasl.git" />
+      <arg value="https://github.com/cyrusimap/cyrus-sasl.git" />
       <arg value="${saslDir}" />
     </exec>
 
