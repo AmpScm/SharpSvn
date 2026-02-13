@@ -1140,6 +1140,7 @@
     <None Include="SharpSvn.snk" />
     <None Include="SharpSvn.vcproj" />
     <None Include="packages.config" />
+    <None Include="Directory.Build.targets" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SharpSvnStrings.txt" />
