@@ -20,6 +20,9 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
+
       - name: Install NAnt
         working-directory: imports/
         run: nuget.exe install NAnt
@@ -61,6 +64,9 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
+
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
         with:
@@ -101,6 +107,9 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
+
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
         with:
@@ -122,6 +131,9 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v6
+
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
@@ -162,6 +174,9 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
+
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
         with:
@@ -183,6 +198,9 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v6
+
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
@@ -225,6 +243,9 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
+
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
         with:
@@ -246,6 +267,9 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v6
+
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
@@ -287,6 +311,9 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
+
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
         with:
@@ -308,6 +335,9 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v6
+
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7
@@ -370,6 +400,9 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v6
+
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
 
       - name: Restore dependency artifacts
         uses: actions/download-artifact@v7

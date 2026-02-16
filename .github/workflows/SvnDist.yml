@@ -18,6 +18,9 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v6
 
+    - name: Setup Subversion
+      uses: ampscm/setup-subversion@v1
+
     - name: Setup Java
       uses: actions/setup-java@v5
       with:
