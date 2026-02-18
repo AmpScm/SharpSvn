@@ -1,5 +1,6 @@
 /*
- * Header for misc.c.
+ * Header for miscellaneous helper functions, mostly defined in the
+ * utils subdirectory.
  */
 
 #ifndef PUTTY_MISC_H
@@ -25,15 +26,17 @@ char *host_strrchr(const char *s, int c);
 char *host_strduptrim(const char *s);
 
 char *dupstr(const char *s);
+wchar_t *dupwcs(const wchar_t *s);
 char *dupcat_fn(const char *s1, ...);
 #define dupcat(...) dupcat_fn(__VA_ARGS__, (const char *)NULL)
 char *dupprintf(const char *fmt, ...) PRINTF_LIKE(1, 2);
 char *dupvprintf(const char *fmt, va_list ap);
 void burnstr(char *string);
+void burnwcs(wchar_t *string);
 
 /*
  * The visible part of a strbuf structure. There's a surrounding
- * implementation struct in misc.c, which isn't exposed to client
+ * implementation struct in strbuf.c, which isn't exposed to client
  * code.
  */
 struct strbuf {
@@ -51,13 +54,15 @@ struct strbuf {
 strbuf *strbuf_new(void);
 strbuf *strbuf_new_nm(void);
 
+/* Helpers to allocate a strbuf containing an existing string */
+strbuf *strbuf_dup(ptrlen string);
+strbuf *strbuf_dup_nm(ptrlen string);
+
 void strbuf_free(strbuf *buf);
 void *strbuf_append(strbuf *buf, size_t len);
 void strbuf_shrink_to(strbuf *buf, size_t new_len);
 void strbuf_shrink_by(strbuf *buf, size_t amount_to_remove);
 char *strbuf_to_str(strbuf *buf); /* does free buf, but you must free result */
-void strbuf_catf(strbuf *buf, const char *fmt, ...) PRINTF_LIKE(2, 3);
-void strbuf_catfv(strbuf *buf, const char *fmt, va_list ap);
 static inline void strbuf_clear(strbuf *buf) { strbuf_shrink_to(buf, 0); }
 bool strbuf_chomp(strbuf *buf, char char_to_remove);
 
@@ -65,13 +70,14 @@ strbuf *strbuf_new_for_agent_query(void);
 void strbuf_finalise_agent_query(strbuf *buf);
 
 /* String-to-Unicode converters that auto-allocate the destination and
- * work around the rather deficient interface of mb_to_wc.
- *
- * These actually live in miscucs.c, not misc.c (the distinction being
- * that the former is only linked into tools that also have the main
- * Unicode support). */
-wchar_t *dup_mb_to_wc_c(int codepage, int flags, const char *string, int len);
+ * work around the rather deficient interface of mb_to_wc. */
+wchar_t *dup_mb_to_wc_c(int codepage, int flags, const char *string,
+                        size_t len, size_t *outlen_p);
 wchar_t *dup_mb_to_wc(int codepage, int flags, const char *string);
+char *dup_wc_to_mb_c(int codepage, int flags, const wchar_t *string,
+                     size_t len, const char *defchr, size_t *outlen_p);
+char *dup_wc_to_mb(int codepage, int flags, const wchar_t *string,
+                   const char *defchr);
 
 static inline int toint(unsigned u)
 {
@@ -105,6 +111,20 @@ bool strendswith(const char *s, const char *t);
 
 void base64_encode_atom(const unsigned char *data, int n, char *out);
 int base64_decode_atom(const char *atom, unsigned char *out);
+void base64_decode_bs(BinarySink *bs, ptrlen data);
+void base64_decode_fp(FILE *fp, ptrlen data);
+strbuf *base64_decode_sb(ptrlen data);
+void base64_encode_bs(BinarySink *bs, ptrlen data, int cpl);
+void base64_encode_fp(FILE *fp, ptrlen data, int cpl);
+strbuf *base64_encode_sb(ptrlen data, int cpl);
+bool base64_valid(ptrlen data);
+
+void percent_encode_bs(BinarySink *bs, ptrlen data, const char *badchars);
+void percent_encode_fp(FILE *fp, ptrlen data, const char *badchars);
+strbuf *percent_encode_sb(ptrlen data, const char *badchars);
+void percent_decode_bs(BinarySink *bs, ptrlen data);
+void percent_decode_fp(FILE *fp, ptrlen data);
+strbuf *percent_decode_sb(ptrlen data);
 
 struct bufchain_granule;
 struct bufchain_tag {
@@ -123,6 +143,8 @@ ptrlen bufchain_prefix(bufchain *ch);
 void bufchain_consume(bufchain *ch, size_t len);
 void bufchain_fetch(bufchain *ch, void *data, size_t len);
 void bufchain_fetch_consume(bufchain *ch, void *data, size_t len);
+bool bufchain_try_consume(bufchain *ch, size_t len);
+bool bufchain_try_fetch(bufchain *ch, void *data, size_t len);
 bool bufchain_try_fetch_consume(bufchain *ch, void *data, size_t len);
 size_t bufchain_fetch_consume_up_to(bufchain *ch, void *data, size_t len);
 void bufchain_set_callback_inner(
@@ -132,9 +154,9 @@ static inline void bufchain_set_callback(bufchain *ch, IdempotentCallback *ic)
 {
     extern void queue_idempotent_callback(struct IdempotentCallback *ic);
     /* Wrapper that puts in the standard queue_idempotent_callback
-     * function. Lives here rather than in utils.c so that standalone
-     * programs can use the bufchain facility without this optional
-     * callback feature and not need to provide a stub of
+     * function. Lives here rather than in bufchain.c so that
+     * standalone programs can use the bufchain facility without this
+     * optional callback feature and not need to provide a stub of
      * queue_idempotent_callback. */
     bufchain_set_callback_inner(ch, ic, queue_idempotent_callback);
 }
@@ -154,6 +176,21 @@ static inline ptrlen make_ptrlen(const void *ptr, size_t len)
     ptrlen pl;
     pl.ptr = ptr;
     pl.len = len;
+    return pl;
+}
+
+static inline const void *ptrlen_end(ptrlen pl)
+{
+    return (const char *)pl.ptr + pl.len;
+}
+
+static inline ptrlen make_ptrlen_startend(const void *startv, const void *endv)
+{
+    const char *start = (const char *)startv, *end = (const char *)endv;
+    assert(end >= start);
+    ptrlen pl;
+    pl.ptr = start;
+    pl.len = end - start;
     return pl;
 }
 
@@ -178,6 +215,8 @@ int ptrlen_strcmp(ptrlen pl1, ptrlen pl2);
 bool ptrlen_startswith(ptrlen whole, ptrlen prefix, ptrlen *tail);
 bool ptrlen_endswith(ptrlen whole, ptrlen suffix, ptrlen *tail);
 ptrlen ptrlen_get_word(ptrlen *input, const char *separators);
+bool ptrlen_contains(ptrlen input, const char *characters);
+bool ptrlen_contains_only(ptrlen input, const char *characters);
 char *mkstr(ptrlen pl);
 int string_length_for_printf(size_t);
 /* Derive two printf arguments from a ptrlen, suitable for "%.*s" */
@@ -196,6 +235,8 @@ int string_length_for_printf(size_t);
 /* Make a ptrlen out of a constant byte array. */
 #define PTRLEN_FROM_CONST_BYTES(a) make_ptrlen(a, sizeof(a))
 
+void wordwrap(BinarySink *bs, ptrlen input, size_t maxwid);
+
 /* Wipe sensitive data out of memory that's about to be freed. Simpler
  * than memset because we don't need the fill char parameter; also
  * attempts (by fiddly use of volatile) to inhibit the compiler from
@@ -206,14 +247,57 @@ void smemclr(void *b, size_t len);
 /* Compare two fixed-length chunks of memory for equality, without
  * data-dependent control flow (so an attacker with a very accurate
  * stopwatch can't try to guess where the first mismatching byte was).
- * Returns false for mismatch or true for equality (unlike memcmp),
- * hinted at by the 'eq' in the name. */
-bool smemeq(const void *av, const void *bv, size_t len);
+ * Returns 0 for mismatch or 1 for equality (unlike memcmp), hinted at
+ * by the 'eq' in the name. */
+unsigned smemeq(const void *av, const void *bv, size_t len);
 
-/* Encode a single UTF-8 character. Assumes that illegal characters
- * (such as things in the surrogate range, or > 0x10FFFF) have already
- * been removed. */
-size_t encode_utf8(void *output, unsigned long ch);
+/* Encode a wide-character string into UTF-8. Tolerates surrogates if
+ * sizeof(wchar_t) == 2, assuming that in that case the wide string is
+ * encoded in UTF-16. */
+char *encode_wide_string_as_utf8(const wchar_t *wstr);
+
+/* Decode UTF-8 to a wide-character string, emitting UTF-16 surrogates
+ * if sizeof(wchar_t) == 2. */
+wchar_t *decode_utf8_to_wide_string(const char *ustr);
+
+/* Decode a single UTF-8 character. Returns U+FFFD for any of the
+ * illegal cases. If the source is empty, returns L'\0' (and sets the
+ * error indicator on the source, of course). */
+#define DECODE_UTF8_FAILURE_LIST(X) \
+    X(DUTF8_SUCCESS, "success")                                      \
+    X(DUTF8_SPURIOUS_CONTINUATION, "spurious continuation byte")     \
+    X(DUTF8_ILLEGAL_BYTE, "illegal UTF-8 byte value")                \
+    X(DUTF8_E_OUT_OF_DATA, "unfinished multibyte encoding at end of string") \
+    X(DUTF8_TRUNCATED_SEQUENCE, "multibyte encoding interrupted by " \
+      "non-continuation byte")                                       \
+    X(DUTF8_OVERLONG_ENCODING, "overlong encoding")                  \
+    X(DUTF8_ENCODED_SURROGATE, "Unicode surrogate character encoded in " \
+      "UTF-8")                                                       \
+    X(DUTF8_CODE_POINT_TOO_BIG, "code point outside the Unicode range") \
+    /* end of list */
+typedef enum DecodeUTF8Failure {
+    #define ENUM_DECL(sym, string) sym,
+    DECODE_UTF8_FAILURE_LIST(ENUM_DECL)
+    #undef ENUM_DECL
+    DUTF8_N_FAILURE_CODES
+} DecodeUTF8Failure;
+unsigned decode_utf8(BinarySource *src, DecodeUTF8Failure *err);
+extern const char *const decode_utf8_error_strings[DUTF8_N_FAILURE_CODES];
+
+/* Decode a single UTF-8 character to an output buffer of the
+ * platform's wchar_t. May write a pair of surrogates if
+ * sizeof(wchar_t) == 2, assuming that in that case the wide string is
+ * encoded in UTF-16. Otherwise, writes one character. Returns the
+ * number written. */
+size_t decode_utf8_to_wchar(BinarySource *src, wchar_t *out,
+                            DecodeUTF8Failure *err);
+
+/* Normalise a UTF-8 string into Normalisation Form C. */
+strbuf *utf8_to_nfc(ptrlen input);
+
+/* Determine if a UTF-8 string contains any characters unknown to our
+ * supported version of Unicode. */
+char *utf8_unknown_char(ptrlen input);
 
 /* Write a string out in C string-literal format. */
 void write_c_string_literal(FILE *fp, ptrlen str);
@@ -374,6 +458,22 @@ static inline void PUT_16BIT_MSB_FIRST(void *vp, uint16_t value)
     p[0] = (uint8_t)(value >> 8);
 }
 
+/* For use in X11-related applications, an endianness-variable form of
+ * {GET,PUT}_16BIT which expects 'endian' to be either 'B' or 'l' */
+
+static inline uint16_t GET_16BIT_X11(char endian, const void *p)
+{
+    return endian == 'B' ? GET_16BIT_MSB_FIRST(p) : GET_16BIT_LSB_FIRST(p);
+}
+
+static inline void PUT_16BIT_X11(char endian, void *p, uint16_t value)
+{
+    if (endian == 'B')
+        PUT_16BIT_MSB_FIRST(p, value);
+    else
+        PUT_16BIT_LSB_FIRST(p, value);
+}
+
 /* Replace NULL with the empty string, permitting an idiom in which we
  * get a string (pointer,length) pair that might be NULL,0 and can
  * then safely say things like printf("%.*s", length, NULLTOEMPTY(ptr)) */
@@ -438,5 +538,19 @@ static inline ptrlen ptrlen_from_lf(LoadedFile *lf)
  * result of this function is not guaranteed. No memmove-style effort
  * is made to handle difficult overlap cases. */
 void memxor(uint8_t *out, const uint8_t *in1, const uint8_t *in2, size_t size);
+
+/* Boolean expressions used in OpenSSH certificate configuration */
+bool cert_expr_valid(const char *expression,
+                     char **error_msg, ptrlen *error_loc);
+bool cert_expr_match_str(const char *expression,
+                         const char *hostname, unsigned port);
+/* Build a certificate expression out of hostname wildcards. Required
+ * to handle legacy configuration from early in development, when
+ * multiple wildcards were stored separately in config, implicitly
+ * ORed together. */
+CertExprBuilder *cert_expr_builder_new(void);
+void cert_expr_builder_free(CertExprBuilder *eb);
+void cert_expr_builder_add(CertExprBuilder *eb, const char *wildcard);
+char *cert_expr_expression(CertExprBuilder *eb);
 
 #endif
