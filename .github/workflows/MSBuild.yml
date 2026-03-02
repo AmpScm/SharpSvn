@@ -51,7 +51,7 @@ jobs:
         run: ${{env.nant}} -f:tools/buildbot.build buildbot-build
 
       - name: Save dependecy artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: dependencies-${{runner.os}}
           path: |
@@ -92,7 +92,7 @@ jobs:
         run: msbuild.exe /r /v:m /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
       - name: Save build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-x86-artifacts
           path: |
@@ -160,7 +160,7 @@ jobs:
         run: msbuild.exe /r /v:m /p:Platform=x64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
       - name: Save build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-x64-artifacts
           path: |
@@ -227,7 +227,7 @@ jobs:
         run: msbuild.exe /r /v:m /p:Platform=x86 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
       - name: Save build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-x86-core-artifacts
           path: |
@@ -296,7 +296,7 @@ jobs:
         run: msbuild.exe /r /v:m /p:Platform=x64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
       - name: Save build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-x64-core-artifacts
           path: |
@@ -364,7 +364,7 @@ jobs:
         run: msbuild.exe /r /v:m /p:Platform=ARM64 /p:Configuration=ReleaseCore ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
 
       - name: Save build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-arm64-core-artifacts
           path: |
@@ -427,7 +427,7 @@ jobs:
         run: scripts\gh-build-nuget.cmd
 
       - name: Package nupkg files
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: nupkg-files
           path: |
