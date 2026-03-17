@@ -1,0 +1,17 @@
+<Project>
+  <UsingTask TaskName="Errors2Enum"
+             TaskFactory="CodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >
+    <ParameterGroup>
+      <WinErrorHeaderPath />
+      <ErrnoHeaderPath />
+      <AprErrnoHeaderPath />
+      <SerfHeaderPath />
+      <LibSsh2HeaderPath />
+      <OutputFilePath />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Class" Language="cs" Source="$(MSBuildThisFileDirectory)\Errors2Enum.cs" />
+    </Task>
+  </UsingTask>
+</Project>
