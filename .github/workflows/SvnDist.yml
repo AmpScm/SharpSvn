@@ -22,7 +22,7 @@ jobs:
       uses: ampscm/setup-subversion@v1
 
     - name: Setup Java
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v6
       with:
         distribution: 'adopt'
         java-version: '8'
