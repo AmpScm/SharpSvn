@@ -407,7 +407,6 @@ jobs:
           name: build-arm64-netfx-artifacts
           path: |
             src/**/bin/ARM64/Release/
-            imports/release/bin/*ARM64*
 
 #  test-arm64-core:
 #    needs: build-arm64-core
@@ -432,7 +431,7 @@ jobs:
 #        run: dotnet vstest /Platform:ARM64 src/SharpSvn.Tests/bin/ARM64/ReleaseCore/SharpSvn.Tests.dll --TestCaseFilter:"TestCategory!=NeedsNetwork" --logger:"console;verbosity=detailed"
 
   create-nuget:
-    needs: [test-x86, test-x64, test-x86-core, test-x64-core, build-arm64-core]
+    needs: [test-x86, test-x64, test-x86-core, test-x64-core, build-arm64-core, build-arm64-netfx]
     runs-on: windows-2022
     steps:
       - name: Git Checkout
