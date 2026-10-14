@@ -372,6 +372,42 @@ jobs:
             src/**/bin/Release/
             src/**/bin/ARM64/ReleaseCore/
 
+  # .NET Framework (in-proc Visual Studio) build for ARM64, needed by AnkhSVN on ARM64 Visual Studio
+  build-arm64-netfx:
+    needs: dependencies
+    runs-on: windows-2022
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Subversion
+        uses: ampscm/setup-subversion@v1
+
+      - name: Restore dependency artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: dependencies-${{runner.os}}
+          path: imports/release/
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Setup version
+        run: scripts\gh-version-setup.cmd ${{env.VERSION}}
+
+      - name: Run nuget
+        run: nuget.exe restore ${{env.SOLUTION_FILE_PATH}}
+
+      - name: Build-arm64-NetFx
+        run: msbuild.exe /r /v:m /p:Platform=ARM64 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} /p:BuildBotBuild=true @scripts\msbuild-version.rsp
+
+      - name: Save build artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: build-arm64-netfx-artifacts
+          path: |
+            src/**/bin/ARM64/Release/
+
 #  test-arm64-core:
 #    needs: build-arm64-core
 #    runs-on: windows-11-arm
@@ -395,7 +431,7 @@ jobs:
 #        run: dotnet vstest /Platform:ARM64 src/SharpSvn.Tests/bin/ARM64/ReleaseCore/SharpSvn.Tests.dll --TestCaseFilter:"TestCategory!=NeedsNetwork" --logger:"console;verbosity=detailed"
 
   create-nuget:
-    needs: [test-x86, test-x64, test-x86-core, test-x64-core, build-arm64-core]
+    needs: [test-x86, test-x64, test-x86-core, test-x64-core, build-arm64-core, build-arm64-netfx]
     runs-on: windows-2022
     steps:
       - name: Git Checkout
