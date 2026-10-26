@@ -18,7 +18,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -62,7 +62,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -105,7 +105,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -130,7 +130,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -172,7 +172,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -197,7 +197,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -241,7 +241,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -266,7 +266,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -309,7 +309,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -334,7 +334,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
@@ -377,7 +377,7 @@ jobs:
 #    runs-on: windows-11-arm
 #    steps:
 #      - name: Git Checkout
-#        uses: actions/checkout@v6
+#        uses: actions/checkout@v7
 #
 #      - name: Restore dependency artifacts
 #        uses: actions/download-artifact@v8
@@ -399,7 +399,7 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Subversion
         uses: ampscm/setup-subversion@v1
