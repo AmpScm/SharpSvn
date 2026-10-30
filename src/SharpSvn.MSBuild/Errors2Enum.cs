@@ -3,106 +3,88 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 namespace Errors2Enum
 {
-    class Program
+    public class Errors2Enum : Task
     {
-        static void Main(string[] args)
+        [Required]
+        public string WinErrorHeaderPath { get; set; }
+
+        [Required]
+        public string ErrnoHeaderPath { get; set; }
+
+        [Required]
+        public string AprErrnoHeaderPath { get; set; }
+
+        [Required]
+        public string SerfHeaderPath { get; set; }
+
+        [Required]
+        public string LibSsh2HeaderPath { get; set; }
+
+        [Required]
+        public string OutputFilePath { get; set; }
+
+        public override bool Execute()
         {
-            if (args.Length != 7)
+            string winerror = WinErrorHeaderPath;
+            string errno = ErrnoHeaderPath;
+            string aprerrno = AprErrnoHeaderPath;
+            string serfh = SerfHeaderPath;
+            string libssh2h = LibSsh2HeaderPath;
+            string to = OutputFilePath;
+
+            if (!File.Exists(winerror))
             {
-                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <UniversalSDKDir> <apr_errno.h> <serf.h> <libssh2.h> <outputfile>");
-                foreach (string s in args)
-                {
-                    Console.Error.WriteLine("'" + s + "'");
-                }
+                Log.LogError("'{0}' does not exist", winerror);
                 Environment.ExitCode = 1;
-                return;
-            }
-
-            string vcPath = Path.GetFullPath(args[0]);
-            string sdkPath = Path.GetFullPath(args[1]);
-            string usdkPath = string.IsNullOrEmpty(args[2].Trim()) ? "C:\\" : Path.GetFullPath(args[2].Split(new char[] { ';' }, 2)[0]);
-            string winerror = Path.Combine(sdkPath, "include\\winerror.h");
-            string errno = Path.Combine(vcPath, "include\\errno.h");
-            string altErrNo = Path.Combine(usdkPath, "errno.h");
-            if (!File.Exists(errno) && File.Exists(altErrNo))
-                errno = altErrNo;
-            string aprerrno = Path.GetFullPath(args[3]);
-            string serfh = Path.GetFullPath(args[4]);
-            string libssh2h = Path.GetFullPath(args[5]);
-            string to = Path.GetFullPath(args[6]);
-
-            if (!File.Exists(winerror))
-                winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
-            if (!File.Exists(winerror))
-                winerror = Path.Combine(usdkPath, "..", "shared", "winerror.h");
-
-            if (!File.Exists(winerror))
-            {
-                if (!File.Exists(winerror))
-                {
-                    Console.Error.WriteLine("'{0}' does not exist", winerror);
-                    Environment.ExitCode = 1;
-                    return;
-                }
+                return false;
             }
 
             if (!File.Exists(errno))
             {
-                Console.Error.WriteLine("'{0}' does not exist", errno);
+                Log.LogError("'{0}' does not exist", errno);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
             if (!File.Exists(aprerrno))
             {
-                Console.Error.WriteLine("'{0}' does not exist", aprerrno);
+                Log.LogError("'{0}' does not exist", aprerrno);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
             if (!File.Exists(serfh))
             {
-                Console.Error.WriteLine("'{0}' does not exist", aprerrno);
+                Log.LogError("'{0}' does not exist", aprerrno);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
             if (!Directory.Exists(Path.GetDirectoryName(to)))
             {
-                Console.Error.WriteLine("Parent directory of '{0}' does not exist", to);
+                Log.LogError("Parent directory of '{0}' does not exist", to);
                 Environment.ExitCode = 1;
-                return;
+                return false;
             }
 
 
-            string verHeader = "/* " + typeof(Program).Assembly.FullName + " */";
+            string verHeader = "/* " + typeof(Errors2Enum).Assembly.FullName + " */";
 
-            if (File.Exists(to)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(winerror)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(errno)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(aprerrno)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(serfh)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(libssh2h)
-                && File.GetLastWriteTime(to) > File.GetLastWriteTime(new Uri(typeof(Program).Assembly.CodeBase).LocalPath))
-            {
-                using (StreamReader sr = File.OpenText(to))
-                {
-                    if (sr.ReadLine() == verHeader)
-                        return; // Nothing to do.
-                }
-            }
-
-            string to_tmp = to + ".tmp";
-            using (StreamWriter r = File.CreateText(to_tmp))
+            using (StreamWriter r = File.CreateText(to))
             using (StreamReader header = File.OpenText(winerror))
             using (StreamReader aprheader = File.OpenText(aprerrno))
             using (StreamReader serfheader = File.OpenText(serfh))
             using (StreamReader libssh2 = File.OpenText(libssh2h))
             using (StreamReader syserrs = File.OpenText(errno))
             {
+                Log.LogMessage("Generating errors enum...");
+
                 r.WriteLine(verHeader);
                 r.WriteLine("/* GENERATED CODE - Don't edit this file */");
                 r.WriteLine("#pragma once");
@@ -137,52 +119,7 @@ namespace Errors2Enum
                 r.WriteLine();
             }
 
-            if (File.Exists(to))
-            {
-                bool same = false;
-
-                using(StreamReader orig = File.OpenText(to))
-                using(StreamReader nw = File.OpenText(to_tmp))
-                {
-                    string id_orig = orig.ReadLine();
-                    string id_new = nw.ReadLine();
-
-                    if (string.IsNullOrEmpty(id_new) == string.IsNullOrEmpty(id_orig))
-                    {
-                        string l1, l2;
-
-                        while(true)
-                        {
-                            l1 = orig.ReadLine();
-                            l2 = nw.ReadLine();
-
-                            if (l1 != l2)
-                            {
-                                same = false;
-                                break;
-                            }
-
-                            if (l1 == null)
-                            {
-                                same = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (same)
-                {
-                    // No different definitions. Don't touch the file as that would trigger
-                    // a recompilation of the precompiled header.
-                    File.Delete(to_tmp);
-                    return;
-                }
-                else
-                    File.Delete(to);
-            }
-
-            File.Move(to_tmp, to);
+            return true;
         }
 
         private static void WriteWinEnumBody(StreamReader header, StreamWriter r)

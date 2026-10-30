@@ -1,0 +1,39 @@
+<Project>
+
+  <Import Project="$(SolutionDir)SharpSvn.MSBuild\Errors2Enum.tasks" />
+
+  <PropertyGroup>
+    <WinErrorHeaderPath>$(KIT_SHARED_IncludePath)\winerror.h</WinErrorHeaderPath>
+    <ErrnoHeaderPath>$(KIT_SHARED_IncludePath)\..\ucrt\errno.h</ErrnoHeaderPath>
+    <AprErrnoHeaderPath>$(SolutionDir)..\imports\release\include\apr_errno.h</AprErrnoHeaderPath>
+    <SerfHeaderPath>$(SolutionDir)..\imports\release\include\serf-1\serf.h</SerfHeaderPath>
+    <LibSsh2HeaderPath>$(SolutionDir)..\imports\release\include\libssh2\libssh2.h</LibSsh2HeaderPath>
+    <ErrorsEnumFilePath>$(ProjectDir)\SvnWindowsError.h</ErrorsEnumFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GenerateErrorEnumsInputs Include="$(WinErrorHeaderPath)" />
+    <GenerateErrorEnumsInputs Include="$(ErrnoHeaderPath)" />
+    <GenerateErrorEnumsInputs Include="$(AprErrnoHeaderPath)" />
+    <GenerateErrorEnumsInputs Include="$(SerfHeaderPath)" />
+  </ItemGroup>
+
+  <Target Name="GenerateErrorEnums"
+          BeforeTargets="ClCompile"
+          Inputs="@(GenerateErrorEnumsInputs)"
+          Outputs="$(ErrorsEnumFilePath)">
+
+    <Errors2Enum WinErrorHeaderPath="$(WinErrorHeaderPath)"
+                 ErrnoHeaderPath="$(ErrnoHeaderPath)"
+                 AprErrnoHeaderPath="$(AprErrnoHeaderPath)"
+                 SerfHeaderPath="$(SerfHeaderPath)"
+                 LibSsh2HeaderPath="$(LibSsh2HeaderPath)"
+                 OutputFilePath="$(ErrorsEnumFilePath)" />
+  </Target>
+
+  <Target Name="CleanErrorEnums"
+          BeforeTargets="CoreClean">
+    <Delete Files="$(ErrorsEnumFilePath)" />
+  </Target>
+
+</Project>
